@@ -41,7 +41,7 @@
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle nameUserNavbar" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <span>Jonnathan</span>
+                                <span>User Name</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
                                 <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
                                 </svg>
@@ -76,7 +76,7 @@
                         <li class="mt-2">
                             <div class="text-muted small fw-bold text-uppercase px-3">CORE</div>
                         </li>
-                        <li>
+                        <li class="offcanvasItems">
                             <a href="#" class="nav-link px-3 active">
                                 <span class="myIconText me-2"><i class="bi bi-collection"></i></span>
                                 <span class="myOffCanvaSubtitle">Dashboard</span>
@@ -88,19 +88,19 @@
                         <li>
                             <div class="text-muted small fw-bold text-uppercase px-3">Cash Management</div>
                         </li>
-                        <li>
+                        <li class="offcanvasItems">
                             <a href="#" class="nav-link px-3 active">
                                 <span class="myIconText me-2"><i class="bi bi-currency-dollar"></i></span>
                                 <span class="myOffCanvaSubtitle">Deposits</span>
                             </a>
                         </li>
-                        <li>
+                        <li class="offcanvasItems">
                             <a href="#" class="nav-link px-3 active">
                                 <span class="myIconText me-2"><i class="bi bi-credit-card-2-back-fill"></i></span>
                                 <span class="myOffCanvaSubtitle">Credits</span>
                             </a>
                         </li>
-                        <li>
+                        <li class="offcanvasItems">
                             <a href="#" class="nav-link px-3 active">
                                 <span class="myIconText me-2"><i class="bi bi-piggy-bank-fill"></i></span>
                                 <span class="myOffCanvaSubtitle">Contributions</span>
@@ -117,7 +117,7 @@
 
                         <!-- Employees LIST -->
                         <li>
-                            <button class="btn-link nav-link sidebar-link px-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEmployees" aria-expanded="false" aria-controls="collapseExample">
+                            <button class="btn-link nav-link sidebar-link px-3 offcanvasItems" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEmployees" aria-expanded="false" aria-controls="collapseExample">
                                 <span class="me-3 myIconText">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
                                     <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
@@ -172,7 +172,7 @@
 
                         <!-- ROL LIST -->
                         <li>
-                            <button class="btn-link nav-link sidebar-link px-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRole" aria-expanded="false" aria-controls="collapseExample">
+                            <button class="btn-link nav-link sidebar-link px-3 offcanvasItems" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRole" aria-expanded="false" aria-controls="collapseExample">
                                 <span class="me-3 myIconText">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-heading" viewBox="0 0 16 16">
                                     <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
@@ -229,7 +229,7 @@
 
                         <!-- Employee Account -->
                         <li>
-                            <button class="btn-link nav-link sidebar-link px-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEmployeeAccount" aria-expanded="false" aria-controls="collapseExample">
+                            <button class="btn-link nav-link sidebar-link px-3 offcanvasItems" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEmployeeAccount" aria-expanded="false" aria-controls="collapseExample">
                                 <span class="me-3 myIconText">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-person-fill" viewBox="0 0 16 16">
                                     <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm-1 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm-3 4c2.623 0 4.146.826 5 1.755V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-1.245C3.854 11.825 5.377 11 8 11z"/>
@@ -285,11 +285,9 @@
 
                         <!-- Partner Accounts -->
                         <li>
-                            <button class="btn-link nav-link sidebar-link px-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePartnerAccounts" aria-expanded="false" aria-controls="collapseExample">
+                            <button class="btn-link nav-link sidebar-link px-3 offcanvasItems" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePartnerAccounts" aria-expanded="false" aria-controls="collapseExample">
                                 <span class="me-3 myIconText">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-person-fill" viewBox="0 0 16 16">
-                                    <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm-1 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm-3 4c2.623 0 4.146.826 5 1.755V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-1.245C3.854 11.825 5.377 11 8 11z"/>
-                                    </svg>
+                                    <i class="bi bi-person-bounding-box"></i>
                                 </span>
                                 <span class="myOffCanvaSubtitle">Partner Accounts</span>
                                 <span class="right-icon ms-auto">
@@ -340,11 +338,9 @@
 
                         <!-- Partners -->
                         <li>
-                            <button class="btn-link nav-link sidebar-link px-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePartners" aria-expanded="false" aria-controls="collapseExample">
+                            <button class="btn-link nav-link sidebar-link px-3 offcanvasItems" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePartners" aria-expanded="false" aria-controls="collapseExample">
                                 <span class="me-3 myIconText">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-person-fill" viewBox="0 0 16 16">
-                                    <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm-1 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm-3 4c2.623 0 4.146.826 5 1.755V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-1.245C3.854 11.825 5.377 11 8 11z"/>
-                                    </svg>
+                                    <i class="bi bi-person"></i>
                                 </span>
                                 <span class="myOffCanvaSubtitle">Partners</span>
                                 <span class="right-icon ms-auto">
@@ -398,7 +394,7 @@
                         <li>
                             <div class="text-muted small fw-bold text-uppercase px-3">CORE</div>
                         </li>
-                        <li>
+                        <li class="offcanvasItems">
                             <a href="#" class="nav-link px-3 active">
                                 <span class="myIconText me-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up-arrow" viewBox="0 0 16 16">
@@ -408,7 +404,28 @@
                                 <span class="myOffCanvaSubtitle">Report</span>
                             </a>
                         </li>
+                        <li class="my-2"></li>
 
+                        <!-- User -->
+                        <li>
+                            <div class="text-muted small fw-bold text-uppercase px-3">User</div>
+                        </li>
+                        <li class="offcanvasItems">
+                            <a href="#" class="nav-link px-3 active">
+                                <span class="myIconText me-2">
+                                    <i class="bi bi-box-arrow-in-right"></i>
+                                </span>
+                                <span class="myOffCanvaSubtitle">Profile</span>
+                            </a>
+                        </li>
+                        <li class="offcanvasItems">
+                            <a href="#" class="nav-link px-3 active">
+                                <span class="myIconText me-2">
+                                    <i class="bi bi-box-arrow-right"></i>
+                                </span>
+                                <span class="myOffCanvaSubtitle">Logout</span>
+                            </a>
+                        </li>
 
                     </ul>
                 </nav>
@@ -418,10 +435,17 @@
         <!-- The content of the dashboard must be encapsulated in the <main> tag -->
         <!-- Example:  
             <main>
-                content
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12 fw-bold fs-3">Dashboard</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">Here goes the content</div>
+                    </div>
+                </div>
             </main>
         -->
-        <main>Hola Jonnathan</main>
+
 
         <!-- Option 1: Bootstrap Bundle with Popper -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>

@@ -3,6 +3,7 @@
     --offcanvas-width: 270px;
     --topNavbarHeight: 56px;
     --white: #fff;
+    --gray-100: #f3f4f6;
     --gray-200: #e5e7eb;
     --gray-800: #1f2937;
     --green-600: #16a34a;
@@ -35,6 +36,10 @@
 
 .myOffCanvaSubtitle {
     color: var(--gray-800) !important;
+}
+
+.offcanvasItems:hover {
+    background-color: var(--gray-100);
 }
 
 .sidebar-nav {
@@ -78,6 +83,8 @@
     
     main {
         margin-left: var(--offcanvas-width);
+        margin-top: 5px;
+        padding-top: 3px;
     }
     
     .sidebar-nav {
