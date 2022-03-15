@@ -75,47 +75,34 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("Entre post");
-        RequestDispatcher rd;
-        String salida ="{\"data\":";
+        String salida ="{\"data\":"; //almacena el Json de salida
+        
         try ( PrintWriter out = response.getWriter()) {
-            System.out.println("entre2");
-            Encriptar enc = new Encriptar();
-            String user = request.getParameter("user");
+            
+            Encriptar enc = new Encriptar();//encriptador de datos en MD5
+            String user = request.getParameter("user"); //recogemos los datos enviados desde el template
             String password = request.getParameter("password");
-            HttpSession sesion = request.getSession();
-            CuentaJpaController cuentaJpaController = new CuentaJpaController();
-            Cuenta cuentaUsurioBuscado = cuentaJpaController.findCuenta(1);
-            System.out.println(cuentaUsurioBuscado.toString() + "------");
-            if (cuentaUsurioBuscado != null) {
-                System.out.println("entre3");
-                System.out.println("contra1 " + cuentaUsurioBuscado.getPassword());
-                System.out.println("contra2 " + enc.getMD5(password));
-                if (cuentaUsurioBuscado.getPassword().equals(enc.getMD5(password))) {
-                    System.out.println("entre4");
-                    sesion.setAttribute("logueado", "1");
+            HttpSession sesion = request.getSession(); // almacenamos la sesion iniciada
+            CuentaJpaController cuentaJpaController = new CuentaJpaController(); //llamamos al controlador jpa
+            Cuenta cuentaUsurioBuscado = cuentaJpaController.findCuentaUsuario(user); //buscamos el usuario dado el nombre de usuario
+            
+            if (cuentaUsurioBuscado != null) { //en caso  de que no exista el usuario buscado
+                if (cuentaUsurioBuscado.getPassword().equals(enc.getMD5(password))) { //comparamos las contraseñas
+                    //enviamos parametros a la sesion
+                    sesion.setAttribute("logueado", "1"); 
                     sesion.setAttribute("user", cuentaUsurioBuscado.getUsuario());
                     sesion.setAttribute("id", cuentaUsurioBuscado.getIdCuenta());
-                    //response.setHeader("Location",dom.getDominio()+"index.jsp");
+                    //enviamos el json para la vista login.jsp
                     salida= salida+"{\"user\":\""+cuentaUsurioBuscado.getUsuario()+"\",\"id\":"+cuentaUsurioBuscado.getIdCuenta()+",\"logueado\":1}}";
                     out.print(salida);
-//                    rd = request.getRequestDispatcher("/index.jsp");
-//                    rd.forward(request, response);
-                    //response.sendRedirect(dom.getDominio()+"login.jsp");
-                } else {
+                } else {//retornamos en este caso no existe contraseña
                     salida= salida+"{\"esContraIncorrecta\":1}}";
                     out.print(salida);
-//                    out.println("<div class=\"alert alert-danger\" role=\"alert\">\n"
-//                            + "                <i class=\"fa fa-ban\" aria-hidden=\"true\"></i> Contraseña incorrecta!!\n"
-//                            + "            </div>");
                     
                 }
-            } else {
+            } else {//retornamos el valor noExisteUsuario
                 salida = salida+"{\"noExisteUsuario\":1}}";
                 out.print(salida);
-//                out.print("<div class=\"alert alert-danger\" role=\"alert\">\n"
-//                        + "                <i class=\"fa fa-ban\" aria-hidden=\"true\"></i> No existe el usuario!!\n"
-//                        + "            </div>");
             }
         }
     }

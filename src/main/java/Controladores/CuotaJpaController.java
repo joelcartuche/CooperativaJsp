@@ -28,7 +28,7 @@ public class CuotaJpaController implements Serializable {
     public CuotaJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
+private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
@@ -36,9 +36,9 @@ public class CuotaJpaController implements Serializable {
 
     public CuotaJpaController() {
     }
+    
+    
 
-    
-    
     public void create(Cuota cuota) {
         EntityManager em = null;
         try {

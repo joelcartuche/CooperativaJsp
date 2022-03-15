@@ -29,7 +29,7 @@ public class UsuarioJpaController implements Serializable {
     public UsuarioJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
+private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
@@ -39,7 +39,7 @@ public class UsuarioJpaController implements Serializable {
     }
     
     
-    
+
     public void create(Usuario usuario) {
         EntityManager em = null;
         try {

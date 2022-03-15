@@ -6,12 +6,12 @@ package Modelos;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -47,12 +47,11 @@ public class Rol implements Serializable {
     private String tipoRol;
     @Column(name = "es_eliminado")
     private Boolean esEliminado;
-    @JoinColumn(name = "id_cuenta", referencedColumnName = "id_cuenta")
-    @OneToOne(optional = false)
-    private Cuenta idCuenta;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idRol")
+    private Cuenta cuenta;
 
     public Rol() {
-        this.esEliminado=false;
+        esEliminado = false;
     }
 
     public Rol(Integer idRol) {
@@ -88,12 +87,12 @@ public class Rol implements Serializable {
         this.esEliminado = esEliminado;
     }
 
-    public Cuenta getIdCuenta() {
-        return idCuenta;
+    public Cuenta getCuenta() {
+        return cuenta;
     }
 
-    public void setIdCuenta(Cuenta idCuenta) {
-        this.idCuenta = idCuenta;
+    public void setCuenta(Cuenta cuenta) {
+        this.cuenta = cuenta;
     }
 
     @Override

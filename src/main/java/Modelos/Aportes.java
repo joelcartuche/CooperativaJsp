@@ -25,6 +25,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  *
  * @author joelc
+ * 
+    * 
+    * private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
  */
 @Entity
 @Table(name = "aportes")

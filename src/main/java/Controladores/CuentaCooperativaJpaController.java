@@ -30,7 +30,7 @@ public class CuentaCooperativaJpaController implements Serializable {
     public CuentaCooperativaJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
+private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
@@ -39,7 +39,6 @@ public class CuentaCooperativaJpaController implements Serializable {
     public CuentaCooperativaJpaController() {
     }
 
-    
     public void create(CuentaCooperativa cuentaCooperativa) throws IllegalOrphanException {
         List<String> illegalOrphanMessages = null;
         Socios idSociosOrphanCheck = cuentaCooperativa.getIdSocios();

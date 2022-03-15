@@ -15,6 +15,7 @@ import javax.persistence.criteria.Root;
 import Modelos.Socios;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -28,7 +29,7 @@ public class DepositoJpaController implements Serializable {
     public DepositoJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
+ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
@@ -36,8 +37,7 @@ public class DepositoJpaController implements Serializable {
 
     public DepositoJpaController() {
     }
-    
-    
+
 
     public void create(Deposito deposito) throws IllegalOrphanException {
         List<String> illegalOrphanMessages = null;

@@ -29,7 +29,7 @@ public class CuentaJpaController implements Serializable {
     public CuentaJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
+private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
@@ -38,8 +38,20 @@ public class CuentaJpaController implements Serializable {
     public CuentaJpaController() {
     }
     
+    
+
     public void create(Cuenta cuenta) throws IllegalOrphanException {
         List<String> illegalOrphanMessages = null;
+        Rol idRolOrphanCheck = cuenta.getIdRol();
+        if (idRolOrphanCheck != null) {
+            Cuenta oldCuentaOfIdRol = idRolOrphanCheck.getCuenta();
+            if (oldCuentaOfIdRol != null) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("The Rol " + idRolOrphanCheck + " already has an item of type Cuenta whose idRol column cannot be null. Please make another selection for the idRol field.");
+            }
+        }
         Usuario idUsuarioOrphanCheck = cuenta.getIdUsuario();
         if (idUsuarioOrphanCheck != null) {
             Cuenta oldCuentaOfIdUsuario = idUsuarioOrphanCheck.getCuenta();
@@ -57,10 +69,10 @@ public class CuentaJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Rol rol = cuenta.getRol();
-            if (rol != null) {
-                rol = em.getReference(rol.getClass(), rol.getIdRol());
-                cuenta.setRol(rol);
+            Rol idRol = cuenta.getIdRol();
+            if (idRol != null) {
+                idRol = em.getReference(idRol.getClass(), idRol.getIdRol());
+                cuenta.setIdRol(idRol);
             }
             Usuario idUsuario = cuenta.getIdUsuario();
             if (idUsuario != null) {
@@ -68,14 +80,9 @@ public class CuentaJpaController implements Serializable {
                 cuenta.setIdUsuario(idUsuario);
             }
             em.persist(cuenta);
-            if (rol != null) {
-                Cuenta oldIdCuentaOfRol = rol.getIdCuenta();
-                if (oldIdCuentaOfRol != null) {
-                    oldIdCuentaOfRol.setRol(null);
-                    oldIdCuentaOfRol = em.merge(oldIdCuentaOfRol);
-                }
-                rol.setIdCuenta(cuenta);
-                rol = em.merge(rol);
+            if (idRol != null) {
+                idRol.setCuenta(cuenta);
+                idRol = em.merge(idRol);
             }
             if (idUsuario != null) {
                 idUsuario.setCuenta(cuenta);
@@ -95,16 +102,19 @@ public class CuentaJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Cuenta persistentCuenta = em.find(Cuenta.class, cuenta.getIdCuenta());
-            Rol rolOld = persistentCuenta.getRol();
-            Rol rolNew = cuenta.getRol();
+            Rol idRolOld = persistentCuenta.getIdRol();
+            Rol idRolNew = cuenta.getIdRol();
             Usuario idUsuarioOld = persistentCuenta.getIdUsuario();
             Usuario idUsuarioNew = cuenta.getIdUsuario();
             List<String> illegalOrphanMessages = null;
-            if (rolOld != null && !rolOld.equals(rolNew)) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
+            if (idRolNew != null && !idRolNew.equals(idRolOld)) {
+                Cuenta oldCuentaOfIdRol = idRolNew.getCuenta();
+                if (oldCuentaOfIdRol != null) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("The Rol " + idRolNew + " already has an item of type Cuenta whose idRol column cannot be null. Please make another selection for the idRol field.");
                 }
-                illegalOrphanMessages.add("You must retain Rol " + rolOld + " since its idCuenta field is not nullable.");
             }
             if (idUsuarioNew != null && !idUsuarioNew.equals(idUsuarioOld)) {
                 Cuenta oldCuentaOfIdUsuario = idUsuarioNew.getCuenta();
@@ -118,23 +128,22 @@ public class CuentaJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            if (rolNew != null) {
-                rolNew = em.getReference(rolNew.getClass(), rolNew.getIdRol());
-                cuenta.setRol(rolNew);
+            if (idRolNew != null) {
+                idRolNew = em.getReference(idRolNew.getClass(), idRolNew.getIdRol());
+                cuenta.setIdRol(idRolNew);
             }
             if (idUsuarioNew != null) {
                 idUsuarioNew = em.getReference(idUsuarioNew.getClass(), idUsuarioNew.getIdUsuario());
                 cuenta.setIdUsuario(idUsuarioNew);
             }
             cuenta = em.merge(cuenta);
-            if (rolNew != null && !rolNew.equals(rolOld)) {
-                Cuenta oldIdCuentaOfRol = rolNew.getIdCuenta();
-                if (oldIdCuentaOfRol != null) {
-                    oldIdCuentaOfRol.setRol(null);
-                    oldIdCuentaOfRol = em.merge(oldIdCuentaOfRol);
-                }
-                rolNew.setIdCuenta(cuenta);
-                rolNew = em.merge(rolNew);
+            if (idRolOld != null && !idRolOld.equals(idRolNew)) {
+                idRolOld.setCuenta(null);
+                idRolOld = em.merge(idRolOld);
+            }
+            if (idRolNew != null && !idRolNew.equals(idRolOld)) {
+                idRolNew.setCuenta(cuenta);
+                idRolNew = em.merge(idRolNew);
             }
             if (idUsuarioOld != null && !idUsuarioOld.equals(idUsuarioNew)) {
                 idUsuarioOld.setCuenta(null);
@@ -161,7 +170,7 @@ public class CuentaJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -173,16 +182,10 @@ public class CuentaJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The cuenta with id " + id + " no longer exists.", enfe);
             }
-            List<String> illegalOrphanMessages = null;
-            Rol rolOrphanCheck = cuenta.getRol();
-            if (rolOrphanCheck != null) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Cuenta (" + cuenta + ") cannot be destroyed since the Rol " + rolOrphanCheck + " in its rol field has a non-nullable idCuenta field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
+            Rol idRol = cuenta.getIdRol();
+            if (idRol != null) {
+                idRol.setCuenta(null);
+                idRol = em.merge(idRol);
             }
             Usuario idUsuario = cuenta.getIdUsuario();
             if (idUsuario != null) {
@@ -232,12 +235,13 @@ public class CuentaJpaController implements Serializable {
     }
     
     public Cuenta findCuentaUsuario(String usuario) {
-        EntityManager em = getEntityManager();
-        try {
-            return em.find(Cuenta.class, usuario);
-        } finally {
-            em.close();
+        List<Cuenta> cuentas = findCuentaEntities();
+        for (Cuenta cuenta : cuentas) {
+            if (cuenta.getUsuario().equals(usuario)) {
+                return cuenta;
+            }
         }
+        return null;
     }
 
     public int getCuentaCount() {

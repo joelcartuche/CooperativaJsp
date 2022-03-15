@@ -6,7 +6,6 @@ package Modelos;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -54,8 +53,9 @@ public class Cuenta implements Serializable {
     private String password;
     @Column(name = "es_eliminado")
     private Boolean esEliminado;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idCuenta")
-    private Rol rol;
+    @JoinColumn(name = "id_rol", referencedColumnName = "id_rol")
+    @OneToOne(optional = false)
+    private Rol idRol;
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     @OneToOne(optional = false)
     private Usuario idUsuario;
@@ -106,12 +106,12 @@ public class Cuenta implements Serializable {
         this.esEliminado = esEliminado;
     }
 
-    public Rol getRol() {
-        return rol;
+    public Rol getIdRol() {
+        return idRol;
     }
 
-    public void setRol(Rol rol) {
-        this.rol = rol;
+    public void setIdRol(Rol idRol) {
+        this.idRol = idRol;
     }
 
     public Usuario getIdUsuario() {

@@ -28,7 +28,7 @@ public class RetiroJpaController implements Serializable {
     public RetiroJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
+private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
@@ -38,7 +38,7 @@ public class RetiroJpaController implements Serializable {
     }
     
     
-    
+
     public void create(Retiro retiro) throws IllegalOrphanException {
         List<String> illegalOrphanMessages = null;
         Socios idSociosOrphanCheck = retiro.getIdSocios();

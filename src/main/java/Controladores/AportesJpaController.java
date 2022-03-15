@@ -28,12 +28,10 @@ public class AportesJpaController implements Serializable {
     public AportesJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
+private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
 
     public AportesJpaController() {
     }
-    
-    
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();

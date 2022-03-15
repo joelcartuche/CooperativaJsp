@@ -37,6 +37,7 @@ public class PagoJpaController implements Serializable {
     public PagoJpaController() {
     }
     
+    
 
     public void create(Pago pago) {
         EntityManager em = null;

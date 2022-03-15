@@ -28,7 +28,7 @@ public class RolJpaController implements Serializable {
     public RolJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
+private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
@@ -37,35 +37,27 @@ public class RolJpaController implements Serializable {
     public RolJpaController() {
     }
     
+    
 
-    public void create(Rol rol) throws IllegalOrphanException {
-        List<String> illegalOrphanMessages = null;
-        Cuenta idCuentaOrphanCheck = rol.getIdCuenta();
-        if (idCuentaOrphanCheck != null) {
-            Rol oldRolOfIdCuenta = idCuentaOrphanCheck.getRol();
-            if (oldRolOfIdCuenta != null) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("The Cuenta " + idCuentaOrphanCheck + " already has an item of type Rol whose idCuenta column cannot be null. Please make another selection for the idCuenta field.");
-            }
-        }
-        if (illegalOrphanMessages != null) {
-            throw new IllegalOrphanException(illegalOrphanMessages);
-        }
+    public void create(Rol rol) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Cuenta idCuenta = rol.getIdCuenta();
-            if (idCuenta != null) {
-                idCuenta = em.getReference(idCuenta.getClass(), idCuenta.getIdCuenta());
-                rol.setIdCuenta(idCuenta);
+            Cuenta cuenta = rol.getCuenta();
+            if (cuenta != null) {
+                cuenta = em.getReference(cuenta.getClass(), cuenta.getIdCuenta());
+                rol.setCuenta(cuenta);
             }
             em.persist(rol);
-            if (idCuenta != null) {
-                idCuenta.setRol(rol);
-                idCuenta = em.merge(idCuenta);
+            if (cuenta != null) {
+                Rol oldIdRolOfCuenta = cuenta.getIdRol();
+                if (oldIdRolOfCuenta != null) {
+                    oldIdRolOfCuenta.setCuenta(null);
+                    oldIdRolOfCuenta = em.merge(oldIdRolOfCuenta);
+                }
+                cuenta.setIdRol(rol);
+                cuenta = em.merge(cuenta);
             }
             em.getTransaction().commit();
         } finally {
@@ -81,33 +73,31 @@ public class RolJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Rol persistentRol = em.find(Rol.class, rol.getIdRol());
-            Cuenta idCuentaOld = persistentRol.getIdCuenta();
-            Cuenta idCuentaNew = rol.getIdCuenta();
+            Cuenta cuentaOld = persistentRol.getCuenta();
+            Cuenta cuentaNew = rol.getCuenta();
             List<String> illegalOrphanMessages = null;
-            if (idCuentaNew != null && !idCuentaNew.equals(idCuentaOld)) {
-                Rol oldRolOfIdCuenta = idCuentaNew.getRol();
-                if (oldRolOfIdCuenta != null) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("The Cuenta " + idCuentaNew + " already has an item of type Rol whose idCuenta column cannot be null. Please make another selection for the idCuenta field.");
+            if (cuentaOld != null && !cuentaOld.equals(cuentaNew)) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
                 }
+                illegalOrphanMessages.add("You must retain Cuenta " + cuentaOld + " since its idRol field is not nullable.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            if (idCuentaNew != null) {
-                idCuentaNew = em.getReference(idCuentaNew.getClass(), idCuentaNew.getIdCuenta());
-                rol.setIdCuenta(idCuentaNew);
+            if (cuentaNew != null) {
+                cuentaNew = em.getReference(cuentaNew.getClass(), cuentaNew.getIdCuenta());
+                rol.setCuenta(cuentaNew);
             }
             rol = em.merge(rol);
-            if (idCuentaOld != null && !idCuentaOld.equals(idCuentaNew)) {
-                idCuentaOld.setRol(null);
-                idCuentaOld = em.merge(idCuentaOld);
-            }
-            if (idCuentaNew != null && !idCuentaNew.equals(idCuentaOld)) {
-                idCuentaNew.setRol(rol);
-                idCuentaNew = em.merge(idCuentaNew);
+            if (cuentaNew != null && !cuentaNew.equals(cuentaOld)) {
+                Rol oldIdRolOfCuenta = cuentaNew.getIdRol();
+                if (oldIdRolOfCuenta != null) {
+                    oldIdRolOfCuenta.setCuenta(null);
+                    oldIdRolOfCuenta = em.merge(oldIdRolOfCuenta);
+                }
+                cuentaNew.setIdRol(rol);
+                cuentaNew = em.merge(cuentaNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -126,7 +116,7 @@ public class RolJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -138,10 +128,16 @@ public class RolJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The rol with id " + id + " no longer exists.", enfe);
             }
-            Cuenta idCuenta = rol.getIdCuenta();
-            if (idCuenta != null) {
-                idCuenta.setRol(null);
-                idCuenta = em.merge(idCuenta);
+            List<String> illegalOrphanMessages = null;
+            Cuenta cuentaOrphanCheck = rol.getCuenta();
+            if (cuentaOrphanCheck != null) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Rol (" + rol + ") cannot be destroyed since the Cuenta " + cuentaOrphanCheck + " in its cuenta field has a non-nullable idRol field.");
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             em.remove(rol);
             em.getTransaction().commit();

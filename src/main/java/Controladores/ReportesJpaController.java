@@ -29,13 +29,13 @@ public class ReportesJpaController implements Serializable {
     public ReportesJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-
-    public ReportesJpaController() {
-    }
     private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
+    }
+
+    public ReportesJpaController() {
     }
     
     
