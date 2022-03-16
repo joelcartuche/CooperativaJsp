@@ -11,8 +11,8 @@
             <div class="row">
                 <div class="col-md-12 fw-bold fs-3 text-center">Lista de Socios</div>
             </div>
-            <div class="row mt-5 justify-content-md-center">
-                <div class="col-md-11">
+            <div class="row mt-5 justify-content-center">
+                <div class="col-12 col-md-11">
                     <table class="table">
                         <thead>
                             <tr>

@@ -4,15 +4,20 @@
     Author     : LENOVO
 --%>
 
+<%@page import="Utilidades.Dominio"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
+<%
+    Dominio dom = new Dominio();
+%>
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg myBgNavbar">
         <div class="container-fluid">
             <!-- offcanvas trigger -->
-            <button class="navbar-toggler me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                <span class="navbar-toggler-icon" data-bs-target="#offcanvasExample"></span>
+            <button class="navbar-toggler me-2 btnTogle" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list burger" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                </svg>
             </button>
             <!-- offcanvas trigger -->
             <!-- Navbar -->
@@ -327,7 +332,7 @@
                             <span class="me-3 myIconText">
                                 <i class="bi bi-person"></i>
                             </span>
-                            <span class="myOffCanvaSubtitle">Partners</span>
+                            <span class="myOffCanvaSubtitle">Socios</span>
                             <span class="right-icon ms-auto">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
                                     <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
@@ -338,25 +343,25 @@
                             <div>
                                 <ul class="navbar-nav ps-3">
                                     <li>
-                                        <a href="#" class="nav-link px-3">
+                                        <a href="<%=dom.getDominio()%>Socio?accion=listar" class="nav-link px-3">
                                             <span class="me-2">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
                                                     <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
                                                     <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
                                                 </svg>
                                             </span>
-                                            <span>List Partners</span>
+                                            <span>Listar Socios</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" class="nav-link px-3">
+                                        <a href="<%=dom.getDominio()%>Socio?accion=agregar" class="nav-link px-3">
                                             <span class="me-2">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus" viewBox="0 0 16 16">
                                                     <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
                                                     <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
                                                 </svg>
                                             </span>
-                                            <span>Add Partners</span>
+                                            <span>Agregar Nuevo Socio</span>
                                         </a>
                                     </li>
                                     <li>
