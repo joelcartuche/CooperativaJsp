@@ -1,0 +1,114 @@
+
+:root {
+    --offcanvas-width: 270px;
+    --topNavbarHeight: 56px;
+    --white: #fff;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-800: #1f2937;
+    --green-600: #16a34a;
+}
+
+.myBgNavbar {
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.navbar-toggler {
+    border: none;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+}
+
+.burger {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    color: black;
+}
+
+.myLogo {
+    color: var(--green-600)
+}
+
+.myLogo:hover {
+    color: var(--green-600);
+}
+
+.nameUserNavbar {
+    color: var(--gray-800);
+}
+
+.nameUserNavbar:hover {
+    color: var(--gray-800) !important;
+}
+
+.myIconText {
+    color: var(--green-600);
+}
+
+.myOffCanvas {
+    border-right: 1px solid var(--gray-200);
+    border-top: 1px solid var(--gray-200);
+}
+
+.myOffCanvaSubtitle {
+    color: var(--gray-800) !important;
+}
+
+.offcanvasItems:hover {
+    background-color: var(--gray-100);
+}
+
+.sidebar-nav {
+    width: var(--offcanvas-width);
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+}
+
+.sidebar-link .right-icon {
+    display: inline-flex;
+    transition: all ease 0.25s;
+}
+
+.sidebar-link[aria-expanded="true"] .right-icon {
+    transform: rotate(180deg);
+}
+
+.btn-link {
+    width: 100%;
+    padding: 6px 0px;
+    border: none;
+    background-color: transparent;
+}
+
+.hidenScroll::-webkit-scrollbar {
+    display: none;
+}
+
+@media (min-width: 992px) {
+    
+    .body {
+        overflow: auto !important;
+    }
+    
+    .offcanvas-backdrop::before {
+        display: none;
+    }
+    
+    main {
+        margin-left: var(--offcanvas-width);
+        margin-top: 5px;
+        padding-top: 3px;
+    }
+    
+    .sidebar-nav {
+        transform: none;
+        visibility: visible !important;
+        top: var(--topNavbarHeight);
+        height: calc(100% - var(--topNavbarHeight));
+    }
+}
