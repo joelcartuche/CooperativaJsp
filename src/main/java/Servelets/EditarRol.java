@@ -1,11 +1,16 @@
+package Servelets;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Servelets.GestionRol;
 
+import Controladores.RolJpaController;
+import Modelos.Rol;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,8 +21,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author joelc
  */
-@WebServlet(name = "CrearRol", urlPatterns = {"/CrearRol"})
-public class CrearRol extends HttpServlet {
+@WebServlet(urlPatterns = {"/EditarRol"})
+public class EditarRol extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,16 +37,7 @@ public class CrearRol extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CrearRol</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CrearRol at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+
         }
     }
 
@@ -71,7 +67,32 @@ public class CrearRol extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String salida ="{"; //almacena el Json de salida
+        try ( PrintWriter out = response.getWriter()) {
+            String tipoRol = request.getParameter("tipoRol");
+            String esEliminado = request.getParameter("esEliminado");
+            String id = request.getParameter("id");
+            RolJpaController rolJpaController = new RolJpaController();
+            Rol rol = rolJpaController.findRol(Integer.parseInt(id));
+            System.out.println(tipoRol+"");
+            if (!tipoRol.equals("Seleccionado")) {
+                rol.setTipoRol(tipoRol);
+                rol.setEsEliminado(Boolean.parseBoolean(esEliminado));
+                try {
+                    rolJpaController.edit(rol);
+                    System.out.println("succes");
+                    salida += "\"success\":1}";
+                } catch (Exception ex) {
+                    salida += "\"success\":0}";
+                    Logger.getLogger(EditarRol.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("2222");
+                }
+            }else{
+                salida += "\"success\":0}";
+                System.out.println("errrr2");
+            }
+            out.print(salida);
+        }
     }
 
     /**

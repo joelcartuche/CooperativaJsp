@@ -13,8 +13,8 @@
     <class>Modelos.Socios</class>
     <class>Modelos.TasaAmortizacion</class>
     <class>Modelos.Usuario</class>
-    <class>Modelos.Rol</class>
     <class>Modelos.Cuenta</class>
+    <class>Modelos.Rol</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/cooperativa"/>
