@@ -25,6 +25,10 @@
     color: var(--gray-800);
 }
 
+.nameUserNavbar:hover {
+    color: var(--gray-800) !important;
+}
+
 .myIconText {
     color: var(--green-600);
 }
