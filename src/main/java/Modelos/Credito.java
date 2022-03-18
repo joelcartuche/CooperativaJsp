@@ -49,6 +49,9 @@ public class Credito implements Serializable {
     @JoinColumn(name = "id_socios", referencedColumnName = "id_socios")
     @OneToOne(optional = false)
     private Socios idSocios;
+    @JoinColumn(name = "id_tasa_amortizacion", referencedColumnName = "id_tasa_amortizacion")
+    @OneToOne(optional = false)
+    private TasaAmortizacion idTasaAmortizacion;
 
     public Credito() {
     }
@@ -95,6 +98,14 @@ public class Credito implements Serializable {
 
     public void setIdSocios(Socios idSocios) {
         this.idSocios = idSocios;
+    }
+
+    public TasaAmortizacion getIdTasaAmortizacion() {
+        return idTasaAmortizacion;
+    }
+
+    public void setIdTasaAmortizacion(TasaAmortizacion idTasaAmortizacion) {
+        this.idTasaAmortizacion = idTasaAmortizacion;
     }
 
     @Override

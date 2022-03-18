@@ -35,9 +35,6 @@ public class TasaAmortizacionJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public TasaAmortizacionJpaController() {
-    }
-
     public void create(TasaAmortizacion tasaAmortizacion) throws IllegalOrphanException {
         List<String> illegalOrphanMessages = null;
         Cuota idCuotaOrphanCheck = tasaAmortizacion.getIdCuota();

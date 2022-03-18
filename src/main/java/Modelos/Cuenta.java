@@ -61,7 +61,6 @@ public class Cuenta implements Serializable {
     private Usuario idUsuario;
 
     public Cuenta() {
-        this.esEliminado=false;
     }
 
     public Cuenta(Integer idCuenta) {

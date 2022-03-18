@@ -59,7 +59,6 @@ public class Deposito implements Serializable {
     private Socios idSocios;
 
     public Deposito() {
-        this.esEliminado=false;
     }
 
     public Deposito(Integer idDeposito) {

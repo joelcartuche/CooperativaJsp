@@ -70,7 +70,15 @@ public class Socios implements Serializable {
     @Column(name = "es_eliminado")
     private Boolean esEliminado;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "idSocios")
+    private CuentaCooperativa cuentaCooperativa;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idSocios")
+    private Deposito deposito;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idSocios")
+    private Retiro retiro;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idSocios")
     private Credito credito;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idSocios")
+    private Aportes aportes;
 
     public Socios() {
     }
@@ -143,12 +151,44 @@ public class Socios implements Serializable {
         this.esEliminado = esEliminado;
     }
 
+    public CuentaCooperativa getCuentaCooperativa() {
+        return cuentaCooperativa;
+    }
+
+    public void setCuentaCooperativa(CuentaCooperativa cuentaCooperativa) {
+        this.cuentaCooperativa = cuentaCooperativa;
+    }
+
+    public Deposito getDeposito() {
+        return deposito;
+    }
+
+    public void setDeposito(Deposito deposito) {
+        this.deposito = deposito;
+    }
+
+    public Retiro getRetiro() {
+        return retiro;
+    }
+
+    public void setRetiro(Retiro retiro) {
+        this.retiro = retiro;
+    }
+
     public Credito getCredito() {
         return credito;
     }
 
     public void setCredito(Credito credito) {
         this.credito = credito;
+    }
+
+    public Aportes getAportes() {
+        return aportes;
+    }
+
+    public void setAportes(Aportes aportes) {
+        this.aportes = aportes;
     }
 
     @Override

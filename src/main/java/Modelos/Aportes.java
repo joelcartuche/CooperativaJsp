@@ -25,9 +25,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  *
  * @author joelc
- * 
-    * 
-    * private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
  */
 @Entity
 @Table(name = "aportes")
@@ -65,7 +62,6 @@ public class Aportes implements Serializable {
     private Socios idSocios;
 
     public Aportes() {
-        this.esEliminado=false;
     }
 
     public Aportes(Integer idAportes) {

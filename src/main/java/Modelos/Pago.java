@@ -48,7 +48,6 @@ public class Pago implements Serializable {
     private TasaAmortizacion tasaAmortizacion;
 
     public Pago() {
-        this.esEliminado=false;
     }
 
     public Pago(Integer idPago) {

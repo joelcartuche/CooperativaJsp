@@ -47,7 +47,6 @@ public class Cuota implements Serializable {
     private TasaAmortizacion tasaAmortizacion;
 
     public Cuota() {
-        this.esEliminado=false;
     }
 
     public Cuota(Integer idCuota) {

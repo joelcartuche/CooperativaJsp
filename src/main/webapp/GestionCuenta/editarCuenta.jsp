@@ -26,9 +26,9 @@
         CuentaJpaController cuentaJpaController = new CuentaJpaController();
         Cuenta cuenta = cuentaJpaController.findCuenta(Integer.parseInt(id));
         UsuarioJpaController usuarioJpaController = new UsuarioJpaController();
-        Usuario usuario =  usuarioJpaController.findUsuario(cuenta.getIdCuenta());
+        Usuario usuario =  usuarioJpaController.findUsuario(cuenta.getIdUsuario().getIdUsuario());
         RolJpaController rolJpaController = new RolJpaController();
-        Rol rol = rolJpaController.findRol(cuenta.getIdRol());
+        Rol rol = rolJpaController.findRol(cuenta.getIdRol().getIdRol());
         
 
     %>
@@ -91,14 +91,12 @@
                         <div class="mb-3 row possition-relative">
                             <label  class="col-sm-2 col-form-label">Usuario</label>
                             <input id="usuarioActual" name="usuarioActual" class="form-input position-absolute top-0 start-0" value="<%=usuario.getNombreUsuario() %> <%=usuario.getApellidoUsuario() %>" id="flexCheckDefault"/>
-                            <input class="form-input me-2 position-absolute top-0 start-50"  placeholder="Ingrese nombre y apellido o número de cédula">
-                            <input id="buscarUsuario" class="btn btn-outline-success position-absolute top-0 start-100" value="Buscar usuario"/>
+                            <input id="buscarUsuario" class="btn btn-outline-success position-absolute top-0 start-100" data-bs-toggle="modal" data-bs-target="#modalUsuario" value="Buscar usuario"/>
                         </div>
                         <div class="mb-3 row ">
                             <label  class="col-sm-2 col-form-label">Rol</label>
                             <input id="rol" name="rol" class="form-input position-absolute top-0 start-0" value="<%=rol.getTipoRol()%>" id="flexCheckDefault"/>
-                            <input class="form-input me-2 position-absolute top-0 start-50"  placeholder="Ingrese tipo de rol" >
-                            <input id="buscarRol" class="btn btn-outline-success position-absolute top-0 start-100" value="Buscar rol"/>
+                            <input id="buscarRol" class="btn btn-outline-success position-absolute top-0 start-50" data-bs-toggle="modal" data-bs-target="#modalRol" value="Buscar rol"/>
                         </div>
                         <div class="mb-3 row">
                             <input id="cancelar" class="btn btn-danger" value="Cancelar"/>
@@ -111,6 +109,47 @@
             </div>
             </div>
         </main>
+                            
+                            
+
+<!-- Modal Usuario-->
+<div class="modal fade" id="modalUsuario" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Rol-->
+<div class="modal fade" id="modalRol" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
 
         
     

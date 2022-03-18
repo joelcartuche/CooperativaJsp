@@ -34,9 +34,6 @@ public class CreditoJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public CreditoJpaController() {
-    }
-
     public void create(Credito credito) throws IllegalOrphanException {
         List<String> illegalOrphanMessages = null;
         Socios idSociosOrphanCheck = credito.getIdSocios();

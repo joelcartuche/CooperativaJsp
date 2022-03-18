@@ -31,11 +31,11 @@
                             //$('#resultado').html(responseText);
                             var result = JSON.parse(responseText);//recogemos el JSON generado
                             //recogemos las variables enviadas desde el servelet
-                            var logueado = result.data.logueado;
-                            var id =result.data.id;
-                            var usuario =result.data.user;
-                            var esContraIncorrecta =result.data.esContraIncorrecta;
-                            var noExisteUsuario = result.data.noExisteUsuario;
+                            var logueado = result.logueado;
+                            var id =result.id;
+                            var usuario =result.user;
+                            var esContraIncorrecta =result.esContraIncorrecta;
+                            var noExisteUsuario = result.noExisteUsuario;
                             
                             if(logueado!=null){
                                 if(logueado=="1"){
