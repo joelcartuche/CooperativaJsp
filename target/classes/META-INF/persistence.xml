@@ -3,7 +3,6 @@
   <persistence-unit name="persistece_cooperativa" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>Modelos.Aportes</class>
-    <class>Modelos.Credito</class>
     <class>Modelos.CuentaCooperativa</class>
     <class>Modelos.Cuota</class>
     <class>Modelos.Deposito</class>
@@ -15,6 +14,7 @@
     <class>Modelos.Usuario</class>
     <class>Modelos.Rol</class>
     <class>Modelos.Cuenta</class>
+    <class>Modelos.Credito</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/cooperativa"/>

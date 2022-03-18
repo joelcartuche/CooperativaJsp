@@ -18,6 +18,14 @@
         String nombre = request.getParameter("user");
         
     %>
-    <h1>Bienvenido <%=nombre%></h1>
+        <main>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12 fw-bold fs-3 text-center">Bienvenido <%=nombre%></div>
+            </div>
+        </div>
+    </main>
+    
+    
     <jsp:include page="/Template/footer.jsp"></jsp:include>
 </html>

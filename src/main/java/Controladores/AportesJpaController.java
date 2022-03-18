@@ -4,20 +4,17 @@
  */
 package Controladores;
 
-import Controladores.exceptions.IllegalOrphanException;
 import Controladores.exceptions.NonexistentEntityException;
 import Modelos.Aportes;
 import java.io.Serializable;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import Modelos.Socios;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.Persistence;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -28,44 +25,21 @@ public class AportesJpaController implements Serializable {
     public AportesJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
-
-    public AportesJpaController() {
-    }
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(Aportes aportes) throws IllegalOrphanException {
-        List<String> illegalOrphanMessages = null;
-        Socios idSociosOrphanCheck = aportes.getIdSocios();
-        if (idSociosOrphanCheck != null) {
-            Aportes oldAportesOfIdSocios = idSociosOrphanCheck.getAportes();
-            if (oldAportesOfIdSocios != null) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("The Socios " + idSociosOrphanCheck + " already has an item of type Aportes whose idSocios column cannot be null. Please make another selection for the idSocios field.");
-            }
-        }
-        if (illegalOrphanMessages != null) {
-            throw new IllegalOrphanException(illegalOrphanMessages);
-        }
+    public AportesJpaController() {
+    }
+
+    public void create(Aportes aportes) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Socios idSocios = aportes.getIdSocios();
-            if (idSocios != null) {
-                idSocios = em.getReference(idSocios.getClass(), idSocios.getIdSocios());
-                aportes.setIdSocios(idSocios);
-            }
             em.persist(aportes);
-            if (idSocios != null) {
-                idSocios.setAportes(aportes);
-                idSocios = em.merge(idSocios);
-            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -74,40 +48,12 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
         }
     }
 
-    public void edit(Aportes aportes) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(Aportes aportes) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Aportes persistentAportes = em.find(Aportes.class, aportes.getIdAportes());
-            Socios idSociosOld = persistentAportes.getIdSocios();
-            Socios idSociosNew = aportes.getIdSocios();
-            List<String> illegalOrphanMessages = null;
-            if (idSociosNew != null && !idSociosNew.equals(idSociosOld)) {
-                Aportes oldAportesOfIdSocios = idSociosNew.getAportes();
-                if (oldAportesOfIdSocios != null) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("The Socios " + idSociosNew + " already has an item of type Aportes whose idSocios column cannot be null. Please make another selection for the idSocios field.");
-                }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            if (idSociosNew != null) {
-                idSociosNew = em.getReference(idSociosNew.getClass(), idSociosNew.getIdSocios());
-                aportes.setIdSocios(idSociosNew);
-            }
             aportes = em.merge(aportes);
-            if (idSociosOld != null && !idSociosOld.equals(idSociosNew)) {
-                idSociosOld.setAportes(null);
-                idSociosOld = em.merge(idSociosOld);
-            }
-            if (idSociosNew != null && !idSociosNew.equals(idSociosOld)) {
-                idSociosNew.setAportes(aportes);
-                idSociosNew = em.merge(idSociosNew);
-            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -136,11 +82,6 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
                 aportes.getIdAportes();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The aportes with id " + id + " no longer exists.", enfe);
-            }
-            Socios idSocios = aportes.getIdSocios();
-            if (idSocios != null) {
-                idSocios.setAportes(null);
-                idSocios = em.merge(idSocios);
             }
             em.remove(aportes);
             em.getTransaction().commit();

@@ -12,7 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -71,19 +70,9 @@ public class Socios implements Serializable {
     @Column(name = "es_eliminado")
     private Boolean esEliminado;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "idSocios")
-    private CuentaCooperativa cuentaCooperativa;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idSocios")
-    private Deposito deposito;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idSocios")
-    private Retiro retiro;
-    @JoinColumn(name = "id_credito", referencedColumnName = "id_credito")
-    @OneToOne(optional = false)
-    private Credito idCredito;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idSocios")
-    private Aportes aportes;
+    private Credito credito;
 
     public Socios() {
-        this.esEliminado=false;
     }
 
     public Socios(Integer idSocios) {
@@ -154,44 +143,12 @@ public class Socios implements Serializable {
         this.esEliminado = esEliminado;
     }
 
-    public CuentaCooperativa getCuentaCooperativa() {
-        return cuentaCooperativa;
+    public Credito getCredito() {
+        return credito;
     }
 
-    public void setCuentaCooperativa(CuentaCooperativa cuentaCooperativa) {
-        this.cuentaCooperativa = cuentaCooperativa;
-    }
-
-    public Deposito getDeposito() {
-        return deposito;
-    }
-
-    public void setDeposito(Deposito deposito) {
-        this.deposito = deposito;
-    }
-
-    public Retiro getRetiro() {
-        return retiro;
-    }
-
-    public void setRetiro(Retiro retiro) {
-        this.retiro = retiro;
-    }
-
-    public Credito getIdCredito() {
-        return idCredito;
-    }
-
-    public void setIdCredito(Credito idCredito) {
-        this.idCredito = idCredito;
-    }
-
-    public Aportes getAportes() {
-        return aportes;
-    }
-
-    public void setAportes(Aportes aportes) {
-        this.aportes = aportes;
+    public void setCredito(Credito credito) {
+        this.credito = credito;
     }
 
     @Override

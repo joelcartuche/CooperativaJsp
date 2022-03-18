@@ -85,18 +85,7 @@
                 });
             });
             $('#no').click(function (event){
-                $.get('../BorrarRol',{
-                    si:0,
-                    no:1
-                },function(resultado) {
-                    var data = JSON.parse(resultado);
-                    var no = data.data.no;
-                    if(no!=null){
-                        if(no==1){
-                            window.location.replace("listarRol.jsp");
-                        }
-                    }
-                });
+                window.location.replace("listarRol.jsp");
             });
         });
         

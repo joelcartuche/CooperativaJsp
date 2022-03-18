@@ -23,18 +23,38 @@
         String esEliminado = request.getParameter("esEliminado");
     %>
 
-  
-
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" >
+    <div class="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Eliminar rol</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <%
+                            if (Boolean.parseBoolean(esEliminado)) {
+                        %>
+                        Habilitar rol
+                        <%
+                        } else {
+                        %>
+                        Eliminar rol
+                        <%
+                            }
+                        %>
+                    </h5>
                 </div>
                 <div class="modal-body">
-                    ¿Desea eliminar el rol?
+                    <%
+                        if(Boolean.parseBoolean(esEliminado)){
+                    %>
+                        ¿Desea habilitar el rol?
+                    <%
+                        }else{
+                    %>
+                        ¿Desea desactivar el rol?
+                    <%
+                        }
+                    %>
+                    
                 </div>
                 <div class="modal-footer">
                     <input  type="button" class="btn btn-secondary" id="no" value="NO"/>
@@ -65,18 +85,7 @@
                 });
             });
             $('#no').click(function (event){
-                $.get('../BorrarRol',{
-                    si:0,
-                    no:1
-                },function(resultado) {
-                    var data = JSON.parse(resultado);
-                    var no = data.data.no;
-                    if(no!=null){
-                        if(no==1){
-                            window.location.replace("listarRol.jsp");
-                        }
-                    }
-                });
+                window.location.replace("listarRol.jsp");
             });
         });
         

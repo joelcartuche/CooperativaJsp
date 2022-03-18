@@ -1,12 +1,12 @@
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Controladores\AportesJpaController.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Servelets\Login.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Controladores\TasaAmortizacionJpaController.java
+C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Servelets\CrearRol.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Modelos\Aportes.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Modelos\TasaAmortizacion.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Modelos\Pago.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Controladores\DepositoJpaController.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Controladores\RolJpaController.java
-C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Servelets\GestionRol\CrearRol.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Controladores\CuotaJpaController.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\com\mycompany\cooperativa\TestContacto.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Utilidades\Encriptar.java
@@ -24,6 +24,7 @@ C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Controladore
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Modelos\Usuario.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Modelos\Reportes.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Utilidades\Dominio.java
+C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Servelets\EditarRol.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Controladores\exceptions\IllegalOrphanException.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Modelos\Deposito.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Controladores\SociosJpaController.java
