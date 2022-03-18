@@ -23,6 +23,7 @@ Modelos\TasaAmortizacion.class
 Controladores\exceptions\PreexistingEntityException.class
 Modelos\Credito.class
 Modelos\CuentaCooperativa.class
+Servelets\Socio.class
 Servelets\Login.class
 Controladores\AportesJpaController.class
 Modelos\Reportes.class

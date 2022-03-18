@@ -86,7 +86,33 @@ public class Socio extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
+        String nombre = request.getParameter("nombre_socio");
+        String apellido = request.getParameter("apellido_socio");
+        String cedula = request.getParameter("cedula_socio");
+        String telefono = request.getParameter("telefono_socio");
+        String direccion = request.getParameter("direccion_socio");
+        
+        String salida ="{\"message\":\"El Socio se creó exitosamente\"}"; //almacena el Json de salida
+        
+        try ( PrintWriter out = response.getWriter()) {
+            
+            // aqui va la logica para registrar el nuevo socio
+
+            // si el nuevo socio se creo exitosamente, se responde con:
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setStatus(200);
+            out.print(salida);
+            
+            // si hubo un error con los datos, se responde con:
+            //salida ="{\"error\":\"Hubo un error al registrar al socio.\"}";
+            //response.setContentType("application/json");
+            //response.setCharacterEncoding("UTF-8");
+            //response.setStatus(400);
+            //out.print(salida);
+            
+        }
     }
 
     /**

@@ -18,12 +18,15 @@
         <!-- My CSS -->
         <link href="../css/styles.css" rel="stylesheet" type="text/css"/>
 
+        <!-- JQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
         <title>Cooperativa</title>
     </head>
     <body>
-        
+
         <jsp:include page="navbar.jsp"></jsp:include>
-        
+
         <!-- The content of the dashboard must be encapsulated in the <main> tag -->
         <!-- Example:  
             <main>
