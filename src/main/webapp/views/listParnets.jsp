@@ -16,15 +16,16 @@
     //if (sesion2.getAttribute("logueado") == null || sesion2.getAttribute("logueado").equals("0")) {
     //        response.sendRedirect("../login.jsp");
     //}
-        
+
     Dominio dom = new Dominio();
 %>
-    
+
 <%
     SociosJpaController sociosJpaController = new SociosJpaController();
     List<Socios> listaSocio = sociosJpaController.findSociosEntities();
 
 %>
+
 <main>
     <div class="container-fluid">
         <div class="row">
@@ -44,25 +45,56 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th scope="col">Cédula</th>
+                            <th scope="col">Id</th>
                             <th scope="col">Nombre</th>
                             <th scope="col">Apellido</th>
+                            <th scope="col">Cédula</th>
                             <th scope="col">Teléfono</th>
+                            <th scope="col">Estado</th>
                             <th scope="col">Opciones</th>
                         </tr>
                     </thead>
                     <tbody>
+                        <%
+                            for (Socios socio : listaSocio) {
+                        %>
                         <tr>
-                            <td>111111111</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>2222222222</td>
+                            <td><%=socio.getIdSocios()%></th>
+                            <td><%=socio.getNombreSocio()%></td>
+                            <td><%=socio.getApellidoSocio()%></td>
+                            <td><%=socio.getCedulaSocio()%></td>
+                            <td><%=socio.getTelefonoSocio()%></td>
                             <td>
-                                <a type="button" href="#" class="btn btn-info"><i class="bi bi-eye text-white"></i></a>
-                                <a type="button" href="#" class="btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                <% if (!socio.getEsEliminado()) {%>
+                                <span class="my-estado-activo">
+                                    Activo
+                                </span>
+                                <%
+                                } else {
+                                %>
+                                <span class="my-estado-inactivo">
+                                    Inactivo
+                                </span>
+                                <%
+                                    }
+                                %></td>
+                            <td>
+                                <a type="button" href="<%=dom.getDominio()%>Socio?accion=listar&id=<%=socio.getIdSocios()%>" class="btn btn-info"><i class="bi bi-eye text-white"></i></a>
+                                <a type="button" href="<%=dom.getDominio()%>Socio?accion=editar&id=<%=socio.getIdSocios()%>" class="btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <% if (!socio.getEsEliminado()) {%>
                                 <a type="button" href="#" class="btn btn-danger"><i class="fa fa-trash-o fa-lg"></i> </a>
+                                <%
+                                } else {
+                                %>
+                                <a type="button" href="#" class="btn btn-success">Activar </a>
+
+                                <%
+                                    }
+                                %></td>
                             </td>
                         </tr>
+                        <%                }
+                        %>
                     </tbody>
                 </table>
                 <%
