@@ -13,7 +13,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import Modelos.Cuota;
 import Modelos.Pago;
-import Modelos.Credito;
 import Modelos.TasaAmortizacion;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,16 +29,11 @@ public class TasaAmortizacionJpaController implements Serializable {
     public TasaAmortizacionJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
-
-    public TasaAmortizacionJpaController() {
-    }
-    
-    
 
     public void create(TasaAmortizacion tasaAmortizacion) throws IllegalOrphanException {
         List<String> illegalOrphanMessages = null;
@@ -80,11 +74,6 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
                 idPago = em.getReference(idPago.getClass(), idPago.getIdPago());
                 tasaAmortizacion.setIdPago(idPago);
             }
-            Credito credito = tasaAmortizacion.getCredito();
-            if (credito != null) {
-                credito = em.getReference(credito.getClass(), credito.getIdCredito());
-                tasaAmortizacion.setCredito(credito);
-            }
             em.persist(tasaAmortizacion);
             if (idCuota != null) {
                 idCuota.setTasaAmortizacion(tasaAmortizacion);
@@ -93,15 +82,6 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
             if (idPago != null) {
                 idPago.setTasaAmortizacion(tasaAmortizacion);
                 idPago = em.merge(idPago);
-            }
-            if (credito != null) {
-                TasaAmortizacion oldIdTasaAmortizacionOfCredito = credito.getIdTasaAmortizacion();
-                if (oldIdTasaAmortizacionOfCredito != null) {
-                    oldIdTasaAmortizacionOfCredito.setCredito(null);
-                    oldIdTasaAmortizacionOfCredito = em.merge(oldIdTasaAmortizacionOfCredito);
-                }
-                credito.setIdTasaAmortizacion(tasaAmortizacion);
-                credito = em.merge(credito);
             }
             em.getTransaction().commit();
         } finally {
@@ -121,8 +101,6 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
             Cuota idCuotaNew = tasaAmortizacion.getIdCuota();
             Pago idPagoOld = persistentTasaAmortizacion.getIdPago();
             Pago idPagoNew = tasaAmortizacion.getIdPago();
-            Credito creditoOld = persistentTasaAmortizacion.getCredito();
-            Credito creditoNew = tasaAmortizacion.getCredito();
             List<String> illegalOrphanMessages = null;
             if (idCuotaNew != null && !idCuotaNew.equals(idCuotaOld)) {
                 TasaAmortizacion oldTasaAmortizacionOfIdCuota = idCuotaNew.getTasaAmortizacion();
@@ -142,12 +120,6 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
                     illegalOrphanMessages.add("The Pago " + idPagoNew + " already has an item of type TasaAmortizacion whose idPago column cannot be null. Please make another selection for the idPago field.");
                 }
             }
-            if (creditoOld != null && !creditoOld.equals(creditoNew)) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("You must retain Credito " + creditoOld + " since its idTasaAmortizacion field is not nullable.");
-            }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
@@ -158,10 +130,6 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
             if (idPagoNew != null) {
                 idPagoNew = em.getReference(idPagoNew.getClass(), idPagoNew.getIdPago());
                 tasaAmortizacion.setIdPago(idPagoNew);
-            }
-            if (creditoNew != null) {
-                creditoNew = em.getReference(creditoNew.getClass(), creditoNew.getIdCredito());
-                tasaAmortizacion.setCredito(creditoNew);
             }
             tasaAmortizacion = em.merge(tasaAmortizacion);
             if (idCuotaOld != null && !idCuotaOld.equals(idCuotaNew)) {
@@ -180,15 +148,6 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
                 idPagoNew.setTasaAmortizacion(tasaAmortizacion);
                 idPagoNew = em.merge(idPagoNew);
             }
-            if (creditoNew != null && !creditoNew.equals(creditoOld)) {
-                TasaAmortizacion oldIdTasaAmortizacionOfCredito = creditoNew.getIdTasaAmortizacion();
-                if (oldIdTasaAmortizacionOfCredito != null) {
-                    oldIdTasaAmortizacionOfCredito.setCredito(null);
-                    oldIdTasaAmortizacionOfCredito = em.merge(oldIdTasaAmortizacionOfCredito);
-                }
-                creditoNew.setIdTasaAmortizacion(tasaAmortizacion);
-                creditoNew = em.merge(creditoNew);
-            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -206,7 +165,7 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -217,17 +176,6 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
                 tasaAmortizacion.getIdTasaAmortizacion();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The tasaAmortizacion with id " + id + " no longer exists.", enfe);
-            }
-            List<String> illegalOrphanMessages = null;
-            Credito creditoOrphanCheck = tasaAmortizacion.getCredito();
-            if (creditoOrphanCheck != null) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This TasaAmortizacion (" + tasaAmortizacion + ") cannot be destroyed since the Credito " + creditoOrphanCheck + " in its credito field has a non-nullable idTasaAmortizacion field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             Cuota idCuota = tasaAmortizacion.getIdCuota();
             if (idCuota != null) {

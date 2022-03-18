@@ -12,7 +12,6 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import Modelos.Socios;
 import Modelos.Usuario;
 import Modelos.Reportes;
 import java.util.ArrayList;
@@ -30,27 +29,17 @@ public class CuentaCooperativaJpaController implements Serializable {
     public CuentaCooperativaJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
+
+    public CuentaCooperativaJpaController() {
+    }
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public CuentaCooperativaJpaController() {
-    }
-
     public void create(CuentaCooperativa cuentaCooperativa) throws IllegalOrphanException {
         List<String> illegalOrphanMessages = null;
-        Socios idSociosOrphanCheck = cuentaCooperativa.getIdSocios();
-        if (idSociosOrphanCheck != null) {
-            CuentaCooperativa oldCuentaCooperativaOfIdSocios = idSociosOrphanCheck.getCuentaCooperativa();
-            if (oldCuentaCooperativaOfIdSocios != null) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("The Socios " + idSociosOrphanCheck + " already has an item of type CuentaCooperativa whose idSocios column cannot be null. Please make another selection for the idSocios field.");
-            }
-        }
         Usuario idUsuarioOrphanCheck = cuentaCooperativa.getIdUsuario();
         if (idUsuarioOrphanCheck != null) {
             CuentaCooperativa oldCuentaCooperativaOfIdUsuario = idUsuarioOrphanCheck.getCuentaCooperativa();
@@ -68,11 +57,6 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Socios idSocios = cuentaCooperativa.getIdSocios();
-            if (idSocios != null) {
-                idSocios = em.getReference(idSocios.getClass(), idSocios.getIdSocios());
-                cuentaCooperativa.setIdSocios(idSocios);
-            }
             Usuario idUsuario = cuentaCooperativa.getIdUsuario();
             if (idUsuario != null) {
                 idUsuario = em.getReference(idUsuario.getClass(), idUsuario.getIdUsuario());
@@ -84,10 +68,6 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
                 cuentaCooperativa.setReportes(reportes);
             }
             em.persist(cuentaCooperativa);
-            if (idSocios != null) {
-                idSocios.setCuentaCooperativa(cuentaCooperativa);
-                idSocios = em.merge(idSocios);
-            }
             if (idUsuario != null) {
                 idUsuario.setCuentaCooperativa(cuentaCooperativa);
                 idUsuario = em.merge(idUsuario);
@@ -115,22 +95,11 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
             em = getEntityManager();
             em.getTransaction().begin();
             CuentaCooperativa persistentCuentaCooperativa = em.find(CuentaCooperativa.class, cuentaCooperativa.getIdCuentaCooperativa());
-            Socios idSociosOld = persistentCuentaCooperativa.getIdSocios();
-            Socios idSociosNew = cuentaCooperativa.getIdSocios();
             Usuario idUsuarioOld = persistentCuentaCooperativa.getIdUsuario();
             Usuario idUsuarioNew = cuentaCooperativa.getIdUsuario();
             Reportes reportesOld = persistentCuentaCooperativa.getReportes();
             Reportes reportesNew = cuentaCooperativa.getReportes();
             List<String> illegalOrphanMessages = null;
-            if (idSociosNew != null && !idSociosNew.equals(idSociosOld)) {
-                CuentaCooperativa oldCuentaCooperativaOfIdSocios = idSociosNew.getCuentaCooperativa();
-                if (oldCuentaCooperativaOfIdSocios != null) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("The Socios " + idSociosNew + " already has an item of type CuentaCooperativa whose idSocios column cannot be null. Please make another selection for the idSocios field.");
-                }
-            }
             if (idUsuarioNew != null && !idUsuarioNew.equals(idUsuarioOld)) {
                 CuentaCooperativa oldCuentaCooperativaOfIdUsuario = idUsuarioNew.getCuentaCooperativa();
                 if (oldCuentaCooperativaOfIdUsuario != null) {
@@ -149,10 +118,6 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            if (idSociosNew != null) {
-                idSociosNew = em.getReference(idSociosNew.getClass(), idSociosNew.getIdSocios());
-                cuentaCooperativa.setIdSocios(idSociosNew);
-            }
             if (idUsuarioNew != null) {
                 idUsuarioNew = em.getReference(idUsuarioNew.getClass(), idUsuarioNew.getIdUsuario());
                 cuentaCooperativa.setIdUsuario(idUsuarioNew);
@@ -162,14 +127,6 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
                 cuentaCooperativa.setReportes(reportesNew);
             }
             cuentaCooperativa = em.merge(cuentaCooperativa);
-            if (idSociosOld != null && !idSociosOld.equals(idSociosNew)) {
-                idSociosOld.setCuentaCooperativa(null);
-                idSociosOld = em.merge(idSociosOld);
-            }
-            if (idSociosNew != null && !idSociosNew.equals(idSociosOld)) {
-                idSociosNew.setCuentaCooperativa(cuentaCooperativa);
-                idSociosNew = em.merge(idSociosNew);
-            }
             if (idUsuarioOld != null && !idUsuarioOld.equals(idUsuarioNew)) {
                 idUsuarioOld.setCuentaCooperativa(null);
                 idUsuarioOld = em.merge(idUsuarioOld);
@@ -226,11 +183,6 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            Socios idSocios = cuentaCooperativa.getIdSocios();
-            if (idSocios != null) {
-                idSocios.setCuentaCooperativa(null);
-                idSocios = em.merge(idSocios);
             }
             Usuario idUsuario = cuentaCooperativa.getIdUsuario();
             if (idUsuario != null) {

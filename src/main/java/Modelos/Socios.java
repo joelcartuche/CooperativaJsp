@@ -12,7 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -76,14 +75,12 @@ public class Socios implements Serializable {
     private Deposito deposito;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "idSocios")
     private Retiro retiro;
-    @JoinColumn(name = "id_credito", referencedColumnName = "id_credito")
-    @OneToOne(optional = false)
-    private Credito idCredito;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idSocios")
+    private Credito credito;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "idSocios")
     private Aportes aportes;
 
     public Socios() {
-        this.esEliminado=false;
     }
 
     public Socios(Integer idSocios) {
@@ -178,12 +175,12 @@ public class Socios implements Serializable {
         this.retiro = retiro;
     }
 
-    public Credito getIdCredito() {
-        return idCredito;
+    public Credito getCredito() {
+        return credito;
     }
 
-    public void setIdCredito(Credito idCredito) {
-        this.idCredito = idCredito;
+    public void setCredito(Credito credito) {
+        this.credito = credito;
     }
 
     public Aportes getAportes() {

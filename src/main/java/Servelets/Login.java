@@ -75,35 +75,37 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String salida ="{\"data\":"; //almacena el Json de salida
-        
+        String salida =""; //almacena el Json de salida
+
         try ( PrintWriter out = response.getWriter()) {
-            
+
             Encriptar enc = new Encriptar();//encriptador de datos en MD5
             String user = request.getParameter("user"); //recogemos los datos enviados desde el template
             String password = request.getParameter("password");
             HttpSession sesion = request.getSession(); // almacenamos la sesion iniciada
             CuentaJpaController cuentaJpaController = new CuentaJpaController(); //llamamos al controlador jpa
             Cuenta cuentaUsurioBuscado = cuentaJpaController.findCuentaUsuario(user); //buscamos el usuario dado el nombre de usuario
-            
+
             if (cuentaUsurioBuscado != null) { //en caso  de que no exista el usuario buscado
                 if (cuentaUsurioBuscado.getPassword().equals(enc.getMD5(password))) { //comparamos las contraseñas
                     //enviamos parametros a la sesion
-                    sesion.setAttribute("logueado", "1"); 
+                    sesion.setAttribute("logueado", "1");
                     sesion.setAttribute("user", cuentaUsurioBuscado.getUsuario());
                     sesion.setAttribute("id", cuentaUsurioBuscado.getIdCuenta());
                     //enviamos el json para la vista login.jsp
-                    salida= salida+"{\"user\":\""+cuentaUsurioBuscado.getUsuario()+"\",\"id\":"+cuentaUsurioBuscado.getIdCuenta()+",\"logueado\":1}}";
+                    salida =  "{\"user\":\"" + cuentaUsurioBuscado.getUsuario() + "\",\"id\":" + cuentaUsurioBuscado.getIdCuenta() + ",\"logueado\":1}";
                     out.print(salida);
                 } else {//retornamos en este caso no existe contraseña
-                    salida= salida+"{\"esContraIncorrecta\":1}}";
+                    salida = "{\"esContraIncorrecta\":1}";
                     out.print(salida);
-                    
+
                 }
             } else {//retornamos el valor noExisteUsuario
-                salida = salida+"{\"noExisteUsuario\":1}}";
+                salida = "{\"noExisteUsuario\":1}";
                 out.print(salida);
             }
+            //out.print("Ssssssssssssssssssssssss");
+
         }
     }
 

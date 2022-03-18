@@ -67,7 +67,7 @@
                         <div class="mb-3 row">
                             <div class="form-check">
                                 <label class="form-check-label" for="flexCheckDefault">
-                                    Es eliminado
+                                    Desactivado
                                 </label>
                                 <input id="esEliminado" name="esEliminado" class="form-check-input" type="checkbox" value="<%=rol.getEsEliminado()%>" id="flexCheckDefault"/>
                             </div> 

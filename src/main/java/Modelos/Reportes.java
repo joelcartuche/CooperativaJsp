@@ -52,7 +52,6 @@ public class Reportes implements Serializable {
     private CuentaCooperativa idCuenta;
 
     public Reportes() {
-        this.esEliminado=false;
     }
 
     public Reportes(Integer idReportes) {

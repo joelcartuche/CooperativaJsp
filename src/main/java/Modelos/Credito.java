@@ -6,7 +6,6 @@ package Modelos;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -47,14 +46,14 @@ public class Credito implements Serializable {
     private Double interesCredito;
     @Column(name = "es_eliminado")
     private Boolean esEliminado;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idCredito")
-    private Socios socios;
+    @JoinColumn(name = "id_socios", referencedColumnName = "id_socios")
+    @OneToOne(optional = false)
+    private Socios idSocios;
     @JoinColumn(name = "id_tasa_amortizacion", referencedColumnName = "id_tasa_amortizacion")
     @OneToOne(optional = false)
     private TasaAmortizacion idTasaAmortizacion;
 
     public Credito() {
-        this.esEliminado=false;
     }
 
     public Credito(Integer idCredito) {
@@ -93,12 +92,12 @@ public class Credito implements Serializable {
         this.esEliminado = esEliminado;
     }
 
-    public Socios getSocios() {
-        return socios;
+    public Socios getIdSocios() {
+        return idSocios;
     }
 
-    public void setSocios(Socios socios) {
-        this.socios = socios;
+    public void setIdSocios(Socios idSocios) {
+        this.idSocios = idSocios;
     }
 
     public TasaAmortizacion getIdTasaAmortizacion() {
