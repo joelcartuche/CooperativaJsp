@@ -87,6 +87,7 @@
                         $('#errorlAlert').text(res.error);
                     }
                     if (res.message) {
+                        $('#errorlAlert').hide();
                         $('#successAlert').show();
                         $('#successAlert').text(res.message);
                         $('input[type="text"]').val('');
