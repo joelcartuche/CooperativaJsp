@@ -73,10 +73,14 @@ public class Socio extends HttpServlet {
         } else if (action.equalsIgnoreCase("agregar")) {
             acceso = agregar;
         } else if (action.equalsIgnoreCase("editar")) {
-            request.setAttribute("id", request.getParameter("id"));
+            int id = Integer.parseInt((String) request.getParameter("id"));
+            SociosJpaController sociosJpaController = new SociosJpaController();
+            Socios socio = sociosJpaController.findSocios(id);
+            request.setAttribute("socio", socio);
+            request.setAttribute("estado", socio.getEsEliminado());
             //request.getSession().setAttribute("idSocio", request.getParameter("id"));
             acceso = editar;
-             
+
         }
         RequestDispatcher vista = request.getRequestDispatcher(acceso);
         vista.forward(request, response);
@@ -94,74 +98,120 @@ public class Socio extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
+
+        String action = request.getParameter("accion");
+
         String nombre = request.getParameter("nombre_socio");
         String apellido = request.getParameter("apellido_socio");
         String cedula = request.getParameter("cedula_socio");
         String telefono = request.getParameter("telefono_socio");
         String direccion = request.getParameter("direccion_socio");
 
-        String salida = "{\"message\":\"El Socio se creó exitosamente\"}"; //almacena el Json de salida
+        String salida = ""; //almacena el Json de salida
 
-        try ( PrintWriter out = response.getWriter()) {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            
-            if (!Validar.esValidoCedulaEc(cedula)) {
-                salida = "{\"error\":\"Hubo un error al registrar la cédula.\"}";
-                out.print(salida);
-            } else if (!Validar.esSoloLetras(nombre)) {
-                salida = "{\"error\":\"Hubo un error al registrar el nombre. Verifique que no contenga números.\"}";
-                out.print(salida);
-            } else if (!Validar.esSoloLetras(apellido)) {
-                salida = "{\"error\":\"Hubo un error al registrar el apellido. Verifique que no contenga números.\"}";
-                out.print(salida);
-            } else if (!Validar.esValidoTelefono(telefono)) {
-                salida = "{\"error\":\"Hubo un error al registrar el teléfono.\"}";
-                out.print(salida);
-            } else {
-                // aqui va la logica para registrar el nuevo socio
-                SociosJpaController socioJpaController = new SociosJpaController();
+        if (action.equalsIgnoreCase("agregar")) {
 
-                Socios socio = new Socios();
-                
-                socio.setNombreSocio(nombre);
-                socio.setApellidoSocio(apellido);
-                socio.setCedulaSocio(cedula);
-                socio.setTelefonoSocio(telefono);
-                socio.setDireccionSocio(direccion);
-                socio.setEsEliminado(Boolean.FALSE);
+            try ( PrintWriter out = response.getWriter()) {
 
-                try {
-                    socioJpaController.create(socio); // guardamos el socio en la bse de datos
-                    
-                    response.setContentType("application/json");
-                    response.setCharacterEncoding("UTF-8");
-                    response.setStatus(200);
+                if (!Validar.esValidoCedulaEc(cedula)) {
+                    salida = "{\"error\":\"Hubo un error al registrar la cédula.\"}";
                     out.print(salida);
-                } catch (Exception e) {
-                    salida = "{\"error\":\"Hubo un error al registrar al socio.\"}";
-                    response.setContentType("application/json");
-                    response.setCharacterEncoding("UTF-8");
+                } else if (!Validar.esSoloLetras(nombre)) {
+                    salida = "{\"error\":\"Hubo un error al registrar el nombre. Verifique que no contenga números.\"}";
                     out.print(salida);
+                } else if (!Validar.esSoloLetras(apellido)) {
+                    salida = "{\"error\":\"Hubo un error al registrar el apellido. Verifique que no contenga números.\"}";
+                    out.print(salida);
+                } else if (!Validar.esValidoTelefono(telefono)) {
+                    salida = "{\"error\":\"Hubo un error al registrar el teléfono.\"}";
+                    out.print(salida);
+                } else {
+                    SociosJpaController socioJpaController = new SociosJpaController();
+
+                    Socios socio = new Socios();
+
+                    socio.setNombreSocio(nombre);
+                    socio.setApellidoSocio(apellido);
+                    socio.setCedulaSocio(cedula);
+                    socio.setTelefonoSocio(telefono);
+                    socio.setDireccionSocio(direccion);
+                    socio.setEsEliminado(Boolean.FALSE);
+
+                    try {
+                        socioJpaController.create(socio); // guardamos el socio en la bse de datos
+                        salida = "{\"message\":\"El Socio se creó exitosamente\"}";
+                        response.setContentType("application/json");
+                        response.setCharacterEncoding("UTF-8");
+                        response.setStatus(200);
+                        out.print(salida);
+                    } catch (Exception e) {
+                        salida = "{\"error\":\"Hubo un error al registrar al socio.\"}";
+                        response.setContentType("application/json");
+                        response.setCharacterEncoding("UTF-8");
+                        out.print(salida);
+                    }
                 }
+
             }
 
+        } else if (action.equalsIgnoreCase("editar")) {
+
+            int id = Integer.parseInt(request.getParameter("id_socio"));
+            String estado = request.getParameter("estadoSocio");
+
+            try ( PrintWriter out = response.getWriter()) {
+
+                if (!Validar.esValidoCedulaEc(cedula)) {
+                    salida = "{\"error\":\"Hubo un error al registrar la cédula.\"}";
+                    out.print(salida);
+                } else if (!Validar.esSoloLetras(nombre)) {
+                    salida = "{\"error\":\"Hubo un error al registrar el nombre. Verifique que no contenga números.\"}";
+                    out.print(salida);
+                } else if (!Validar.esSoloLetras(apellido)) {
+                    salida = "{\"error\":\"Hubo un error al registrar el apellido. Verifique que no contenga números.\"}";
+                    out.print(salida);
+                } else if (!Validar.esValidoTelefono(telefono)) {
+                    salida = "{\"error\":\"Hubo un error al registrar el teléfono.\"}";
+                    out.print(salida);
+                } else {
+                    SociosJpaController socioJpaController = new SociosJpaController();
+
+                    Socios socio = new Socios();
+
+                    socio.setIdSocios(id);
+                    socio.setNombreSocio(nombre);
+                    socio.setApellidoSocio(apellido);
+                    socio.setCedulaSocio(cedula);
+                    socio.setTelefonoSocio(telefono);
+                    socio.setDireccionSocio(direccion);
+
+                    if (estado.equalsIgnoreCase("true")) {
+                        socio.setEsEliminado(Boolean.TRUE);
+                    } else {
+                        socio.setEsEliminado(Boolean.FALSE);
+                    }
+
+                    try {
+                        socioJpaController.edit(socio); // guardamos el socio en la bse de datos
+
+                        salida = "{\"message\":\"La información se actualizó exitosamente\"}";
+                        response.setContentType("application/json");
+                        response.setCharacterEncoding("UTF-8");
+                        response.setStatus(200);
+                        out.print(salida);
+                    } catch (Exception e) {
+                        salida = "{\"error\":\"Hubo un error al actualizar los datos.\"}";
+                        response.setContentType("application/json");
+                        response.setCharacterEncoding("UTF-8");
+                        out.print(salida);
+                    }
+                }
+
+            }
         }
-    }
-    
-    
-    @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String id = req.getParameter("id_socio");
-        String nombre = req.getParameter("nombre_socio");
-        String apellido = req.getParameter("apellido_socio");
-        String cedula = req.getParameter("cedula_socio");
-        String telefono = req.getParameter("telefono_socio");
-        String direccion = req.getParameter("direccion_socio");
-        System.out.println(nombre);
-        System.out.println(id);
     }
 
     /**
@@ -173,6 +223,5 @@ public class Socio extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    
 
 }

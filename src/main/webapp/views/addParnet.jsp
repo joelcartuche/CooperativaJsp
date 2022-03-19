@@ -81,7 +81,7 @@
 
         $("#botonenviar").click(function () {     // Con esto establecemos la acción por defecto de nuestro botón de enviar.
             if (validaForm()) {                               // Primero validará el formulario.
-                $.post("<%=dom.getDominio()%>Socio", $("#formdata").serialize(), function (res) {
+                $.post("<%=dom.getDominio()%>Socio?accion=agregar", $("#formdata").serialize(), function (res) {
                     if (res.error) {
                         $('#errorlAlert').show();
                         $('#errorlAlert').text(res.error);
