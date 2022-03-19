@@ -81,13 +81,13 @@
                             <td>
                                 <a type="button" href="<%=dom.getDominio()%>Socio?accion=listar&id=<%=socio.getIdSocios()%>" class="btn btn-info"><i class="bi bi-eye text-white"></i></a>
                                 <a type="button" href="<%=dom.getDominio()%>Socio?accion=editar&id=<%=socio.getIdSocios()%>" class="btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                    <% if (!socio.getEsEliminado()) {%>
-                                <a type="button" href="#" class="btn btn-danger"><i class="fa fa-trash-o fa-lg"></i> </a>
+                                    
+                                <% if (!socio.getEsEliminado()) {%>
+                                <a type="button" href="<%=dom.getDominio()%>Socio?accion=eliminar&id=<%=socio.getIdSocios()%>&esEliminado=<%=socio.getEsEliminado()%>" class="btn btn-danger"><i class="fa fa-trash-o fa-lg"></i> </a>
                                 <%
                                 } else {
                                 %>
-                                <a type="button" href="#" class="btn btn-success">Activar </a>
-
+                                <a type="button" href="<%=dom.getDominio()%>Socio?accion=eliminar&id=<%=socio.getIdSocios()%>&esEliminado=<%=socio.getEsEliminado()%>" class="btn btn-success">Activar </a>
                                 <%
                                     }
                                 %></td>

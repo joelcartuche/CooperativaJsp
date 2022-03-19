@@ -5,10 +5,13 @@
 package Servelets;
 
 import Controladores.SociosJpaController;
+import Controladores.exceptions.NonexistentEntityException;
 import Modelos.Socios;
 import Utilidades.Validar;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,6 +29,7 @@ public class Socio extends HttpServlet {
     String listar = "views/listParnets.jsp";
     String agregar = "views/addParnet.jsp";
     String editar = "views/editParnet.jsp";
+    String eliminar = "views/deleteParnet.jsp";
     String buscar = "";
 
     /**
@@ -81,7 +85,12 @@ public class Socio extends HttpServlet {
             //request.getSession().setAttribute("idSocio", request.getParameter("id"));
             acceso = editar;
 
+        } else if (action.equalsIgnoreCase("eliminar")) {
+            request.setAttribute("id", request.getParameter("id"));
+            request.setAttribute("esEliminado", request.getParameter("esEliminado"));
+            acceso = eliminar;
         }
+
         RequestDispatcher vista = request.getRequestDispatcher(acceso);
         vista.forward(request, response);
         //response.sendRedirect(acceso);
@@ -210,6 +219,30 @@ public class Socio extends HttpServlet {
                     }
                 }
 
+            }
+        } else if (action.equalsIgnoreCase("eliminar")) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            boolean esEliminado = Boolean.parseBoolean(request.getParameter("esEliminado"));
+            try ( PrintWriter out = response.getWriter()) {
+                SociosJpaController sociosJpaController = new SociosJpaController();
+
+                Socios socio = sociosJpaController.findSocios(id);
+                socio.setEsEliminado(!esEliminado);
+
+                try {
+                    sociosJpaController.edit(socio);
+
+                    salida = "{\"message\":\"Los cambios se realizaron exitosamente\"}";
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.setStatus(200);
+                    out.print(salida);
+
+                } catch (NonexistentEntityException ex) {
+                    Logger.getLogger(Socio.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
+                    Logger.getLogger(Socio.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }
