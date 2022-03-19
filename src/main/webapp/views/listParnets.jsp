@@ -9,13 +9,14 @@
 <%@page import="java.util.List"%>
 <%@page import="Controladores.SociosJpaController"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <jsp:include page="../Template/layout.jsp"></jsp:include>
 
 <%
-    //HttpSession sesion2 = request.getSession();
-    //if (sesion2.getAttribute("logueado") == null || sesion2.getAttribute("logueado").equals("0")) {
-    //        response.sendRedirect("../login.jsp");
-    //}
+    HttpSession sesion2 = request.getSession();
+    if (sesion2.getAttribute("logueado") == null || sesion2.getAttribute("logueado").equals("0")) {
+            response.sendRedirect("../login.jsp");
+    }
 
     Dominio dom = new Dominio();
 %>
