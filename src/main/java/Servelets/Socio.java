@@ -25,7 +25,7 @@ public class Socio extends HttpServlet {
 
     String listar = "views/listParnets.jsp";
     String agregar = "views/addParnet.jsp";
-    String editar = "";
+    String editar = "views/editParnet.jsp";
     String buscar = "";
 
     /**
@@ -72,10 +72,15 @@ public class Socio extends HttpServlet {
             acceso = listar;
         } else if (action.equalsIgnoreCase("agregar")) {
             acceso = agregar;
+        } else if (action.equalsIgnoreCase("editar")) {
+            request.setAttribute("id", request.getParameter("id"));
+            //request.getSession().setAttribute("idSocio", request.getParameter("id"));
+            acceso = editar;
+             
         }
-        //RequestDispatcher vista = request.getRequestDispatcher(acceso);
-        //vista.forward(request, response);
-        response.sendRedirect(acceso);
+        RequestDispatcher vista = request.getRequestDispatcher(acceso);
+        vista.forward(request, response);
+        //response.sendRedirect(acceso);
     }
 
     /**
@@ -145,6 +150,19 @@ public class Socio extends HttpServlet {
 
         }
     }
+    
+    
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String id = req.getParameter("id_socio");
+        String nombre = req.getParameter("nombre_socio");
+        String apellido = req.getParameter("apellido_socio");
+        String cedula = req.getParameter("cedula_socio");
+        String telefono = req.getParameter("telefono_socio");
+        String direccion = req.getParameter("direccion_socio");
+        System.out.println(nombre);
+        System.out.println(id);
+    }
 
     /**
      * Returns a short description of the servlet.
@@ -155,5 +173,6 @@ public class Socio extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    
 
 }
