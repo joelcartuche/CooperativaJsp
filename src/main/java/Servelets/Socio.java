@@ -30,7 +30,7 @@ public class Socio extends HttpServlet {
     String agregar = "views/addParnet.jsp";
     String editar = "views/editParnet.jsp";
     String eliminar = "views/deleteParnet.jsp";
-    String buscar = "";
+    String ver = "views/viewParnet.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -74,8 +74,10 @@ public class Socio extends HttpServlet {
         String action = request.getParameter("accion");
         if (action.equalsIgnoreCase("listar")) {
             acceso = listar;
+            
         } else if (action.equalsIgnoreCase("agregar")) {
             acceso = agregar;
+            
         } else if (action.equalsIgnoreCase("editar")) {
             int id = Integer.parseInt((String) request.getParameter("id"));
             SociosJpaController sociosJpaController = new SociosJpaController();
@@ -89,6 +91,14 @@ public class Socio extends HttpServlet {
             request.setAttribute("id", request.getParameter("id"));
             request.setAttribute("esEliminado", request.getParameter("esEliminado"));
             acceso = eliminar;
+            
+        } else if (action.equalsIgnoreCase("ver")) {
+            int id = Integer.parseInt((String) request.getParameter("id"));
+            SociosJpaController sociosJpaController = new SociosJpaController();
+            Socios socio = sociosJpaController.findSocios(id);
+            request.setAttribute("socio", socio);
+            request.setAttribute("estado", socio.getEsEliminado());
+            acceso = ver;
         }
 
         RequestDispatcher vista = request.getRequestDispatcher(acceso);

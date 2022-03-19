@@ -79,7 +79,7 @@
                                     }
                                 %></td>
                             <td>
-                                <a type="button" href="<%=dom.getDominio()%>Socio?accion=listar&id=<%=socio.getIdSocios()%>" class="btn btn-info"><i class="bi bi-eye text-white"></i></a>
+                                <a type="button" href="<%=dom.getDominio()%>Socio?accion=ver&id=<%=socio.getIdSocios()%>" class="btn btn-info"><i class="bi bi-eye text-white"></i></a>
                                 <a type="button" href="<%=dom.getDominio()%>Socio?accion=editar&id=<%=socio.getIdSocios()%>" class="btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                     
                                 <% if (!socio.getEsEliminado()) {%>
