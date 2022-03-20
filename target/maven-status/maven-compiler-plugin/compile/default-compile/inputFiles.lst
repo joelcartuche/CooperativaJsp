@@ -5,9 +5,11 @@ C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Servelets\Cr
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Modelos\Aportes.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Modelos\TasaAmortizacion.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Modelos\Pago.java
+C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Servelets\BuscarUsuarioNombre.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Controladores\DepositoJpaController.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Controladores\RolJpaController.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Controladores\CuotaJpaController.java
+C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Servelets\BuscarRolId.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\com\mycompany\cooperativa\TestContacto.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Utilidades\Encriptar.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Modelos\Credito.java
@@ -15,6 +17,7 @@ C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Servelets\So
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Controladores\ReportesJpaController.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Controladores\exceptions\PreexistingEntityException.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Modelos\Cuota.java
+C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Servelets\BuscarRolNombre.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Controladores\UsuarioJpaController.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Controladores\RetiroJpaController.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Controladores\CreditoJpaController.java
@@ -35,6 +38,7 @@ C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Servelets\Cr
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Controladores\SociosJpaController.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Modelos\Retiro.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Servelets\BorrarRol.java
+C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Servelets\BuscarUsuarioId.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Modelos\CuentaCooperativa.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Modelos\Socios.java
 C:\Users\joelc\Documents\NetBeansProjects\Cooperativa\src\main\java\Controladores\PagoJpaController.java

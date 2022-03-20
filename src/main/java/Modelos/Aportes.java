@@ -62,6 +62,7 @@ public class Aportes implements Serializable {
     private Socios idSocios;
 
     public Aportes() {
+        this.esEliminado=false;
     }
 
     public Aportes(Integer idAportes) {

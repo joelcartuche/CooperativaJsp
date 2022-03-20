@@ -54,6 +54,7 @@ public class Credito implements Serializable {
     private TasaAmortizacion idTasaAmortizacion;
 
     public Credito() {
+        this.esEliminado=false;
     }
 
     public Credito(Integer idCredito) {

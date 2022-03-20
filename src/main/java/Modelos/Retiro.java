@@ -59,6 +59,7 @@ public class Retiro implements Serializable {
     private Socios idSocios;
 
     public Retiro() {
+        this.esEliminado=false;
     }
 
     public Retiro(Integer idRetiro) {

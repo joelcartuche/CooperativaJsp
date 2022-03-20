@@ -124,6 +124,8 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
             em.close();
         }
     }
+    
+    
 
     public int getRolCount() {
         EntityManager em = getEntityManager();

@@ -30,7 +30,7 @@
         <main>
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-12 fw-bold fs-3 text-center">Gestión  Rol</div>
+                    <div class="col-md-12 fw-bold fs-3 text-center">Gestión  Cuenta</div>
                 </div>
                 <div class="row mt-4 mb-5 justify-content-center">
                     <div class="col-12 ">
@@ -43,7 +43,7 @@
                                         <th scope="col" class="text-center"></th>
                                         <th scope="col" class="text-center"></th>
                                         <th scope="col" >
-                                            <a href="crearRol.jsp"><i class="fa fa-user-plus" aria-hidden="true"></i></a>
+                                            <a href="crearCuenta.jsp"><i class="fa fa-user-plus" aria-hidden="true"></i></a>
                                         </th>
                                     </tr>
                                     <tr>

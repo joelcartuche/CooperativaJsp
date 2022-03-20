@@ -4,6 +4,9 @@
     Author     : joelc
 --%>
 
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.AbstractList"%>
+<%@page import="java.util.List"%>
 <%@page import="Modelos.Usuario"%>
 <%@page import="Controladores.UsuarioJpaController"%>
 <%@page import="Modelos.Cuenta"%>
@@ -21,114 +24,245 @@
         }
         
         String id = request.getParameter("id");
-        String idUsuario = request.getParameter("idUsuario");
-        String idRol = request.getParameter("idRol");
         CuentaJpaController cuentaJpaController = new CuentaJpaController();
         Cuenta cuenta = cuentaJpaController.findCuenta(Integer.parseInt(id));
         UsuarioJpaController usuarioJpaController = new UsuarioJpaController();
         Usuario usuario =  usuarioJpaController.findUsuario(cuenta.getIdUsuario().getIdUsuario());
         RolJpaController rolJpaController = new RolJpaController();
         Rol rol = rolJpaController.findRol(cuenta.getIdRol().getIdRol());
+        List<Usuario> listUsuario = new ArrayList<>();
         
 
     %>
 
     <jsp:include page="../Template/cabecera.jsp"></jsp:include>
+
+<script>        
+$(document).ready(function(event) {
     
-    <script>
-            $(document).ready(function(event) {
+    $('#cancelar').click(function(){
+        window.location.replace("listarCuenta.jsp");
+    });
+    
+    $('#btnBuscarUsuario').click(function(){
+        $('#errorBuscarUsuario').attr("hidden",true);
+        var usuario = $('#usuarioBuscar').val();
+        $.get('../BuscarUsuarioNombre',{
+            nombreApellido: usuario
+        },function(resultado){
+            var data = resultado;
+            if(data == "error"){
+                $('#errorBuscarUsuario').attr("hidden",false);
+            }else{
+                var tBody="";
+                data = data.split(';');
+                window.console.log(data.length);
+                for(var i=0;i<data.length-1;i=i+5){
+                    tBody=tBody+"<tr>";
+                    tBody=tBody+"<td>"+data[i]+"</td>";
+                    tBody=tBody+"<td>"+data[i+1]+"</td>";
+                    tBody=tBody+"<td>"+data[i+2]+"</td>";
+                    tBody=tBody+"<td>"+data[i+3]+"</td>";
+                    tBody=tBody+"<td>"+data[i+4]+"</td>";
+                    tBody=tBody+'<td> <input id="id'+data[i]+'" type="button" onclick="actualizacionIdUsuario('+data[i]+')" class="boton btn btn-secondary" data-bs-dismiss="modal" value="Seleccionar" input/> </td>';
+                    tBody=tBody+"</tr>";                    
+                }
+                $('#coicidenciaBussquedaUsuario').html(tBody);
                 
-                $('#guardar').click(function(){
-                    var usuario = $('#usuario').val();
-                    var clave1 = $('#clave1').val();
-                    var clave2 = $('#clave2').val();
-                    $.post('../EditarCuenta',
-                    {
-                        id:<%= cuenta.getIdCuenta() %>,
-                        usuario: usuario,
-                        clave1: clave1,
-                        clave2: clave2,
-                        idUsuario:<%=idUsuario%>,
-                        idRol: <%=idRol%>
-                        
-                    },function(resultado) {
-                        var data = JSON.parse(resultado);
-                        var succes = data.success;
-                        if(succes ==1){
-                            window.console.log("Registro actualizado");
-                            window.location.replace("listarRol.jsp");
-                        }
-                        if(succes ==0){
-                            window.console.log("Error en la actualizacion");
-                        }
-                    });
-                });
-                $('#cancelar').click(function(){
-                window.location.replace("listarRol.jsp");
-                });
-            });
-    </script>
+            }
+            
+        });
+    });
+    
+    $('#btnBuscarRol').click(function (){
+        $('#errorBuscarRol').attr("hidden",true);
+        $('#coicidenciaBussquedaRol').html("");
+        var rol = $('#tipoRolBuscar').val();
+        $.get('../BuscarRolNombre',{
+            rolTipo:rol
+        },function(resultado){
+            var data = resultado;
+            if(data == "error"){
+                $('#errorBuscarRol').attr("hidden",false);
+            }else{
+                var tBody="";
+                data = data.split(';');
+                window.console.log(data.length);
+                for(var i=0;i<data.length-1;i=i+2){
+                    tBody=tBody+"<tr>";
+                    tBody=tBody+"<td>"+data[i]+"</td>";
+                    tBody=tBody+"<td>"+data[i+1]+"</td>";
+                    tBody=tBody+'<td> <input id="idRolLista'+data[i]+'" type="button" onclick="actualizacionIdRol('+data[i]+')" class="boton btn btn-secondary" data-bs-dismiss="modal" value="Seleccionar" input/> </td>';
+                    tBody=tBody+"</tr>";                    
+                }
+                $('#coicidenciaBussquedaRol').html(tBody);
+                
+            }
+            
+        });
+    });
+    
+    function ocultarCampos(){
+        $('#usuario').removeClass("is-invalid");
+        $('#clave1').removeClass("is-invalid");
+        $('#clave2').removeClass("is-invalid");
+        $('#mensajeError').attr("hidden",true);
+        $('#mensajeSuccess').attr("hidden",true);
+    }
+    $('#guardar').click(function (){
+        ocultarCampos();
+        var usuario = $('#usuario').val();
+        var clave1 = $('#clave1').val();
+        var clave2 = $('#clave2').val();
+        var idUsuario =$('#idUsuarioActual').val();
+        var idRol = $('#idRolActual').val();
+        $.post('../EditarCuenta',{
+            idCuenta: <%=cuenta.getIdCuenta()%>,
+            usuario: usuario,
+            clave1: clave1,
+            clave2: clave2,
+            idUsuario: idUsuario,
+            idRol: idRol
+        },function(result){
+            if(result=="errorNombreUsuario"){
+                $('#usuario').addClass("is-invalid");
+                window.console.log("1111"+result);
+            }else if(result=="errorClaveNoCoincide"){
+                $('#clave1').addClass("is-invalid");
+                $('#clave2').addClass("is-invalid");
+                window.console.log("2222"+result);
+                
+            }if(result=="errorUsuario"){
+                $('#mensajeError').attr("hidden",false);
+                $('#mensajeError').html("Error con el usaurio");
+            }else if(result=="errorIdRol"){
+                $('#mensajeError').attr("hidden",false);
+                $('#mensajeError').html("Error con el rol");
+            }else if(result=="errorNoHayCuenta"){
+                $('#mensajeError').attr("hidden",false);
+                $('#mensajeError').html("Error no existe la cuenta a ser editada");
+            }else if(result=="success"){
+                $('#mensajeSuccess').attr("hidden",false);
+                window.location.replace("listarCuenta.jsp");
+            }else{
+                $('#mensajeError').attr("hidden",false);
+                $('#mensajeError').html("Error inesperado intentelo de nuevo");
+            }
+        });
+    });    
+});
+
+
+
+</script>
     <main>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-12 fw-bold fs-3 text-center">Gestión  Rol</div>
+                <div class="col-md-12 fw-bold fs-3 text-center">Gestión  Cuenta</div>
             </div>
             <div class="row mt-4 mb-5 justify-content-center">
                 <div class="col-12 col-md-12">
                     <div class="card p-4">
-                        <div class="mb-3 row">
-                            <label class="col-sm-2 col-form-label">Tipo de rol</label>
-                            <input id="tipoRol" name="usuario" class="form-input" value="<%=cuenta.getUsuario() %>" id="flexCheckDefault"/>
+                        <div class="alert alert-primary d-flex align-items-center" role="alert">
+                            <div>
+                               <i class="fa fa-info-circle" aria-hidden="true"></i> Si no desea configurar la clave deje sus campos correspondientes vacios
+                            </div>
+                        </div>
+                        <div id="mensajeError" class="alert alert-danger" role="alert" hidden>
+                        </div>
+                        <div id="mensajeSuccess" class="alert alert-success" role="alert" hidden>
+                            La cuenta ha sido editada con éxito
                         </div>
                         <div class="mb-3 row">
-                            <label  class="col-sm-2 col-form-label">Tipo de rol</label>
-                            <input id="tipoRol" name="clave1" class="form-input"  id="flexCheckDefault"/>
+                            <label class="col-sm-2 col-form-label">Usuario</label>
+                            <input id="usuario" name="usuario" class="form-control " value="<%=cuenta.getUsuario()%>" aria-describedby="validacionUsuario"/>
+                            <div id="validacionUsuario" class="invalid-feedback" >
+                                Ingrese usuario
+                            </div>
                         </div>
                         <div class="mb-3 row">
-                            <label class="col-sm-2 col-form-label">Tipo de rol</label>
-                            <input id="tipoRol" name="clave2" class="form-input" id="flexCheckDefault"/>
+                            <label  class="col-sm-2 col-form-label">Clave</label>
+                            <input id="clave1" name="clave1" class="form-control" aria-describedby="validacionClave1"/>                        
+                            <div id="validacionClave1" class="invalid-feedback" >
+                                No coinciden las claves
+                            </div>
                         </div>
-                        <div class="mb-3 row possition-relative">
+                        <div class="mb-3 row">
+                            <label class="col-md-6 col-form-label">Confirmar clave</label>
+                            <input id="clave2" name="clave2" class="form-control" aria-describedby="validacionClave2"/>
+                            <div id="validacionClave2" class="invalid-feedback" >
+                                No coinciden las claves
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
                             <label  class="col-sm-2 col-form-label">Usuario</label>
-                            <input id="usuarioActual" name="usuarioActual" class="form-input position-absolute top-0 start-0" value="<%=usuario.getNombreUsuario() %> <%=usuario.getApellidoUsuario() %>" id="flexCheckDefault"/>
-                            <input id="buscarUsuario" class="btn btn-outline-success position-absolute top-0 start-100" data-bs-toggle="modal" data-bs-target="#modalUsuario" value="Buscar usuario"/>
+                            <input id="usuarioActual" name="usuarioActual" class="form-control " value="<%=usuario.getNombreUsuario()%> <%=usuario.getApellidoUsuario()%>"  disabled/>
+                            <input id="buscarUsuario" class="btn btn-outline-success " data-bs-toggle="modal" data-bs-target="#modalUsuario" value="Buscar usuario"/>
+                            <input id="idUsuarioActual" value="<%=usuario.getIdUsuario() %>" hidden >
                         </div>
                         <div class="mb-3 row ">
                             <label  class="col-sm-2 col-form-label">Rol</label>
-                            <input id="rol" name="rol" class="form-input position-absolute top-0 start-0" value="<%=rol.getTipoRol()%>" id="flexCheckDefault"/>
-                            <input id="buscarRol" class="btn btn-outline-success position-absolute top-0 start-50" data-bs-toggle="modal" data-bs-target="#modalRol" value="Buscar rol"/>
+                            <input id="rol" name="rol" class="form-control " value="<%=rol.getTipoRol()%>" disabled/>
+                            <input id="buscarRol" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalRol" value="Buscar rol"/>
+                            <input id="idRolActual" value="<%=usuario.getIdUsuario()%>" hidden >
                         </div>
                         <div class="mb-3 row">
                             <input id="cancelar" class="btn btn-danger" value="Cancelar"/>
                         </div>
-                            <div class="mb-3 row">
+                        <div class="mb-3 row">
                             <input id="guardar" class="btn btn-primary" value="Guardar"/>
                         </div>
                     </div>
                 </div>
             </div>
-            </div>
-        </main>
-                            
-                            
+        </div>
+    </main>
+
+
 
 <!-- Modal Usuario-->
 <div class="modal fade" id="modalUsuario" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Buscar Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div id="salida"></div>
+                    <div id="errorBuscarUsuario" class="alert alert-danger" role="alert" hidden>
+                        No se encontraron coincidencias
+                    </div>
+                    <div class="row">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" colspan="4">
+                                        <input id="usuarioBuscar" name="usaurioBuscar" class="form-control " placeholder="Ingrese nombre y apellido del usuario"  />
+                                    </th>
+                                    <th scope="col" class="text-center" colspan="2">
+                                        <input id="btnBuscarUsuario" class="btn btn-primary" value="Buscar"/>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th scope="col">N°</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Apellido</th>
+                                    <th scope="col">Cedula</th>
+                                    <th scope="col">telefono</th>
+                                    <th scope="col">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="coicidenciaBussquedaUsuario">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 
@@ -141,15 +275,62 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <div class="container-fluid">
+            <div id="errorBuscarRol" class="alert alert-danger" role="alert" hidden>
+                No se encontraron coincidencias
+            </div>
+            <div class="row">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col" colspan="2" >
+                                <input id="tipoRolBuscar" name="tipoRolBuscar" class="form-control " placeholder="Ingrese rol" id="flexCheckDefault" />
+                            </th>
+                            <th scope="col" class="text-center" >
+                                <input id="btnBuscarRol" class="btn btn-primary" value="Buscar"/>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th scope="col">N°</th>
+                            <th scope="col">Tipo Rol</th>
+                        </tr>
+                    </thead>
+                    <tbody id="coicidenciaBussquedaRol">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
+<script>
+    function actualizacionIdUsuario(idDada){
+        $('#idUsuarioActual').removeAttr("value");
+        $('#idUsuarioActual').attr("value",idDada);
+        
+        $.get('../BuscarUsuarioId',{
+           idUsuario:idDada 
+        },function(result){
+            var data = JSON.parse(result);
+            $('#usuarioActual').val(data.nombreUsuario);
+        });
+
+    };
+    
+    function actualizacionIdRol(idDado){
+        $('#idRolActual').removeAttr("value");
+        $('#idRolActual').attr("value",idDado);
+        
+        $.get('../BuscarRolId',{
+           idRol:idDado 
+        },function(result){
+            var data = JSON.parse(result);
+            $('#rol').val(data.rol);
+        });
+    };
+</script>
 
         
     
