@@ -12,7 +12,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import Modelos.CuentaCooperativa;
-import Modelos.Cuenta;
 import Modelos.Usuario;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,9 +36,8 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
 
     public UsuarioJpaController() {
     }
-    
-    
 
+    
     public void create(Usuario usuario) {
         EntityManager em = null;
         try {
@@ -50,11 +48,6 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
                 cuentaCooperativa = em.getReference(cuentaCooperativa.getClass(), cuentaCooperativa.getIdCuentaCooperativa());
                 usuario.setCuentaCooperativa(cuentaCooperativa);
             }
-            Cuenta cuenta = usuario.getCuenta();
-            if (cuenta != null) {
-                cuenta = em.getReference(cuenta.getClass(), cuenta.getIdCuenta());
-                usuario.setCuenta(cuenta);
-            }
             em.persist(usuario);
             if (cuentaCooperativa != null) {
                 Usuario oldIdUsuarioOfCuentaCooperativa = cuentaCooperativa.getIdUsuario();
@@ -64,15 +57,6 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
                 }
                 cuentaCooperativa.setIdUsuario(usuario);
                 cuentaCooperativa = em.merge(cuentaCooperativa);
-            }
-            if (cuenta != null) {
-                Usuario oldIdUsuarioOfCuenta = cuenta.getIdUsuario();
-                if (oldIdUsuarioOfCuenta != null) {
-                    oldIdUsuarioOfCuenta.setCuenta(null);
-                    oldIdUsuarioOfCuenta = em.merge(oldIdUsuarioOfCuenta);
-                }
-                cuenta.setIdUsuario(usuario);
-                cuenta = em.merge(cuenta);
             }
             em.getTransaction().commit();
         } finally {
@@ -90,8 +74,6 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
             Usuario persistentUsuario = em.find(Usuario.class, usuario.getIdUsuario());
             CuentaCooperativa cuentaCooperativaOld = persistentUsuario.getCuentaCooperativa();
             CuentaCooperativa cuentaCooperativaNew = usuario.getCuentaCooperativa();
-            Cuenta cuentaOld = persistentUsuario.getCuenta();
-            Cuenta cuentaNew = usuario.getCuenta();
             List<String> illegalOrphanMessages = null;
             if (cuentaCooperativaOld != null && !cuentaCooperativaOld.equals(cuentaCooperativaNew)) {
                 if (illegalOrphanMessages == null) {
@@ -99,22 +81,12 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
                 }
                 illegalOrphanMessages.add("You must retain CuentaCooperativa " + cuentaCooperativaOld + " since its idUsuario field is not nullable.");
             }
-            if (cuentaOld != null && !cuentaOld.equals(cuentaNew)) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("You must retain Cuenta " + cuentaOld + " since its idUsuario field is not nullable.");
-            }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             if (cuentaCooperativaNew != null) {
                 cuentaCooperativaNew = em.getReference(cuentaCooperativaNew.getClass(), cuentaCooperativaNew.getIdCuentaCooperativa());
                 usuario.setCuentaCooperativa(cuentaCooperativaNew);
-            }
-            if (cuentaNew != null) {
-                cuentaNew = em.getReference(cuentaNew.getClass(), cuentaNew.getIdCuenta());
-                usuario.setCuenta(cuentaNew);
             }
             usuario = em.merge(usuario);
             if (cuentaCooperativaNew != null && !cuentaCooperativaNew.equals(cuentaCooperativaOld)) {
@@ -125,15 +97,6 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
                 }
                 cuentaCooperativaNew.setIdUsuario(usuario);
                 cuentaCooperativaNew = em.merge(cuentaCooperativaNew);
-            }
-            if (cuentaNew != null && !cuentaNew.equals(cuentaOld)) {
-                Usuario oldIdUsuarioOfCuenta = cuentaNew.getIdUsuario();
-                if (oldIdUsuarioOfCuenta != null) {
-                    oldIdUsuarioOfCuenta.setCuenta(null);
-                    oldIdUsuarioOfCuenta = em.merge(oldIdUsuarioOfCuenta);
-                }
-                cuentaNew.setIdUsuario(usuario);
-                cuentaNew = em.merge(cuentaNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -171,13 +134,6 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This Usuario (" + usuario + ") cannot be destroyed since the CuentaCooperativa " + cuentaCooperativaOrphanCheck + " in its cuentaCooperativa field has a non-nullable idUsuario field.");
-            }
-            Cuenta cuentaOrphanCheck = usuario.getCuenta();
-            if (cuentaOrphanCheck != null) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Usuario (" + usuario + ") cannot be destroyed since the Cuenta " + cuentaOrphanCheck + " in its cuenta field has a non-nullable idUsuario field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
@@ -222,6 +178,20 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
         } finally {
             em.close();
         }
+    }
+    
+    public List<Usuario> findUsuarioNombre(String nombre) {
+        List<Usuario> listUsuario = findUsuarioEntities();
+        List<Usuario> listUsuarioSalida = new ArrayList<>();
+        for (Usuario usuario : listUsuario) {
+            String nombreApellido = usuario.getNombreUsuario()+" "+usuario.getApellidoUsuario();
+            if (nombreApellido.toLowerCase().contains(nombre.toLowerCase())) {
+                listUsuarioSalida.add(usuario);
+            }
+        }
+
+        return listUsuarioSalida;
+        
     }
 
     public int getUsuarioCount() {

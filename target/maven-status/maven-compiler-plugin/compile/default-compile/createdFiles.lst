@@ -16,6 +16,7 @@ Modelos\Aportes.class
 Controladores\CuentaJpaController.class
 Utilidades\Dominio.class
 Modelos\Credito_.class
+Servelets\BuscarUsuarioId.class
 Modelos\Deposito_.class
 Modelos\Pago_.class
 Modelos\TasaAmortizacion_.class
@@ -24,6 +25,7 @@ Modelos\Usuario.class
 Modelos\Rol.class
 Modelos\Socios_.class
 Modelos\TasaAmortizacion.class
+Servelets\BuscarRolNombre.class
 Controladores\exceptions\PreexistingEntityException.class
 Modelos\Credito.class
 Modelos\CuentaCooperativa.class
@@ -40,6 +42,8 @@ Modelos\Aportes_.class
 Controladores\DepositoJpaController.class
 Controladores\PagoJpaController.class
 Modelos\Reportes_.class
+Servelets\BuscarRolId.class
+Servelets\BuscarUsuarioNombre.class
 Controladores\CuotaJpaController.class
 Controladores\SociosJpaController.class
 Modelos\Cuota.class

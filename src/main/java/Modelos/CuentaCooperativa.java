@@ -70,6 +70,7 @@ public class CuentaCooperativa implements Serializable {
     private Reportes reportes;
 
     public CuentaCooperativa() {
+        this.esEliminado=false;
     }
 
     public CuentaCooperativa(Integer idCuentaCooperativa) {
