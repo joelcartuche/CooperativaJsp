@@ -30,5 +30,5 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
-
+src/main/resources/META-INF/persistence.xml
 # End of https://www.toptal.com/developers/gitignore/api/netbeans,maven

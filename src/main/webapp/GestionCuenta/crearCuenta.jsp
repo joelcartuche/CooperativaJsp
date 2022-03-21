@@ -153,7 +153,7 @@ $(document).ready(function(event) {
                 <div class="col-md-12 fw-bold fs-3 text-center">Gestión  Cuenta</div>
             </div>
             <div class="row mt-4 mb-5 justify-content-center">
-                <div class="col-12 col-md-12">
+                <div class="col-12 col-md-6">
                     <div class="card p-4">
                         <div class="alert alert-primary d-flex align-items-center" role="alert">
                             <div>

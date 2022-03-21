@@ -5,8 +5,10 @@
 package Servelets;
 
 import Controladores.SociosJpaController;
+import Controladores.UsuarioJpaController;
 import Controladores.exceptions.NonexistentEntityException;
 import Modelos.Socios;
+import Modelos.Usuario;
 import Utilidades.Validar;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -149,18 +151,25 @@ public class Socio extends HttpServlet {
                     out.print(salida);
                 } else {
                     SociosJpaController socioJpaController = new SociosJpaController();
+                    UsuarioJpaController usuarioJpaController = new UsuarioJpaController();
 
                     Socios socio = new Socios();
+                    Usuario usuario = new Usuario();
 
                     socio.setNombreSocio(nombre);
+                    usuario.setNombreUsuario(nombre);
                     socio.setApellidoSocio(apellido);
+                    usuario.setApellidoUsuario(apellido);
                     socio.setCedulaSocio(cedula);
+                    usuario.setCedulaUsuario(cedula);
                     socio.setTelefonoSocio(telefono);
+                    usuario.setTelefonoUsuario(telefono);
                     socio.setDireccionSocio(direccion);
                     socio.setEsEliminado(Boolean.FALSE);
 
                     try {
                         socioJpaController.create(socio); // guardamos el socio en la bse de datos
+                        usuarioJpaController.create(usuario); //guardamos el usuario en la base de datos
                         salida = "{\"message\":\"El Socio se creó exitosamente\"}";
                         response.setContentType("application/json");
                         response.setCharacterEncoding("UTF-8");

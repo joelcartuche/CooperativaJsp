@@ -161,7 +161,7 @@ $(document).ready(function(event) {
                 <div class="col-md-12 fw-bold fs-3 text-center">Gestión  Cuenta</div>
             </div>
             <div class="row mt-4 mb-5 justify-content-center">
-                <div class="col-12 col-md-12">
+                <div class="col-12 col-md-6">
                     <div class="card p-4">
                         <div class="alert alert-primary d-flex align-items-center" role="alert">
                             <div>
@@ -204,7 +204,7 @@ $(document).ready(function(event) {
                             <label  class="col-sm-2 col-form-label">Rol</label>
                             <input id="rol" name="rol" class="form-control " value="<%=rol.getTipoRol()%>" disabled/>
                             <input id="buscarRol" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalRol" value="Buscar rol"/>
-                            <input id="idRolActual" value="<%=usuario.getIdUsuario()%>" hidden >
+                            <input id="idRolActual" value="<%=rol.getIdRol()%>" hidden >
                         </div>
                         <div class="mb-3 row">
                             <input id="cancelar" class="btn btn-danger" value="Cancelar"/>

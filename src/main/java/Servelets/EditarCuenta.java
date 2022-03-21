@@ -77,7 +77,7 @@ public class EditarCuenta extends HttpServlet {
         String clave2 = request.getParameter("clave2");
         String idUsuario = request.getParameter("idUsuario");
         String idRol = request.getParameter("idRol");
-        
+
         if (usuarioNombre == null || usuarioNombre.isEmpty()) {
             out.print("errorNombreUsuario");
         } else if (!clave1.equals(clave2)) {
@@ -87,20 +87,26 @@ public class EditarCuenta extends HttpServlet {
         } else if (idRol == null || idRol.equals("")) {
             out.print("errorIdRol");
         } else {
+
             Encriptar encriptar = new Encriptar();
             CuentaJpaController cuentaJpaController = new CuentaJpaController();
             UsuarioJpaController usuarioJpaController = new UsuarioJpaController();
             RolJpaController rolJpaController = new RolJpaController();
             Cuenta cuenta = cuentaJpaController.findCuenta(Integer.parseInt(idCuenta));
             cuenta.setUsuario(usuarioNombre);
+
             if (!clave1.equals("")) {
-                System.out.println("--------------------------------");
-        System.out.println(clave1+"++++++");
-        System.out.println("--------------------------------");
                 cuenta.setPassword(encriptar.getMD5(clave1));
             }
-            cuenta.setIdUsuario(usuarioJpaController.findUsuario(Integer.parseInt(idUsuario)));
-            cuenta.setIdRol(rolJpaController.findRol(Integer.parseInt(idRol)));
+
+            if (cuenta.getIdUsuario().getIdUsuario()!= Integer.parseInt(idUsuario)) {
+                cuenta.setIdUsuario(usuarioJpaController.findUsuario(Integer.parseInt(idUsuario)));
+            }
+            if (cuenta.getIdRol().getIdRol() != Integer.parseInt(idRol)) {
+                cuenta.setIdRol(rolJpaController.findRol(Integer.parseInt(idRol)));
+            }
+ 
+ 
             out.print("success");
             try {
                 cuentaJpaController.edit(cuenta);

@@ -85,10 +85,10 @@ public class Login extends HttpServlet {
             HttpSession sesion = request.getSession(); // almacenamos la sesion iniciada
             CuentaJpaController cuentaJpaController = new CuentaJpaController(); //llamamos al controlador jpa
             Cuenta cuentaUsurioBuscado = cuentaJpaController.findCuentaUsuario(user); //buscamos el usuario dado el nombre de usuario
-
             if (cuentaUsurioBuscado != null) { //en caso  de que no exista el usuario buscado
                 if (cuentaUsurioBuscado.getPassword().equals(enc.getMD5(password))) { //comparamos las contraseñas
                     //enviamos parametros a la sesion
+
                     sesion.setAttribute("logueado", "1");
                     sesion.setAttribute("user", cuentaUsurioBuscado.getUsuario());
                     sesion.setAttribute("id", cuentaUsurioBuscado.getIdCuenta());
@@ -104,8 +104,6 @@ public class Login extends HttpServlet {
                 salida = "{\"noExisteUsuario\":1}";
                 out.print(salida);
             }
-            //out.print("Ssssssssssssssssssssssss");
-
         }
     }
 

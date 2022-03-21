@@ -16,11 +16,16 @@
     </head>
     <script>
         $(document).ready(function() {
-            //ocultamos los divs de alertas
-            $('#errorPassword').hide();
-            $('#errorUsuario').hide();
-            $('#success').hide();
+            function ocultarCampos(){
+                //ocultamos los divs de alertas
+                $('#errorPassword').attr("hidden",true);
+                $('#errorUsuario').attr("hidden",true);
+                $('#success').attr("hidden",true);
+
+            };
+            
                 $('#submit').click(function(event) {//le damos evento al boton
+                    ocultarCampos();
                         var usuario = $('#usuario').val(); //almacena el nombre de usuario
                         var password = $('#password').val(); //almacena el password
                         // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
@@ -39,26 +44,21 @@
                             
                             if(logueado!=null){
                                 if(logueado=="1"){
-                                    $('#errorPassword').hide();
-                                    $('#errorUsuario').hide();
-                                    $('#success').show();
+                                    $('#success').removeAttr("hidden");
                                     //redireccionamos a index.jsp
-                                    window.location.replace("index.jsp?id="+id+"&user="+usuario);
+                                    window.location.replace("admin.jsp?id="+id+"&user="+usuario);
                                 }
                             }
                             if(esContraIncorrecta!=null){
                                 if(esContraIncorrecta=="1")
                                 {
-                                    $('#errorPassword').show();
-                                    $('#errorUsuario').hide();
-                                    $('#success').hide();
+                                    $('#errorPassword').removeAttr("hidden");
+
                                 }
                             }
                             if(noExisteUsuario!=null){
                                 if(noExisteUsuario=="1"){
-                                    $('#errorPassword').hide();
-                                    $('#errorUsuario').show();
-                                    $('#success').hide();
+                                    $('#errorUsuario').removeAttr("hidden");
                                 }
                             }
                             //console.log(result.data.logueado);
@@ -71,17 +71,17 @@
         <div class="container mt-5">
             <div class="row">
                 <div class="col-sm">
-                    <div id="errorPassword" >
+                    <div id="errorPassword" hidden>
                         <div class="alert alert-danger" role="alert">
                            <i class="fa fa-ban" aria-hidden="true"></i> Contraseña incorrecta
                         </div>
                     </div>
-                    <div id="errorUsuario">
+                    <div id="errorUsuario" hidden>
                         <div class="alert alert-danger" role="alert">
                            <i class="fa fa-ban" aria-hidden="true"></i> No existe el usuario
                         </div>
                     </div>
-                    <div id="success" >
+                    <div id="success" hidden>
                         <div class="alert alert-success" role="alert">
                            <i class="fa fa-check-circle" aria-hidden="true"></i> Datos correctos
                         </div>
