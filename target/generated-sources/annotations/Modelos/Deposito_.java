@@ -6,7 +6,11 @@ import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
+<<<<<<< HEAD
+@Generated(value="EclipseLink-2.7.9.v20210604-rNA", date="2022-03-18T10:50:42")
+=======
 @Generated(value="EclipseLink-2.7.9.v20210604-rNA", date="2022-03-18T19:22:42")
+>>>>>>> Developer
 @StaticMetamodel(Deposito.class)
 public class Deposito_ { 
 

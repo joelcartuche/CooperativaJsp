@@ -4,28 +4,25 @@
     Author     : joelc
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
+<jsp:include page="/Template/layout.jsp"></jsp:include>   
 <%
-        HttpSession sesion = request.getSession();
-        if (sesion.getAttribute("logueado") == null || sesion.getAttribute("logueado").equals("0")) {
-            response.sendRedirect("login.jsp");
-        }
-    %>
-    <jsp:include page="/Template/cabecera.jsp"></jsp:include>
-    <%
-        String id = request.getParameter("id");
-        String nombre = request.getParameter("user");
-        
-    %>
-        <main>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12 fw-bold fs-3 text-center">Bienvenido <%=nombre%></div>
-            </div>
+    HttpSession sesion = request.getSession();
+    if (sesion.getAttribute("logueado") == null || sesion.getAttribute("logueado").equals("0")) {
+        response.sendRedirect("login.jsp");
+    }
+%>
+<%
+    String id = request.getParameter("id");
+    String nombre = request.getParameter("user");
+
+%>
+<main>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 fw-bold fs-3 text-center">Bienvenido <%=nombre%></div>
         </div>
-    </main>
-    
-    
-    <jsp:include page="/Template/footer.jsp"></jsp:include>
-</html>
+    </div>
+</main>
+
+
+<jsp:include page="/Template/footer.jsp"></jsp:include>
