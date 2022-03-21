@@ -84,9 +84,9 @@
                         <div class="text-muted small fw-bold text-uppercase px-3">Cash Management</div>
                     </li>
                     <li class="offcanvasItems">
-                        <a href="#" class="nav-link px-3 active">
+                        <a href="<%=dom.getDominio()%>Deposito?accion=buscarcuenta" class="nav-link px-3 active">
                             <span class="myIconText me-2"><i class="bi bi-currency-dollar"></i></span>
-                            <span class="myOffCanvaSubtitle">Deposits</span>
+                            <span class="myOffCanvaSubtitle">Depositar</span>
                         </a>
                     </li>
                     <li class="offcanvasItems">
