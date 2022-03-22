@@ -160,12 +160,16 @@ public class Socio extends HttpServlet {
 
                     socio.setNombreSocio(nombre);
                     usuario.setNombreUsuario(nombre);
+                    
                     socio.setApellidoSocio(apellido);
                     usuario.setApellidoUsuario(apellido);
+                    
                     socio.setCedulaSocio(cedula);
                     usuario.setCedulaUsuario(cedula);
+                    
                     socio.setTelefonoSocio(telefono);
                     usuario.setTelefonoUsuario(telefono);
+                    
                     socio.setDireccionSocio(direccion);
                     socio.setEsEliminado(Boolean.FALSE);
 
