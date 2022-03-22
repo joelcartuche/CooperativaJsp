@@ -12,10 +12,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -30,7 +31,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Credito.findByIdCredito", query = "SELECT c FROM Credito c WHERE c.idCredito = :idCredito"),
     @NamedQuery(name = "Credito.findByMontoCredito", query = "SELECT c FROM Credito c WHERE c.montoCredito = :montoCredito"),
     @NamedQuery(name = "Credito.findByInteresCredito", query = "SELECT c FROM Credito c WHERE c.interesCredito = :interesCredito"),
-    @NamedQuery(name = "Credito.findByEsEliminado", query = "SELECT c FROM Credito c WHERE c.esEliminado = :esEliminado")})
+    @NamedQuery(name = "Credito.findByEsEliminado", query = "SELECT c FROM Credito c WHERE c.esEliminado = :esEliminado"),
+    @NamedQuery(name = "Credito.findByIdCodigoSocio", query = "SELECT c FROM Credito c WHERE c.idCodigoSocio = :idCodigoSocio")})
 public class Credito implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,19 +48,24 @@ public class Credito implements Serializable {
     private Double interesCredito;
     @Column(name = "es_eliminado")
     private Boolean esEliminado;
-    @JoinColumn(name = "id_socios", referencedColumnName = "id_socios")
-    @OneToOne(optional = false)
-    private Socios idSocios;
-    @JoinColumn(name = "id_tasa_amortizacion", referencedColumnName = "id_tasa_amortizacion")
-    @OneToOne(optional = false)
-    private TasaAmortizacion idTasaAmortizacion;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "id_codigo_socio")
+    private int idCodigoSocio;
+    @JoinColumn(name = "codigo_credito", referencedColumnName = "codigo_socio")
+    @ManyToOne(optional = false)
+    private Socios codigoCredito;
 
     public Credito() {
-        this.esEliminado=false;
     }
 
     public Credito(Integer idCredito) {
         this.idCredito = idCredito;
+    }
+
+    public Credito(Integer idCredito, int idCodigoSocio) {
+        this.idCredito = idCredito;
+        this.idCodigoSocio = idCodigoSocio;
     }
 
     public Integer getIdCredito() {
@@ -93,20 +100,20 @@ public class Credito implements Serializable {
         this.esEliminado = esEliminado;
     }
 
-    public Socios getIdSocios() {
-        return idSocios;
+    public int getIdCodigoSocio() {
+        return idCodigoSocio;
     }
 
-    public void setIdSocios(Socios idSocios) {
-        this.idSocios = idSocios;
+    public void setIdCodigoSocio(int idCodigoSocio) {
+        this.idCodigoSocio = idCodigoSocio;
     }
 
-    public TasaAmortizacion getIdTasaAmortizacion() {
-        return idTasaAmortizacion;
+    public Socios getCodigoCredito() {
+        return codigoCredito;
     }
 
-    public void setIdTasaAmortizacion(TasaAmortizacion idTasaAmortizacion) {
-        this.idTasaAmortizacion = idTasaAmortizacion;
+    public void setCodigoCredito(Socios codigoCredito) {
+        this.codigoCredito = codigoCredito;
     }
 
     @Override

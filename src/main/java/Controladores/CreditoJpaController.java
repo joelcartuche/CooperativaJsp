@@ -4,7 +4,6 @@
  */
 package Controladores;
 
-import Controladores.exceptions.IllegalOrphanException;
 import Controladores.exceptions.NonexistentEntityException;
 import Modelos.Credito;
 import java.io.Serializable;
@@ -13,7 +12,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import Modelos.Socios;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -29,39 +27,30 @@ public class CreditoJpaController implements Serializable {
         this.emf = emf;
     }
     private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
-
+    
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 
-    public void create(Credito credito) throws IllegalOrphanException {
-        List<String> illegalOrphanMessages = null;
-        Socios idSociosOrphanCheck = credito.getIdSocios();
-        if (idSociosOrphanCheck != null) {
-            Credito oldCreditoOfIdSocios = idSociosOrphanCheck.getCredito();
-            if (oldCreditoOfIdSocios != null) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("The Socios " + idSociosOrphanCheck + " already has an item of type Credito whose idSocios column cannot be null. Please make another selection for the idSocios field.");
-            }
-        }
-        if (illegalOrphanMessages != null) {
-            throw new IllegalOrphanException(illegalOrphanMessages);
-        }
+    public CreditoJpaController() {
+    }
+    
+    
+
+    public void create(Credito credito) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Socios idSocios = credito.getIdSocios();
-            if (idSocios != null) {
-                idSocios = em.getReference(idSocios.getClass(), idSocios.getIdSocios());
-                credito.setIdSocios(idSocios);
+            Socios codigoCredito = credito.getCodigoCredito();
+            if (codigoCredito != null) {
+                codigoCredito = em.getReference(codigoCredito.getClass(), codigoCredito.getIdSocios());
+                credito.setCodigoCredito(codigoCredito);
             }
             em.persist(credito);
-            if (idSocios != null) {
-                idSocios.setCredito(credito);
-                idSocios = em.merge(idSocios);
+            if (codigoCredito != null) {
+                codigoCredito.getCreditoCollection().add(credito);
+                codigoCredito = em.merge(codigoCredito);
             }
             em.getTransaction().commit();
         } finally {
@@ -71,39 +60,26 @@ public class CreditoJpaController implements Serializable {
         }
     }
 
-    public void edit(Credito credito) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(Credito credito) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             Credito persistentCredito = em.find(Credito.class, credito.getIdCredito());
-            Socios idSociosOld = persistentCredito.getIdSocios();
-            Socios idSociosNew = credito.getIdSocios();
-            List<String> illegalOrphanMessages = null;
-            if (idSociosNew != null && !idSociosNew.equals(idSociosOld)) {
-                Credito oldCreditoOfIdSocios = idSociosNew.getCredito();
-                if (oldCreditoOfIdSocios != null) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("The Socios " + idSociosNew + " already has an item of type Credito whose idSocios column cannot be null. Please make another selection for the idSocios field.");
-                }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            if (idSociosNew != null) {
-                idSociosNew = em.getReference(idSociosNew.getClass(), idSociosNew.getIdSocios());
-                credito.setIdSocios(idSociosNew);
+            Socios codigoCreditoOld = persistentCredito.getCodigoCredito();
+            Socios codigoCreditoNew = credito.getCodigoCredito();
+            if (codigoCreditoNew != null) {
+                codigoCreditoNew = em.getReference(codigoCreditoNew.getClass(), codigoCreditoNew.getIdSocios());
+                credito.setCodigoCredito(codigoCreditoNew);
             }
             credito = em.merge(credito);
-            if (idSociosOld != null && !idSociosOld.equals(idSociosNew)) {
-                idSociosOld.setCredito(null);
-                idSociosOld = em.merge(idSociosOld);
+            if (codigoCreditoOld != null && !codigoCreditoOld.equals(codigoCreditoNew)) {
+                codigoCreditoOld.getCreditoCollection().remove(credito);
+                codigoCreditoOld = em.merge(codigoCreditoOld);
             }
-            if (idSociosNew != null && !idSociosNew.equals(idSociosOld)) {
-                idSociosNew.setCredito(credito);
-                idSociosNew = em.merge(idSociosNew);
+            if (codigoCreditoNew != null && !codigoCreditoNew.equals(codigoCreditoOld)) {
+                codigoCreditoNew.getCreditoCollection().add(credito);
+                codigoCreditoNew = em.merge(codigoCreditoNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -134,10 +110,10 @@ public class CreditoJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The credito with id " + id + " no longer exists.", enfe);
             }
-            Socios idSocios = credito.getIdSocios();
-            if (idSocios != null) {
-                idSocios.setCredito(null);
-                idSocios = em.merge(idSocios);
+            Socios codigoCredito = credito.getCodigoCredito();
+            if (codigoCredito != null) {
+                codigoCredito.getCreditoCollection().remove(credito);
+                codigoCredito = em.merge(codigoCredito);
             }
             em.remove(credito);
             em.getTransaction().commit();

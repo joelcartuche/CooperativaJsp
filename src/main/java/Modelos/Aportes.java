@@ -13,9 +13,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -57,12 +57,11 @@ public class Aportes implements Serializable {
     private Date fechaAporte;
     @Column(name = "es_eliminado")
     private Boolean esEliminado;
-    @JoinColumn(name = "id_socios", referencedColumnName = "id_socios")
-    @OneToOne(optional = false)
-    private Socios idSocios;
+    @JoinColumn(name = "codigo_socio", referencedColumnName = "codigo_socio")
+    @ManyToOne(optional = false)
+    private Socios codigoSocio;
 
     public Aportes() {
-        this.esEliminado=false;
     }
 
     public Aportes(Integer idAportes) {
@@ -117,12 +116,12 @@ public class Aportes implements Serializable {
         this.esEliminado = esEliminado;
     }
 
-    public Socios getIdSocios() {
-        return idSocios;
+    public Socios getCodigoSocio() {
+        return codigoSocio;
     }
 
-    public void setIdSocios(Socios idSocios) {
-        this.idSocios = idSocios;
+    public void setCodigoSocio(Socios codigoSocio) {
+        this.codigoSocio = codigoSocio;
     }
 
     @Override
