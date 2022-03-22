@@ -90,7 +90,7 @@
                         </a>
                     </li>
                     <li class="offcanvasItems">
-                        <a href="#" class="nav-link px-3 active">
+                        <a href="GestionCredito/listarCreditos.jsp" class="nav-link px-3 active">
                             <span class="myIconText me-2"><i class="bi bi-credit-card-2-back-fill"></i></span>
                             <span class="myOffCanvaSubtitle">Credits</span>
                         </a>

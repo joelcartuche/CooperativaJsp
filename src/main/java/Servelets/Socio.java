@@ -7,6 +7,7 @@ package Servelets;
 import Controladores.SociosJpaController;
 import Controladores.UsuarioJpaController;
 import Controladores.exceptions.NonexistentEntityException;
+import Modelos.Cuenta;
 import Modelos.Socios;
 import Modelos.Usuario;
 import Utilidades.Validar;
@@ -155,6 +156,7 @@ public class Socio extends HttpServlet {
 
                     Socios socio = new Socios();
                     Usuario usuario = new Usuario();
+                    Cuenta cuenta = new Cuenta(); // numero de cedula
 
                     socio.setNombreSocio(nombre);
                     usuario.setNombreUsuario(nombre);
