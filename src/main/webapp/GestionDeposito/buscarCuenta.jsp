@@ -30,9 +30,6 @@
                 <div id="errorlAlert" class="alert alert-danger" style="display: none" role="alert">
                     A simple danger alert
                 </div>
-                <div id="successAlert" class="alert alert-success" style="display: none" role="alert">
-                    A simple success alert
-                </div>
                 <div class="card p-4">
                     <form id="formdata">
                         <div class="mb-3 d-flex">
@@ -61,12 +58,24 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
+
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+        <div id="liveToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body" id="message">
+                    Cuenta Encontrada.
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
 </main>
 <script>
     $(document).ready(function () {
@@ -78,24 +87,24 @@
                         $('#errorlAlert').show();
                         $('#errorlAlert').text(res.error);
                     } else {
-                        console.log(res[0]);
-                        console.log(res[1]);
+                        $('#liveToast').toast('show');
+
                         let estadoCuenta = "";
                         if (!res[0].esEliminado) {
                             estadoCuenta = '<span class="my-estado-activo">Activo</span>';
                         } else {
                             estadoCuenta = '<span class="my-estado-inactivo">Inactivo</span>';
                         }
-                        
+
                         let opciones = "";
                         if (!res[0].esEliminado) {
-                            opciones = '<a type="button" href="<%=dom.getDominio()%>Deposito?accion=irDeposito&id='+res[0].idCuentaCooperativa+'" class="btn btn-success">Hacer Depósito</a>';
+                            opciones = '<a type="button" href="<%=dom.getDominio()%>Deposito?accion=irDeposito&id=' + res[0].idCuentaCooperativa + '" class="btn btn-success">Hacer Depósito</a>';
                         } else {
-                            opciones = '<a type="button" href="<%=dom.getDominio()%>Cuenta?accion=editar&id='+res[1].idSocios+'" class="btn btn-primary">Activar Cuenta<i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                            opciones = '<a type="button" href="<%=dom.getDominio()%>Cuenta?accion=editar&id=' + res[1].idSocios + '" class="btn btn-primary">Activar Cuenta<i class="fa fa-pencil" aria-hidden="true"></i></a>';
                         }
 
                         $('#tableSearch>tbody').append(
-                            "<tr>\n\
+                                "<tr>\n\
                             <td>" + res[0].numeroCuenta + "</td>\n\
                             <td>" + res[1].nombreSocio + "</td>\n\
                             <td>" + res[1].apellidoSocio + "</td>\n\
@@ -103,7 +112,7 @@
                             <td>" + estadoCuenta + "</td>\n\
                             <td>" + opciones + "</td>\n\
                             </tr>"
-                        );
+                                );
 
                     }
                 }).fail(function (error) {
