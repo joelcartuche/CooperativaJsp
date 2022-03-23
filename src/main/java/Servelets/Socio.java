@@ -4,10 +4,12 @@
  */
 package Servelets;
 
+import Controladores.CuentaCooperativaJpaController;
 import Controladores.SociosJpaController;
 import Controladores.UsuarioJpaController;
 import Controladores.exceptions.NonexistentEntityException;
 import Modelos.Cuenta;
+import Modelos.CuentaCooperativa;
 import Modelos.Socios;
 import Modelos.Usuario;
 import Utilidades.Validar;
@@ -77,10 +79,10 @@ public class Socio extends HttpServlet {
         String action = request.getParameter("accion");
         if (action.equalsIgnoreCase("listar")) {
             acceso = listar;
-            
+
         } else if (action.equalsIgnoreCase("agregar")) {
             acceso = agregar;
-            
+
         } else if (action.equalsIgnoreCase("editar")) {
             int id = Integer.parseInt((String) request.getParameter("id"));
             SociosJpaController sociosJpaController = new SociosJpaController();
@@ -94,7 +96,7 @@ public class Socio extends HttpServlet {
             request.setAttribute("id", request.getParameter("id"));
             request.setAttribute("esEliminado", request.getParameter("esEliminado"));
             acceso = eliminar;
-            
+
         } else if (action.equalsIgnoreCase("ver")) {
             int id = Integer.parseInt((String) request.getParameter("id"));
             SociosJpaController sociosJpaController = new SociosJpaController();
@@ -151,32 +153,65 @@ public class Socio extends HttpServlet {
                     salida = "{\"error\":\"Hubo un error al registrar el teléfono.\"}";
                     out.print(salida);
                 } else {
+
+                    // Creamos un nuevo socio
                     SociosJpaController socioJpaController = new SociosJpaController();
-                    UsuarioJpaController usuarioJpaController = new UsuarioJpaController();
-
                     Socios socio = new Socios();
-                    Usuario usuario = new Usuario();
-                    Cuenta cuenta = new Cuenta(); // numero de cedula
-
                     socio.setNombreSocio(nombre);
-                    usuario.setNombreUsuario(nombre);
-                    
                     socio.setApellidoSocio(apellido);
-                    usuario.setApellidoUsuario(apellido);
-                    
                     socio.setCedulaSocio(cedula);
-                    usuario.setCedulaUsuario(cedula);
-                    
                     socio.setTelefonoSocio(telefono);
-                    usuario.setTelefonoUsuario(telefono);
-                    
                     socio.setDireccionSocio(direccion);
                     socio.setEsEliminado(Boolean.FALSE);
 
+                    // creamos un nuevo usuario
+                    UsuarioJpaController usuarioJpaController = new UsuarioJpaController();
+                    Usuario usuario = new Usuario();
+                    usuario.setNombreUsuario(nombre);
+                    usuario.setApellidoUsuario(apellido);
+                    usuario.setCedulaUsuario(cedula);
+                    usuario.setTelefonoUsuario(telefono);
+
                     try {
-                        socioJpaController.create(socio); // guardamos el socio en la bse de datos
-                        usuarioJpaController.create(usuario); //guardamos el usuario en la base de datos
-                        salida = "{\"message\":\"El Socio se creó exitosamente\"}";
+                        // guardamos el socio en la bse de datos
+                        socioJpaController.create(socio);
+                        socio.setCodigoSocio(socio.getIdSocios());
+                        socioJpaController.edit(socio);
+
+                        //guardamos el usuario en la base de datos
+                        usuarioJpaController.create(usuario);
+
+                        // Creamos una nueva cuenta cooperativa
+                        CuentaCooperativaJpaController cuentaCooperativaJpaController = new CuentaCooperativaJpaController();
+                        CuentaCooperativa cuentaCooperativa = new CuentaCooperativa();
+                        cuentaCooperativa.setNombreCuenta(socio.getNombreSocio());
+                        cuentaCooperativa.setIdSocios(socio);
+                        cuentaCooperativa.setIdUsuario(usuario);
+
+                        // creamos una cuenta cooperativa para buscar si existe replicada en la base de datos
+                        CuentaCooperativa findCuenta = new CuentaCooperativa();
+                        // realizamos la generacion del numero de cuenta y el codigo de cuenta
+                        // el codigo de cuenta es el mismo que el numero de cuenta
+                        boolean esBuscarBumero = true;
+                        int intentos = 0;
+                        while (esBuscarBumero && intentos <= 20) {
+                            // generamos un número de cuenta
+                            int numeroRandom = (int) (Math.random() * 999999999 + 1);
+                            // buscamos si existe una cuenta con el mismo número
+                            findCuenta = cuentaCooperativaJpaController.findNumeroCuentaCooperativa("" + numeroRandom);
+                            // si no existe, guardamos el numero aleatorio en la cuenta
+                            if (findCuenta == null) {
+                                cuentaCooperativa.setNumeroCuenta("" + numeroRandom);
+                                cuentaCooperativa.setCodigoCuenta("" + numeroRandom);
+                                esBuscarBumero = false;
+                            }
+                            intentos = intentos + 1;
+                        }
+                        // guardamos la cuenta cooperativa en la base de datos
+                        cuentaCooperativaJpaController.create(cuentaCooperativa);
+                        // presentamos la respuesta del servidor
+                        salida = "{\"message\":\"El Socio " + socio.getNombreSocio() + " " + socio.getApellidoSocio() + " se creó exitosamente.\",";
+                        salida += "\"numeroCuenta\":\"" + cuentaCooperativa.getNumeroCuenta() + "\"}";
                         response.setContentType("application/json");
                         response.setCharacterEncoding("UTF-8");
                         response.setStatus(200);

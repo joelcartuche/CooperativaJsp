@@ -9,10 +9,10 @@
 
 <jsp:include page="../Template/layout.jsp"></jsp:include>
 <%
-    HttpSession sesion2 = request.getSession();
-    if (sesion2.getAttribute("logueado") == null || sesion2.getAttribute("logueado").equals("0")) {
-            response.sendRedirect("../login.jsp");
-    }
+    //HttpSession sesion2 = request.getSession();
+    //if (sesion2.getAttribute("logueado") == null || sesion2.getAttribute("logueado").equals("0")) {
+    //        response.sendRedirect("../login.jsp");
+    //}
 
     Dominio dom = new Dominio();
 %>
@@ -25,11 +25,17 @@
         <div class="row mt-4 mb-5 justify-content-center">
             <div class="col-12 col-md-6">
 
-                <div id="errorlAlert" class="alert alert-danger" role="alert">
+                <div id="errorlAlert" class="alert alert-danger" role="alert" style="display: none">
                     A simple danger alert
                 </div>
-                <div id="successAlert" class="alert alert-success" role="alert">
-                    A simple success alert
+                <div id="successAlert" class="alert alert-success" role="alert" style="display: none">
+                    <div class="row">
+                        <div class="col-12" id="messageRes">Mensaje</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-6 fw-bold">Número de Cuenta:</div>
+                        <div class="col-12 col-md-6 fw-bold" id="messageNum">11</div>
+                    </div>
                 </div>
 
                 <div class="card p-4">
@@ -72,34 +78,54 @@
             </div>
         </div>
     </div>
+
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+        <div id="liveToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body" id="message">
+                    Cuenta de Socio Creado con éxito.
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
 </main>
 <script>
     $(document).ready(function () {
-        //ocultamos los divs de alertas
-        //$('#errorName').hide();
-        $('#errorlAlert').hide();
-        $('#successAlert').hide();
 
-        $("#botonenviar").click(function () {     // Con esto establecemos la acción por defecto de nuestro botón de enviar.
-            if (validaForm()) {                               // Primero validará el formulario.
+        // Con esto establecemos la acción por defecto de nuestro botón de enviar.
+        $("#botonenviar").click(function () {
+            // Primero validará el formulario.
+            if (validaForm()) {
+                // enviamos la peticion por el metodo POST
+                // como respuesta, recibimos un JSON con la informacion requerida
                 $.post("<%=dom.getDominio()%>Socio?accion=agregar", $("#formdata").serialize(), function (res) {
+                    // si en el JSON existe el parametro error, significa que existe un error de los datos. 
                     if (res.error) {
                         $('#errorlAlert').show();
-                        $('#errorlAlert').text(res.error);
+                        $('#errorlAlert').text(res.error); // se presenta el mensaje en un alert
                     }
+                    // si existe el parametro messagge en el JSON, significa que la operacion tuvo exito
                     if (res.message) {
+                        // se presenta un toast de confirmacion
+                        $('#liveToast').toast('show');
+                        // se presenta el mensaje en un alert
                         $('#errorlAlert').hide();
                         $('#successAlert').show();
-                        $('#successAlert').text(res.message);
+                        $('#messageRes').text(res.message);
+                        $('#messageNum').text(res.numeroCuenta);
+                        // se limpia el formulario
                         $('input[type="text"]').val('');
                         $('#inputAddress').val('');
+                        // se oculta los mensajes de error
                         $("#errorName").hide();
                         $("#errorLastName").hide();
                         $("#errorCi").hide();
                         $("#errorPhone").hide();
                         $('input[type="text"]').removeClass('is-invalid');
                     }
-                }).fail(function (error) {
+                }).fail(function (error) { // este error corresponde al servidor
                     $('#errorlAlert').show();
                     $('#errorlAlert').text("Error " + error.status + ": " + error.responseText);
                 });
@@ -108,7 +134,6 @@
     });
 
     function validaForm() {
-        // Campos de texto
         if ($("#inputName").val() == "") {
             $('#errorName').show();
             $('#inputName').addClass("is-invalid");
