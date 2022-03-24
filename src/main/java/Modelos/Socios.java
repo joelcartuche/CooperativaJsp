@@ -5,7 +5,9 @@
 package Modelos;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -88,6 +90,9 @@ public class Socios implements Serializable {
     
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "idSocios", fetch = FetchType.LAZY)
     private CuentaCooperativa cuentaCooperativa;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoSocio")
+    private List<Deposito> deposito = new ArrayList<>();
         
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoCredito")
     private Collection<Credito> creditoCollection;
@@ -179,7 +184,14 @@ public class Socios implements Serializable {
     public void setCuentaCooperativa(CuentaCooperativa cuentaCooperativa) {
         this.cuentaCooperativa = cuentaCooperativa;
     }
-    
+
+    public List<Deposito> getDeposito() {
+        return deposito;
+    }
+
+    public void setDeposito(List<Deposito> deposito) {
+        this.deposito = deposito;
+    }
     
     @XmlTransient
     public Collection<Credito> getCreditoCollection() {

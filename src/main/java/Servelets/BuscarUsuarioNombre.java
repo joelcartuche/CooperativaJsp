@@ -5,7 +5,7 @@
 package Servelets;
 
 import Controladores.UsuarioJpaController;
-import Modelos.CuentaCooperativa_;
+import Modelos.CuentaCooperativa;
 import Modelos.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;

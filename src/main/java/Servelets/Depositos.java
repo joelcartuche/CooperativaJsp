@@ -5,10 +5,15 @@
 package Servelets;
 
 import Controladores.CuentaCooperativaJpaController;
+import Controladores.DepositoJpaController;
 import Modelos.CuentaCooperativa;
+import Modelos.Deposito;
 import Modelos.Socios;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,7 +28,7 @@ import org.json.JSONObject;
  * @author LENOVO
  */
 @WebServlet(name = "Deposito", urlPatterns = {"/Deposito"})
-public class Deposito extends HttpServlet {
+public class Depositos extends HttpServlet {
 
     String buscarCuenta = "GestionDeposito/buscarCuenta.jsp";
     String irDeposito = "GestionDeposito/depositar.jsp";
@@ -63,7 +68,10 @@ public class Deposito extends HttpServlet {
 
         } else if (action.equalsIgnoreCase("irDeposito")) {
             int id = Integer.parseInt((String) request.getParameter("id"));
-            request.setAttribute("idCuentaCooperativa", id);
+            CuentaCooperativaJpaController cuentaCooperativaJpaController = new CuentaCooperativaJpaController();
+            CuentaCooperativa cuentaCooperativa = cuentaCooperativaJpaController.findCuentaCooperativa(id);
+            request.setAttribute("idCuentaCooperativa", cuentaCooperativa.getIdCuentaCooperativa());
+            request.setAttribute("numCuentaCooperativa", cuentaCooperativa.getNumeroCuenta());
             request.setAttribute("saldoActual", 8000);
             acceso = irDeposito;
         }
@@ -111,7 +119,7 @@ public class Deposito extends HttpServlet {
                     out.print(jsonResultado);
 
                 } catch (Exception e) {
-                    String salida = "{\"error\":\"Lo sentimos, no se encontró el número de cuenta "+numCuenta+"\"}";
+                    String salida = "{\"error\":\"Lo sentimos, no se encontró el número de cuenta " + numCuenta + "\"}";
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
                     out.print(salida);
@@ -122,33 +130,39 @@ public class Deposito extends HttpServlet {
         } else if (action.equalsIgnoreCase("depositar")) {
 
             try ( PrintWriter out = response.getWriter()) {
-
-                int numCuenta = Integer.parseInt((String) request.getParameter("id_cuenta"));
-                String fecha = request.getParameter("fecha_deposito");
+                // Obtengo loa parametros del formulario
+                int id = Integer.parseInt((String) request.getParameter("id_cuenta"));
                 String monto = request.getParameter("monto");
-
-                System.out.println(numCuenta);
-                System.out.println(fecha);
-                System.err.println(monto);
-
+                //String fecha = request.getParameter("fecha_deposito");
                 try {
-
                     // Buscar cuenta cooperativa por el id de cuenta en la base de datos
-                    //CuentaCooperativaJpaController cuentaCooperativaJpaController = new CuentaCooperativaJpaController();
-                    //CuentaCooperativa cuentaCooperativa = cuentaCooperativaJpaController.findCuentaCooperativa(numCuenta);
-                    // !: BORRAR esta seccion, es solo para pruebas
-                    CuentaCooperativa cuentaCooperativa = new CuentaCooperativa();
-                    cuentaCooperativa.setIdCuentaCooperativa(numCuenta);
-                    cuentaCooperativa.setNumeroCuenta(numCuenta + "");
-                    // FIN BORRAR
-
-                    String salida = "{\"message\":\"Depósito realizado con éxito\"}";
-
+                    CuentaCooperativaJpaController cuentaCooperativaJpaController = new CuentaCooperativaJpaController();
+                    CuentaCooperativa cuentaCooperativa = cuentaCooperativaJpaController.findCuentaCooperativa(id);
+                    // creo un objeto deposito y agrego la informacion
+                    Deposito deposito = new Deposito();
+                    deposito.setMontoDeposito(Float.parseFloat((String) monto));
+                    deposito.setFechaDeposito(new Date());
+                    deposito.setCodigoSocio(cuentaCooperativa.getIdSocios());
+                    // almaceno el deposito en la base de datos
+                    DepositoJpaController depositoJpaController = new DepositoJpaController();
+                    depositoJpaController.create(deposito);
+                    // ceamos un objeto JSON para hacer la respuesta en la vista
+                    JSONObject jsonRes = new JSONObject();
+                    jsonRes.put("message", "Depósito realizado con éxito");
+                    jsonRes.put("cuentaNumero", cuentaCooperativa.getNumeroCuenta());
+                    jsonRes.put("cuentaCodigo", cuentaCooperativa.getCodigoCuenta());
+                    jsonRes.put("socioNombre", cuentaCooperativa.getIdSocios().getNombreSocio());
+                    jsonRes.put("socioApellido", cuentaCooperativa.getIdSocios().getApellidoSocio());
+                    jsonRes.put("socioTelefono", cuentaCooperativa.getIdSocios().getTelefonoSocio());
+                    jsonRes.put("depositoFecha", new SimpleDateFormat("dd/MM/yyyy").format(deposito.getFechaDeposito()));
+                    jsonRes.put("depositoMonto", Math.round(deposito.getMontoDeposito()*100.0)/100.0);
+                    // !: OBTENER EL SALDO VERDADERO
+                    jsonRes.put("saldo", "---");
                     //System.out.println(jsonRes);
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
                     response.setStatus(200);
-                    out.print(salida);
+                    out.print(jsonRes);
 
                 } catch (Exception e) {
                     String salida = "{\"error\":\"Lo sentimos, no se puede realizar el depósito. No se ha encontrado el número de cuenta\"}";

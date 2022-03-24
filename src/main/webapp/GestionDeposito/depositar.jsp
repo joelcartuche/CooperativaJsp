@@ -36,7 +36,7 @@
                             <span class="fw-bold">Número de Cuenta:</span>
                         </div>
                         <div class="col-12 col-md-6">
-                            <span>${idCuentaCooperativa}</span>
+                            <span>${numCuentaCooperativa}</span>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -80,10 +80,52 @@
             </div>
         </div>
 
-        <div id="cardSuccess" class="row mt-4 mb-5 justify-content-center" style="display: none">
+        <div id="cardSuccess" class="row mt-4 mb-3 justify-content-center" style="display: none">
             <div class="col-12 col-md-11">
                 <div class="alert alert-success" role="alert">
                     Depósito realizado con éxito
+                </div>
+            </div>
+        </div>
+        <div id="cardSuccessInfo" class="row mb-5 justify-content-center" style="display: none">
+            <div class="col-12 col-md-11">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row mb-3">
+                            <div class="col-12 col-md-6">
+                                <span class="fw-bold">N° de Cuenta: </span><span id="textNumCuenta">111</span>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <span class="fw-bold">Código de Cuenta: </span><span id="textCodCuenta">222</span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <span class="fw-bold">Nombres: </span><span id="textNombre">Primer Segundo</span> <span id="textApellido">Tercero Cuarto</span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <span class="fw-bold">Teléfono: </span><span id="textTelefono">1111111111</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table" id="tableSuccess">
+                            <thead>
+                                <tr>
+                                    <th scope="col">FECHA</th>
+                                    <th scope="col">TIPO DE OPERACIÓN</th>
+                                    <th scope="col">MONTO</th>
+                                    <th scope="col">SALDO</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -113,9 +155,26 @@
                     }
                     // si la peticion fue un exito, se presenta un mensaje y se oculta el formulario del deposito
                     if (res.message) {
+                        // limpiamos el formulario y lo ocultamos
                         $("#inputMonto").val("");
                         $("#panel").hide();
+                        // presentamos un mensaje
                         $('#cardSuccess').show();
+                        // presentamos un card de informacion con respecto a la transacción
+                        $('#cardSuccessInfo').show();
+                        $('#textNumCuenta').text(res.cuentaNumero);
+                        $('#textCodCuenta').text(res.cuentaCodigo);
+                        $('#textNombre').text(res.socioNombre);
+                        $('#textApellido').text(res.socioApellido);
+                        $('#textTelefono').text(res.socioTelefono);
+                        $('#tableSuccess>tbody').append(
+                                "<tr>\n\
+                            <td>" + res.depositoFecha + "</td>\n\
+                            <td>" + "Depósito" + "</td>\n\
+                            <td>" + res.depositoMonto + "</td>\n\
+                            <td>" + res.saldo + "</td>\n\
+                            </tr>"
+                                );
                     }
                 }).fail(function (error) { // si existe un error del servidor, presentamos un alert
                     $('#errorlAlert').show();
