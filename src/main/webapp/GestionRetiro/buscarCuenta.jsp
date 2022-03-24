@@ -81,42 +81,51 @@
 <script>
     $(document).ready(function () {
 
-        $("#btnSearch").click(function () {     // Con esto establecemos la acción por defecto de nuestro botón de enviar.
-            if (validaForm()) {                               // Primero validará el formulario.
-                $.post("<%=dom.getDominio()%>Retiro?accion=buscar", $("#formdata").serialize(), function (res) {
+        // Con esto establecemos la acción por defecto de nuestro botón de enviar.
+        $("#btnSearch").click(function () {
+            // Primero validará el formulario.
+            if (validaForm()) {
+                // enviamos la peticion por el metodo POST
+                $.post("<%=dom.getDominio()%>Deposito?accion=buscar", $("#formdata").serialize(), function (res) {
+                    // si existe un error en los datos enviados, se presenta un alert            
                     if (res.error) {
                         $('#errorlAlert').show();
                         $('#errorlAlert').text(res.error);
                     } else {
+                        // si la peticion fue un exito, se presenta los datos en una TABLA
+                        // se presenta un toast de confirmacion
                         $('#liveToast').toast('show');
-
+                        // se oculta los mensajes de error
+                        $('#errorlAlert').hide();
+                        // se almacena el mensaje de acuerdo al estado de la cuenta, si esta eliminada o no
                         let estadoCuenta = "";
-                        if (!res[0].esEliminado) {
+                        if (!res.estadoCuentaCooperativa) {
                             estadoCuenta = '<span class="my-estado-activo">Activo</span>';
                         } else {
                             estadoCuenta = '<span class="my-estado-inactivo">Inactivo</span>';
                         }
-
+                        // se almacena las obciones de acuerdo al estado de la cuenta, si esta eliminada o no
+                        // si la cuenta esta eliminada, no se podra hacer un deposito y se presenta un boton para activa la cuenta
                         let opciones = "";
-                        if (!res[0].esEliminado) {
-                            opciones = '<a type="button" href="<%=dom.getDominio()%>Retiro?accion=irRetiro&id=' + res[0].idCuentaCooperativa + '" class="btn btn-success">Hacer Depósito</a>';
+                        if (!res.estadoCuentaCooperativa) {
+                            opciones = '<a type="button" href="<%=dom.getDominio()%>Retiro?accion=irRetiro&id=' + res.idCuentaCooperativa + '" class="btn btn-success">Realizar Retiro</a>';
                         } else {
-                            opciones = '<a type="button" href="<%=dom.getDominio()%>Cuenta?accion=editar&id=' + res[1].idSocios + '" class="btn btn-primary">Activar Cuenta<i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                            opciones = '<a type="button" href="<%=dom.getDominio()%>Cuenta?accion=editar&id=' + res.idCuentaCooperativa + '" class="btn btn-primary">Activar Cuenta<i class="fa fa-pencil" aria-hidden="true"></i></a>';
                         }
-
+                        // se construye la tabla y se presenta en la vista
                         $('#tableSearch>tbody').append(
                                 "<tr>\n\
-                            <td>" + res[0].numeroCuenta + "</td>\n\
-                            <td>" + res[1].nombreSocio + "</td>\n\
-                            <td>" + res[1].apellidoSocio + "</td>\n\
-                            <td>" + res[1].cedulaSocio + "</td>\n\
+                            <td>" + res.numeroCuentaCooperativa + "</td>\n\
+                            <td>" + res.nombreSocio + "</td>\n\
+                            <td>" + res.apellidoSocio + "</td>\n\
+                            <td>" + res.cedulaSocio + "</td>\n\
                             <td>" + estadoCuenta + "</td>\n\
                             <td>" + opciones + "</td>\n\
                             </tr>"
                                 );
 
                     }
-                }).fail(function (error) {
+                }).fail(function (error) { // si existe un error del servidor, presentamos un alert
                     $('#errorlAlert').show();
                     $('#errorlAlert').text("Error " + error.status + ": " + error.responseText);
                 });
@@ -126,7 +135,7 @@
 
     function validaForm() {
         // Campos de texto
-        if ($("#inputSearch").val() == "") {
+        if ($("#inputSearch").val() === "") {
             $('#errorSearch').show();
             $('#inputSearch').addClass("is-invalid");
             $("#inputSearch").focus();

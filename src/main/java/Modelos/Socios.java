@@ -93,6 +93,9 @@ public class Socios implements Serializable {
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoSocio")
     private List<Deposito> deposito = new ArrayList<>();
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoSocio")
+    private List<Retiro> retiro = new ArrayList<>();
         
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoCredito")
     private Collection<Credito> creditoCollection;
@@ -191,6 +194,14 @@ public class Socios implements Serializable {
 
     public void setDeposito(List<Deposito> deposito) {
         this.deposito = deposito;
+    }
+
+    public List<Retiro> getRetiro() {
+        return retiro;
+    }
+
+    public void setRetiro(List<Retiro> retiro) {
+        this.retiro = retiro;
     }
     
     @XmlTransient
