@@ -167,7 +167,7 @@
                         <span class="me-3 myIconText">
                             <i class="bi bi-person-bounding-box"></i>
                         </span>
-                        <span class="myOffCanvaSubtitle">Partner Accounts</span>
+                        <span class="myOffCanvaSubtitle">Cuentas Cooperativa</span>
                         <span class="right-icon ms-auto">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
@@ -178,18 +178,28 @@
                         <div>
                             <ul class="navbar-nav ps-3">
                                 <li>
-                                    <a href="#" class="nav-link px-3">
+                                    <a href="<%=dom.getDominio()%>CuentasCooperativa?accion=buscarCuenta" class="nav-link px-3">
+                                        <span class="me-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                            </svg>
+                                        </span>
+                                        <span>Search Partner Accounts</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="<%=dom.getDominio()%>CuentasCooperativa?accion=listar" class="nav-link px-3">
                                         <span class="me-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
                                                 <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
                                                 <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
                                             </svg>
                                         </span>
-                                        <span>List Partner Accounts</span>
+                                        <span>Listar Cuentas Cooperativa</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" class="nav-link px-3">
+                                    <a href="<%=dom.getDominio()%>CuentasCooperativa?accion=agregar" class="nav-link px-3">
                                         <span class="me-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus" viewBox="0 0 16 16">
                                                 <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
@@ -197,16 +207,6 @@
                                             </svg>
                                         </span>
                                         <span>Add Partner Accounts</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="nav-link px-3">
-                                        <span class="me-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                                            </svg>
-                                        </span>
-                                        <span>Search Partner Accounts</span>
                                     </a>
                                 </li>
                             </ul>
