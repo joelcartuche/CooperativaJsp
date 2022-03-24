@@ -257,9 +257,8 @@ public class Socio extends HttpServlet {
                 } else {
                     SociosJpaController socioJpaController = new SociosJpaController();
 
-                    Socios socio = new Socios();
+                    Socios socio = socioJpaController.findSocios(id);
 
-                    socio.setIdSocios(id);
                     socio.setNombreSocio(nombre);
                     socio.setApellidoSocio(apellido);
                     socio.setCedulaSocio(cedula);
