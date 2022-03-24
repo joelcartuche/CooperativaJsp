@@ -81,7 +81,7 @@
                 </li>
                 <!-- Cash Management -->
                 <li>
-                    <div class="text-muted small fw-bold text-uppercase px-3">Cash Management</div>
+                    <div class="text-muted small fw-bold text-uppercase px-3">Caja</div>
                 </li>
                 <li class="offcanvasItems">
                     <a href="<%=dom.getDominio()%>Deposito?accion=buscarcuenta" class="nav-link px-3 active">
@@ -113,7 +113,7 @@
                 <!-- User and account management -->
 
                 <li>
-                    <div class="text-muted small fw-bold text-uppercase px-3">User and Account Management</div>
+                    <div class="text-muted small fw-bold text-uppercase px-3">Usuarios Y Cuentas</div>
                 </li>
 
                 <!-- Rol LIST -->
@@ -231,6 +231,16 @@
                         <div>
                             <ul class="navbar-nav ps-3">
                                 <li>
+                                    <a href="<%=dom.getDominio()%>Socio?accion=buscarSocio" class="nav-link px-3">
+                                        <span class="me-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                            </svg>
+                                        </span>
+                                        <span>Buscar Socio</span>
+                                    </a>
+                                </li>
+                                <li>
                                     <a href="<%=dom.getDominio()%>Socio?accion=listar" class="nav-link px-3">
                                         <span class="me-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
@@ -250,16 +260,6 @@
                                             </svg>
                                         </span>
                                         <span>Agregar Nuevo Socio</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="nav-link px-3">
-                                        <span class="me-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                                            </svg>
-                                        </span>
-                                        <span>Search Partners</span>
                                     </a>
                                 </li>
                             </ul>

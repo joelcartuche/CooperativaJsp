@@ -23,6 +23,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONObject;
 
 /**
  *
@@ -36,6 +37,7 @@ public class Socio extends HttpServlet {
     String editar = "views/editParnet.jsp";
     String eliminar = "views/deleteParnet.jsp";
     String ver = "views/viewParnet.jsp";
+    String buscar = "views/searchParnet.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -75,8 +77,10 @@ public class Socio extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         String acceso = "";
         String action = request.getParameter("accion");
+        
         if (action.equalsIgnoreCase("listar")) {
             acceso = listar;
 
@@ -84,35 +88,37 @@ public class Socio extends HttpServlet {
             acceso = agregar;
 
         } else if (action.equalsIgnoreCase("editar")) {
+            // obtenemos el id de la url
             int id = Integer.parseInt((String) request.getParameter("id"));
-            
+            // buscamos el socio por el id
             SociosJpaController sociosJpaController = new SociosJpaController();
             Socios socio = sociosJpaController.findSocios(id);
-                        
+            // enviamos la informacion a la vista            
             request.setAttribute("socio", socio);
             request.setAttribute("estado", socio.getEsEliminado());
             //request.getSession().setAttribute("idSocio", request.getParameter("id"));
             acceso = editar;
 
         } else if (action.equalsIgnoreCase("eliminar")) {
+            // obtenemos los parametros y enviamos a la vista de eliminar
             request.setAttribute("id", request.getParameter("id"));
             request.setAttribute("esEliminado", request.getParameter("esEliminado"));
             acceso = eliminar;
 
         } else if (action.equalsIgnoreCase("ver")) {
+            // obtenemos el id de la url
             int id = Integer.parseInt((String) request.getParameter("id"));
-            
+            // buscamos el socio por el id
             SociosJpaController sociosJpaController = new SociosJpaController();
             Socios socio = sociosJpaController.findSocios(id);
-            
-            CuentaCooperativaJpaController cuentaCooperativaJpaController = new CuentaCooperativaJpaController();
-            CuentaCooperativa cuentaCooperativa = cuentaCooperativaJpaController.findBySocioId(id);
-            
+            // enviamos la informacion a la vista
             request.setAttribute("socio", socio);
             request.setAttribute("estado", socio.getEsEliminado());
-            request.setAttribute("cuentaCooperativa", cuentaCooperativa);
-            request.setAttribute("estadoCuentaCooperativa", cuentaCooperativa.getEsEliminado());
+            request.setAttribute("cuentaCooperativa", socio.getCuentaCooperativa());
+            request.setAttribute("estadoCuentaCooperativa", socio.getCuentaCooperativa().getEsEliminado());
             acceso = ver;
+        } else if (action.equalsIgnoreCase("buscarSocio")) {
+            acceso = buscar;
         }
 
         RequestDispatcher vista = request.getRequestDispatcher(acceso);
@@ -145,10 +151,11 @@ public class Socio extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
+        // FUNCIONALIDAD DE REGISTRAR NUEVO SOCIO
         if (action.equalsIgnoreCase("agregar")) {
 
             try ( PrintWriter out = response.getWriter()) {
-
+                // validamos los datos enviados del formulario
                 if (!Validar.esValidoCedulaEc(cedula)) {
                     salida = "{\"error\":\"Hubo un error al registrar la cédula.\"}";
                     out.print(salida);
@@ -234,6 +241,7 @@ public class Socio extends HttpServlet {
                 }
 
             }
+            
             // FUNCIONALIDAD PARA EDITAR DATOS DEL SOCIO
         } else if (action.equalsIgnoreCase("editar")) {
             // obtenemos los parametros adicionales del formulario
@@ -300,18 +308,23 @@ public class Socio extends HttpServlet {
                 }
 
             }
+            
+            // FUNCIONALIDAD DE ELIMINAR SOCIO
         } else if (action.equalsIgnoreCase("eliminar")) {
+            // obtenemos los parmetros de la URL
             int id = Integer.parseInt(request.getParameter("id"));
             boolean esEliminado = Boolean.parseBoolean(request.getParameter("esEliminado"));
+            
             try ( PrintWriter out = response.getWriter()) {
+                // obtenenmos el socio por el id y modificamos el atributo esEliminado
                 SociosJpaController sociosJpaController = new SociosJpaController();
-
                 Socios socio = sociosJpaController.findSocios(id);
                 socio.setEsEliminado(!esEliminado);
 
                 try {
+                    // actualizamos la informacion en la base de datos
                     sociosJpaController.edit(socio);
-
+                    // enviamos la informacion a la vista
                     salida = "{\"message\":\"Los cambios se realizaron exitosamente\"}";
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
@@ -322,6 +335,36 @@ public class Socio extends HttpServlet {
                     Logger.getLogger(Socio.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (Exception ex) {
                     Logger.getLogger(Socio.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+            // ACCION DE BUSCAR SOCIO POR LA CEDULA
+        } else if (action.equalsIgnoreCase("buscarSocio")) {
+            try ( PrintWriter out = response.getWriter()) {
+                // obtengo el numero de cuenta del formulario de busqueda
+                String numCedula = request.getParameter("numCedula");
+                try {
+                    // buscamos al socio por numero de cedula
+                    SociosJpaController sociosJpaController = new SociosJpaController();
+                    Socios socio = sociosJpaController.findByCedulaSocio(numCedula);
+                    // preparo los datos en un JSON
+                    JSONObject jsonResultado = new JSONObject(); // convierto el objeto a json
+                    jsonResultado.put("idSocio", socio.getIdSocios());
+                    jsonResultado.put("nombreSocio", socio.getNombreSocio());
+                    jsonResultado.put("apellidoSocio", socio.getApellidoSocio());
+                    jsonResultado.put("cedulaSocio", socio.getCedulaSocio());
+                    jsonResultado.put("telefonoSocio", socio.getTelefonoSocio());
+                    jsonResultado.put("esEliminado", socio.getEsEliminado());
+                    // enviar resultado
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.setStatus(200);
+                    out.print(jsonResultado);
+                } catch (Exception e) {
+                    salida = "{\"error\":\"Lo sentimos, no se encontró el número de cedula " + numCedula + "\"}";
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    out.print(salida);
                 }
             }
         }

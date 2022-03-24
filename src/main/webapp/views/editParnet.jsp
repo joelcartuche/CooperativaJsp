@@ -32,7 +32,7 @@
         <div class="row mt-4 mb-5 justify-content-center">
             <div class="col-12 col-md-8">
 
-                <div id="errorlAlert" class="alert alert-danger" role="alert">
+                <div id="errorlAlert" class="alert alert-danger" role="alert" style="display: none">
                     A simple danger alert
                 </div>
 
@@ -118,10 +118,6 @@
 </main>
 <script>
     $(document).ready(function () {
-        //ocultamos los divs de alertas
-        //$('#errorName').hide();
-        $('#errorlAlert').hide();
-        $('#successAlert').hide();
 
         $("#botonenviar").click(function () {     // Con esto establecemos la acción por defecto de nuestro botón de enviar.
             if (validaForm()) {                               // Primero validará el formulario.
@@ -151,25 +147,25 @@
 
     function validaForm() {
         // Campos de texto
-        if ($("#inputName").val() == "") {
+        if ($("#inputName").val() === "") {
             $('#errorName').show();
             $('#inputName').addClass("is-invalid");
             $("#inputName").focus();
             return false;
         }
-        if ($("#inputLatName").val() == "") {
+        if ($("#inputLatName").val() === "") {
             $('#errorLastName').show();
             $('#inputLatName').addClass("is-invalid");
             $("#inputLatName").focus();
             return false;
         }
-        if ($("#inputCi").val() == "") {
+        if ($("#inputCi").val() === "") {
             $('#errorCi').show();
             $('#inputCi').addClass("is-invalid");
             $("#inputCi").focus();
             return false;
         }
-        if ($("#inputPhone").val() == "") {
+        if ($("#inputPhone").val() === "") {
             $('#errorPhone').show();
             $('#inputPhone').addClass("is-invalid");
             $("#inputPhone").focus();
