@@ -15,7 +15,6 @@
     //}
 
     Dominio dom = new Dominio();
-    boolean esEliminado = false;
 %>
 
 <main>
@@ -37,7 +36,7 @@
                             <span class="fw-bold">Número de Cuenta:</span>
                         </div>
                         <div class="col-12 col-md-6">
-                            <span>111</span>
+                            <span>${idCuentaCooperativa}</span>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -45,13 +44,13 @@
                             <span class="fw-bold">Saldo Actual:</span>
                         </div>
                         <div class="col-12 col-md-6">
-                            <span class="my-estado-activo">$ 3000.00</span>
+                            <span class="my-estado-activo">$ ${saldoActual}</span>
                         </div>
                     </div>
 
 
                     <form id="formdata">
-                        <input type="hidden" name="id_cuenta" value="999"/>
+                        <input type="hidden" name="id_cuenta" value="${idCuentaCooperativa}"/>
                         <div class="input-group mb-3">
                             <div class="col-12 col-md-6">
                                 <label for="bday" class="form-label fw-bold">Fecha de la transacción:</label>
@@ -93,27 +92,32 @@
 </main>
 <script>
     $(document).ready(function () {
-
+        // obtenemos la fecha actual y le damos formato
         let date = new Date();
         let dia = date.getDate();
         let mes = ("0" + (date.getMonth() + 1));
         let anio = date.getFullYear();
         let fechaTotal = anio + "-" + mes + "-" + dia;
+        // ingresamos la fecha en el input date del formulario
         $("#inputDate").val(fechaTotal);
-
-        $("#btnSubmit").click(function () {     // Con esto establecemos la acción por defecto de nuestro botón de enviar.
-            if (validaForm()) {                               // Primero validará el formulario.
+        // Con esto establecemos la acción por defecto de nuestro botón de enviar.
+        $("#btnSubmit").click(function () {
+            // Primero validará el formulario.
+            if (validaForm()) {
+                // enviamos la peticion por el metodo POST
                 $.post("<%=dom.getDominio()%>Deposito?accion=depositar", $("#formdata").serialize(), function (res) {
+                    // si existe un error en los datos enviados, se presenta un alert            
                     if (res.error) {
                         $('#errorlAlert').show();
                         $('#errorlAlert').text(res.error);
                     }
+                    // si la peticion fue un exito, se presenta un mensaje y se oculta el formulario del deposito
                     if (res.message) {
                         $("#inputMonto").val("");
                         $("#panel").hide();
                         $('#cardSuccess').show();
                     }
-                }).fail(function (error) {
+                }).fail(function (error) { // si existe un error del servidor, presentamos un alert
                     $('#errorlAlert').show();
                     $('#errorlAlert').text("Error " + error.status + ": " + error.responseText);
                 });
@@ -123,7 +127,7 @@
 
     function validaForm() {
         // Campos de texto
-        if ($("#inputMonto").val() == "") {
+        if ($("#inputMonto").val() === "") {
             $('#errorMonto').show();
             $('#inputMonto').addClass("is-invalid");
             $("#inputMonto").focus();

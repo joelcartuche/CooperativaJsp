@@ -44,29 +44,36 @@ public class CuentaCooperativa implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_cuenta_cooperativa")
     private Integer idCuentaCooperativa;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 10)
     @Column(name = "numero_cuenta")
     private String numeroCuenta;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
     @Column(name = "nombre_cuenta")
     private String nombreCuenta;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 10)
     @Column(name = "codigo_cuenta")
     private String codigoCuenta;
+    
     @Column(name = "es_eliminado")
     private Boolean esEliminado;
-    @JoinColumn(name = "id_socios", referencedColumnName = "id_socios")
+    
+    @JoinColumn(name = "id_socios")
     @OneToOne(optional = false)
     private Socios idSocios;
-    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    
+    @JoinColumn(name = "id_usuario")
     @OneToOne(optional = false)
     private Usuario idUsuario;
+    
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "idCuenta")
     private Reportes reportes;
 

@@ -62,6 +62,9 @@ public class Deposito extends HttpServlet {
             acceso = buscarCuenta;
 
         } else if (action.equalsIgnoreCase("irDeposito")) {
+            int id = Integer.parseInt((String) request.getParameter("id"));
+            request.setAttribute("idCuentaCooperativa", id);
+            request.setAttribute("saldoActual", 8000);
             acceso = irDeposito;
         }
 
@@ -84,53 +87,38 @@ public class Deposito extends HttpServlet {
 
         String action = request.getParameter("accion");
 
+        // REALIZO LA BUSQUEDA DE LA CUENTA POR EL NUMERO DE CUENTA
         if (action.equalsIgnoreCase("buscar")) {
             try ( PrintWriter out = response.getWriter()) {
-
-                int numCuenta = Integer.parseInt((String) request.getParameter("numCuenta"));
-
+                // obtengo el numero de cuenta del formulario de busqueda
+                String numCuenta = request.getParameter("numCuenta");
                 try {
-
                     // Buscar cuenta cooperativa por el numero de cuenta en la base de datos
-                    //CuentaCooperativaJpaController cuentaCooperativaJpaController = new CuentaCooperativaJpaController();
-                    //CuentaCooperativa cuentaCooperativa = cuentaCooperativaJpaController.findCuentaCooperativa(numCuenta);
-                    // !: BORRAR esta seccion, es solo para pruebas
-                    CuentaCooperativa cuentaCooperativa = new CuentaCooperativa();
-                    cuentaCooperativa.setIdCuentaCooperativa(numCuenta);
-                    cuentaCooperativa.setNumeroCuenta(numCuenta + "");
-                    // FIN BORRAR
-
-                    JSONObject jsonCuenta = new JSONObject(cuentaCooperativa); // convierto el objeto a json
-
-                    // Obtener el socio vinculado al numero de cuenta
-                    Socios socios = new Socios();
-                    socios.setIdSocios(1);
-                    socios.setNombreSocio("Jonnathan");
-                    socios.setApellidoSocio("Espinoza");
-                    socios.setCedulaSocio("1234567890");
-                    JSONObject jsonSocio = new JSONObject(socios); // convierto el objeto a json
-
-                    System.out.println(jsonCuenta);
-                    System.out.println(jsonSocio);
-
-                    JSONArray jsonRes = new JSONArray();
-                    jsonRes.put(jsonCuenta);
-                    jsonRes.put(jsonSocio);
-
-                    System.out.println(jsonRes);
-
+                    CuentaCooperativaJpaController cuentaCooperativaJpaController = new CuentaCooperativaJpaController();
+                    CuentaCooperativa cuentaCooperativa = cuentaCooperativaJpaController.findNumeroCuentaCooperativa(numCuenta);;
+                    // preparo los datos en un JSON
+                    JSONObject jsonResultado = new JSONObject(); // convierto el objeto a json
+                    jsonResultado.put("idCuentaCooperativa", cuentaCooperativa.getIdCuentaCooperativa());
+                    jsonResultado.put("numeroCuentaCooperativa", cuentaCooperativa.getNumeroCuenta());
+                    jsonResultado.put("estadoCuentaCooperativa", cuentaCooperativa.getEsEliminado());
+                    jsonResultado.put("nombreSocio", cuentaCooperativa.getIdSocios().getNombreSocio());
+                    jsonResultado.put("apellidoSocio", cuentaCooperativa.getIdSocios().getApellidoSocio());
+                    jsonResultado.put("cedulaSocio", cuentaCooperativa.getIdSocios().getCedulaSocio());
+                    // enviar resultado
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
                     response.setStatus(200);
-                    out.print(jsonRes);
+                    out.print(jsonResultado);
 
                 } catch (Exception e) {
-                    String salida = "{\"error\":\"Lo sentimos, no se encontró el número de cuenta ingresada.\"}";
+                    String salida = "{\"error\":\"Lo sentimos, no se encontró el número de cuenta "+numCuenta+"\"}";
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
                     out.print(salida);
                 }
             }
+
+            // REALIZAR EL DEPOSITO
         } else if (action.equalsIgnoreCase("depositar")) {
 
             try ( PrintWriter out = response.getWriter()) {

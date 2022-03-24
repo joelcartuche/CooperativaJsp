@@ -10,12 +10,14 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -47,35 +49,46 @@ public class Socios implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_socios")
     private Integer idSocios;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 150)
     @Column(name = "nombre_socio")
     private String nombreSocio;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 150)
     @Column(name = "apellido_socio")
     private String apellidoSocio;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 150)
     @Column(name = "cedula_socio")
     private String cedulaSocio;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 150)
     @Column(name = "telefono_socio")
     private String telefonoSocio;
+    
     @Size(max = 300)
     @Column(name = "direccion_socio")
     private String direccionSocio;
+    
     @Column(name = "es_eliminado")
     private Boolean esEliminado;
+    
     @Basic(optional = false)
     @NotNull
     @Column(name = "codigo_socio")
     private int codigoSocio;
+    
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idSocios", fetch = FetchType.LAZY)
+    private CuentaCooperativa cuentaCooperativa;
+        
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoCredito")
     private Collection<Credito> creditoCollection;
 
@@ -159,6 +172,15 @@ public class Socios implements Serializable {
         this.codigoSocio = codigoSocio;
     }
 
+    public CuentaCooperativa getCuentaCooperativa() {
+        return cuentaCooperativa;
+    }
+
+    public void setCuentaCooperativa(CuentaCooperativa cuentaCooperativa) {
+        this.cuentaCooperativa = cuentaCooperativa;
+    }
+    
+    
     @XmlTransient
     public Collection<Credito> getCreditoCollection() {
         return creditoCollection;
