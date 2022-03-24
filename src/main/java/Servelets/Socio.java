@@ -193,7 +193,7 @@ public class Socio extends HttpServlet {
                         // Creamos una nueva cuenta cooperativa
                         CuentaCooperativaJpaController cuentaCooperativaJpaController = new CuentaCooperativaJpaController();
                         CuentaCooperativa cuentaCooperativa = new CuentaCooperativa();
-                        cuentaCooperativa.setNombreCuenta(socio.getNombreSocio());
+                        cuentaCooperativa.setNombreCuenta("Ahorros");
                         cuentaCooperativa.setIdSocios(socio);
                         cuentaCooperativa.setIdUsuario(usuario);
 
@@ -234,14 +234,14 @@ public class Socio extends HttpServlet {
                 }
 
             }
-
+            // FUNCIONALIDAD PARA EDITAR DATOS DEL SOCIO
         } else if (action.equalsIgnoreCase("editar")) {
-
+            // obtenemos los parametros adicionales del formulario
             int id = Integer.parseInt(request.getParameter("id_socio"));
             String estado = request.getParameter("estadoSocio");
-
+            
             try ( PrintWriter out = response.getWriter()) {
-
+                // validamos los datos enviados del formulario
                 if (!Validar.esValidoCedulaEc(cedula)) {
                     salida = "{\"error\":\"Hubo un error al registrar la cédula.\"}";
                     out.print(salida);
@@ -255,25 +255,37 @@ public class Socio extends HttpServlet {
                     salida = "{\"error\":\"Hubo un error al registrar el teléfono.\"}";
                     out.print(salida);
                 } else {
+                    // buscamos el socio por el id en la base de datos y modificamos la informacion
                     SociosJpaController socioJpaController = new SociosJpaController();
-
                     Socios socio = socioJpaController.findSocios(id);
-
+                    
                     socio.setNombreSocio(nombre);
                     socio.setApellidoSocio(apellido);
                     socio.setCedulaSocio(cedula);
                     socio.setTelefonoSocio(telefono);
                     socio.setDireccionSocio(direccion);
-
+                    
                     if (estado.equalsIgnoreCase("true")) {
                         socio.setEsEliminado(Boolean.TRUE);
                     } else {
                         socio.setEsEliminado(Boolean.FALSE);
                     }
-
+                    
+                    // obtenermos el usuario para modificar la informacion
+                    // el usuario y socio comparten la misma informacion, por ello se modifican los dos
+                    UsuarioJpaController usuarioJpaController = new UsuarioJpaController();
+                    Usuario usuario = socio.getCuentaCooperativa().getIdUsuario();
+                    
+                    usuario.setNombreUsuario(nombre);
+                    usuario.setApellidoUsuario(apellido);
+                    usuario.setCedulaUsuario(cedula);
+                    usuario.setTelefonoUsuario(telefono);
+                    
                     try {
-                        socioJpaController.edit(socio); // guardamos el socio en la bse de datos
-
+                        // actualizamos los datos en la DB
+                        socioJpaController.edit(socio);
+                        usuarioJpaController.edit(usuario);
+                        // realizamos el mensaje de salida
                         salida = "{\"message\":\"La información se actualizó exitosamente\"}";
                         response.setContentType("application/json");
                         response.setCharacterEncoding("UTF-8");
