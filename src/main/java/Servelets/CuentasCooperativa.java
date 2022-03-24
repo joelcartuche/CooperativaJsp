@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 public class CuentasCooperativa extends HttpServlet {
 
     String listar = "GestionCuentaCooperativa/listarCuentasCooperativa.jsp";
+    String ver = "GestionCuentaCooperativa/verCuentasCooperativa.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -56,12 +57,24 @@ public class CuentasCooperativa extends HttpServlet {
         String action = request.getParameter("accion");
 
         if (action.equalsIgnoreCase("listar")) {
-            CuentaCooperativaJpaController cuentaCooperativaJpaController = new CuentaCooperativaJpaController();
-            List<CuentaCooperativa> listaCuentas = cuentaCooperativaJpaController.findCuentaCooperativaEntities();
-            request.setAttribute("cuentas", listaCuentas);
             acceso = listar;
 
+        } else if (action.equalsIgnoreCase("ver")) {
+            // obtenemos el id de la url
+            int id = Integer.parseInt((String) request.getParameter("id"));
+            // buscamos la cuenta por el id
+            CuentaCooperativaJpaController cuentaCooperativaJpaController = new CuentaCooperativaJpaController();
+            CuentaCooperativa cuentaCooperativa = cuentaCooperativaJpaController.findCuentaCooperativa(id);
+            // enviamos la informacion a la vista
+            request.setAttribute("cuentaCooperativa", cuentaCooperativa);
+            request.setAttribute("esEliminadoCuenta", cuentaCooperativa.getEsEliminado());
+            request.setAttribute("socio", cuentaCooperativa.getIdSocios());
+            request.setAttribute("esEliminadoSocio", cuentaCooperativa.getIdSocios().getEsEliminado());
+            request.setAttribute("usuario", cuentaCooperativa.getIdUsuario());
+            request.setAttribute("esEliminadoUsuario", cuentaCooperativa.getIdUsuario().getEsEliminado());
+            acceso = ver;
         }
+        
         RequestDispatcher vista = request.getRequestDispatcher(acceso);
         vista.forward(request, response);
     }
