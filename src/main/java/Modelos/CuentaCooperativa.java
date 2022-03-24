@@ -34,7 +34,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "CuentaCooperativa.findByNumeroCuenta", query = "SELECT c FROM CuentaCooperativa c WHERE c.numeroCuenta = :numeroCuenta"),
     @NamedQuery(name = "CuentaCooperativa.findByNombreCuenta", query = "SELECT c FROM CuentaCooperativa c WHERE c.nombreCuenta = :nombreCuenta"),
     @NamedQuery(name = "CuentaCooperativa.findByCodigoCuenta", query = "SELECT c FROM CuentaCooperativa c WHERE c.codigoCuenta = :codigoCuenta"),
-    @NamedQuery(name = "CuentaCooperativa.findByEsEliminado", query = "SELECT c FROM CuentaCooperativa c WHERE c.esEliminado = :esEliminado")})
+    @NamedQuery(name = "CuentaCooperativa.findByEsEliminado", query = "SELECT c FROM CuentaCooperativa c WHERE c.esEliminado = :esEliminado"),
+    @NamedQuery(name = "CuentaCooperativa.findByIdSocio", query = "SELECT c FROM CuentaCooperativa c WHERE c.idSocios.idSocios = :idSocio")})
 public class CuentaCooperativa implements Serializable {
 
     private static final long serialVersionUID = 1L;

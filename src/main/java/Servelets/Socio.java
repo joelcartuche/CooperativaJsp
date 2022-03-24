@@ -85,8 +85,10 @@ public class Socio extends HttpServlet {
 
         } else if (action.equalsIgnoreCase("editar")) {
             int id = Integer.parseInt((String) request.getParameter("id"));
+            
             SociosJpaController sociosJpaController = new SociosJpaController();
             Socios socio = sociosJpaController.findSocios(id);
+                        
             request.setAttribute("socio", socio);
             request.setAttribute("estado", socio.getEsEliminado());
             //request.getSession().setAttribute("idSocio", request.getParameter("id"));
@@ -99,10 +101,17 @@ public class Socio extends HttpServlet {
 
         } else if (action.equalsIgnoreCase("ver")) {
             int id = Integer.parseInt((String) request.getParameter("id"));
+            
             SociosJpaController sociosJpaController = new SociosJpaController();
             Socios socio = sociosJpaController.findSocios(id);
+            
+            CuentaCooperativaJpaController cuentaCooperativaJpaController = new CuentaCooperativaJpaController();
+            CuentaCooperativa cuentaCooperativa = cuentaCooperativaJpaController.findBySocioId(id);
+            
             request.setAttribute("socio", socio);
             request.setAttribute("estado", socio.getEsEliminado());
+            request.setAttribute("cuentaCooperativa", cuentaCooperativa);
+            request.setAttribute("estadoCuentaCooperativa", cuentaCooperativa.getEsEliminado());
             acceso = ver;
         }
 
