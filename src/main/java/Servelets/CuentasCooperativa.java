@@ -29,6 +29,7 @@ public class CuentasCooperativa extends HttpServlet {
     String listar = "GestionCuentaCooperativa/listarCuentasCooperativa.jsp";
     String ver = "GestionCuentaCooperativa/verCuentasCooperativa.jsp";
     String eliminar = "GestionCuentaCooperativa/borrarCuentaCooperativa.jsp";
+    String editar = "GestionCuentaCooperativa/editarCuentaCooperativa.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -77,14 +78,27 @@ public class CuentasCooperativa extends HttpServlet {
             request.setAttribute("usuario", cuentaCooperativa.getIdUsuario());
             request.setAttribute("esEliminadoUsuario", cuentaCooperativa.getIdUsuario().getEsEliminado());
             acceso = ver;
-            
+
         } else if (action.equalsIgnoreCase("eliminar")) {
             // obtenemos los parametros y enviamos a la vista de eliminar
             request.setAttribute("id", request.getParameter("id"));
             request.setAttribute("esEliminado", request.getParameter("esEliminado"));
             acceso = eliminar;
+
+        } else if (action.equalsIgnoreCase("editar")) {
+            // obtenemos el id de la url
+            int id = Integer.parseInt((String) request.getParameter("id"));
+            // buscamos el socio por el id
+            CuentaCooperativaJpaController cuentaCooperativaJpaController = new CuentaCooperativaJpaController();
+            CuentaCooperativa cuentaCooperativa = cuentaCooperativaJpaController.findCuentaCooperativa(id);
+            // enviamos la informacion a la vista            
+            request.setAttribute("cuenta", cuentaCooperativa);
+            request.setAttribute("esEliminado", cuentaCooperativa.getEsEliminado());
+            request.setAttribute("socioNombre", cuentaCooperativa.getIdSocios().getNombreSocio());
+            request.setAttribute("socioApellido", cuentaCooperativa.getIdSocios().getApellidoSocio());
+            acceso = editar;
         }
-        
+
         RequestDispatcher vista = request.getRequestDispatcher(acceso);
         vista.forward(request, response);
     }
@@ -100,20 +114,54 @@ public class CuentasCooperativa extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-         String action = request.getParameter("accion");
-         
-         String salida = ""; //almacena el Json de salida
-         
-         response.setContentType("application/json");
+
+        String action = request.getParameter("accion");
+
+        String salida = ""; //almacena el Json de salida
+
+        response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        
+
         // FUNCIONALIDAD PARA AGREGAR UNA NUEVA CUENTA COOPERATIVA
         if (action.equalsIgnoreCase("agregar")) {
-            
+
             // FUNCIONALIDAD PARA EDITAR CUENTA COOPERATIVA
         } else if (action.equalsIgnoreCase("editar")) {
+            // obtenemos los parametros adicionales del formulario
+            int id = Integer.parseInt(request.getParameter("id_cuenta_cooperativa"));
+            String estado = request.getParameter("estadoCuenta");
+            String nombreCuenta = request.getParameter("nombreCuenta");
             
+            try ( PrintWriter out = response.getWriter()) {
+                // buscamos la cuenta por el id en la base de datos y modificamos la informacion
+                CuentaCooperativaJpaController cuentaCooperativaJpaController = new CuentaCooperativaJpaController();
+                CuentaCooperativa cuentaCooperativa = cuentaCooperativaJpaController.findCuentaCooperativa(id);
+
+                cuentaCooperativa.setNombreCuenta(nombreCuenta);
+                
+                if (estado.equalsIgnoreCase("true")) {
+                    cuentaCooperativa.setEsEliminado(Boolean.TRUE);
+                } else if (estado.equalsIgnoreCase("false")){
+                    cuentaCooperativa.setEsEliminado(Boolean.FALSE);
+                }
+
+                try {
+                    // actualizamos los datos en la DB
+                    cuentaCooperativaJpaController.edit(cuentaCooperativa);
+                    // realizamos el mensaje de salida
+                    salida = "{\"message\":\"La información se actualizó exitosamente\"}";
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.setStatus(200);
+                    out.print(salida);
+                } catch (Exception e) {
+                    salida = "{\"error\":\"Hubo un error al actualizar los datos.\"}";
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    out.print(salida);
+                }
+            }
+
             // FUNCIONALIDAD DE ELIMINAR CUENTA COOPERATIVA
         } else if (action.equalsIgnoreCase("eliminar")) {
             // obtenemos los parmetros de la URL

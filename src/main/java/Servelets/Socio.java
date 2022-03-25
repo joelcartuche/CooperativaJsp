@@ -200,7 +200,7 @@ public class Socio extends HttpServlet {
                         // Creamos una nueva cuenta cooperativa
                         CuentaCooperativaJpaController cuentaCooperativaJpaController = new CuentaCooperativaJpaController();
                         CuentaCooperativa cuentaCooperativa = new CuentaCooperativa();
-                        cuentaCooperativa.setNombreCuenta("Ahorros");
+                        cuentaCooperativa.setNombreCuenta("ahorros");
                         cuentaCooperativa.setIdSocios(socio);
                         cuentaCooperativa.setIdUsuario(usuario);
 
@@ -275,7 +275,7 @@ public class Socio extends HttpServlet {
                     
                     if (estado.equalsIgnoreCase("true")) {
                         socio.setEsEliminado(Boolean.TRUE);
-                    } else {
+                    } else if (estado.equalsIgnoreCase("false")) {
                         socio.setEsEliminado(Boolean.FALSE);
                     }
                     
