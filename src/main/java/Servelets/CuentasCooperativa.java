@@ -18,6 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONObject;
 
 /**
  *
@@ -30,6 +31,7 @@ public class CuentasCooperativa extends HttpServlet {
     String ver = "GestionCuentaCooperativa/verCuentasCooperativa.jsp";
     String eliminar = "GestionCuentaCooperativa/borrarCuentaCooperativa.jsp";
     String editar = "GestionCuentaCooperativa/editarCuentaCooperativa.jsp";
+    String buscar = "GestionCuentaCooperativa/buscarCuentaCooperativa.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -97,6 +99,10 @@ public class CuentasCooperativa extends HttpServlet {
             request.setAttribute("socioNombre", cuentaCooperativa.getIdSocios().getNombreSocio());
             request.setAttribute("socioApellido", cuentaCooperativa.getIdSocios().getApellidoSocio());
             acceso = editar;
+
+        } else if (action.equalsIgnoreCase("buscarCuenta")) {
+            acceso = buscar;
+
         }
 
         RequestDispatcher vista = request.getRequestDispatcher(acceso);
@@ -131,17 +137,17 @@ public class CuentasCooperativa extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("id_cuenta_cooperativa"));
             String estado = request.getParameter("estadoCuenta");
             String nombreCuenta = request.getParameter("nombreCuenta");
-            
+
             try ( PrintWriter out = response.getWriter()) {
                 // buscamos la cuenta por el id en la base de datos y modificamos la informacion
                 CuentaCooperativaJpaController cuentaCooperativaJpaController = new CuentaCooperativaJpaController();
                 CuentaCooperativa cuentaCooperativa = cuentaCooperativaJpaController.findCuentaCooperativa(id);
 
                 cuentaCooperativa.setNombreCuenta(nombreCuenta);
-                
+
                 if (estado.equalsIgnoreCase("true")) {
                     cuentaCooperativa.setEsEliminado(Boolean.TRUE);
-                } else if (estado.equalsIgnoreCase("false")){
+                } else if (estado.equalsIgnoreCase("false")) {
                     cuentaCooperativa.setEsEliminado(Boolean.FALSE);
                 }
 
@@ -188,7 +194,38 @@ public class CuentasCooperativa extends HttpServlet {
                     Logger.getLogger(Socio.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+            
+            // ACCION DE BUSCAR CUENTA COOPERATIVA POR EL NUMERO DE CUENTA
+        } else if (action.equalsIgnoreCase("buscarCuenta")) {
+            try ( PrintWriter out = response.getWriter()) {
+                // obtengo el numero de cuenta del formulario de busqueda
+                String numCuenta = request.getParameter("numCuenta");
+                try {
+                    // buscamos la cuenta por su numero
+                    CuentaCooperativaJpaController cuentaCooperativaJpaController = new CuentaCooperativaJpaController();
+                    CuentaCooperativa cuentaCooperativa = cuentaCooperativaJpaController.findNumeroCuentaCooperativa(numCuenta);
+                    // preparo los datos en un JSON
+                    JSONObject jsonRes = new JSONObject(); // convierto el objeto a json
+                    jsonRes.put("idCuenta", cuentaCooperativa.getIdCuentaCooperativa());
+                    jsonRes.put("numeroCuenta", cuentaCooperativa.getNumeroCuenta());
+                    jsonRes.put("nombreCuenta", cuentaCooperativa.getNombreCuenta());
+                    jsonRes.put("codigoCuenta", cuentaCooperativa.getCodigoCuenta());
+                    jsonRes.put("nombreSocio", cuentaCooperativa.getIdSocios().getNombreSocio());
+                    jsonRes.put("esEliminadoCuenta", cuentaCooperativa.getEsEliminado());
+                    // enviar resultado
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.setStatus(200);
+                    out.print(jsonRes);
+                } catch (Exception e) {
+                    salida = "{\"error\":\"Lo sentimos, no se encontró el número de cuenta " + numCuenta + "\"}";
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    out.print(salida);
+                }
+            }
         }
+        
     }
 
     /**
