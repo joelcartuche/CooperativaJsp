@@ -29,7 +29,7 @@
         <div class="row">
             <div class="col-md-12 fw-bold fs-3 text-center">Lista de Cuentas Cooperativa</div>
         </div>
-        <div class="row mt-5 justify-content-center">
+        <div class="row mt-4 justify-content-center">
             <div class="col-12 col-md-11">
                 <%                    if (listaCuentas.isEmpty()) {
                 %>
@@ -41,7 +41,7 @@
                 } else {
                 %>
                 <table class="table">
-                    <thead>
+                    <thead class="table-primary">
                         <tr>
                             <th scope="col">Id</th>
                             <th scope="col">Número Cuenta</th>
