@@ -10,7 +10,6 @@ import Utilidades.Dominio;
 import Utilidades.Encriptar;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,6 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.json.JSONObject;
 
 /**
  *
@@ -43,7 +43,6 @@ public class Login extends HttpServlet {
 
         try ( PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            System.out.println("entre1");
 
         }
     }
@@ -60,8 +59,8 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("Entre get");
-        processRequest(request, response);
+        RequestDispatcher vista = request.getRequestDispatcher("login.jsp");
+        vista.forward(request, response);
     }
 
     /**
@@ -75,26 +74,34 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String salida =""; //almacena el Json de salida
+
+        String salida = ""; //almacena el Json de salida
 
         try ( PrintWriter out = response.getWriter()) {
-
-            Encriptar enc = new Encriptar();//encriptador de datos en MD5
-            String user = request.getParameter("user"); //recogemos los datos enviados desde el template
+            //recogemos los datos enviados desde el template
+            String user = request.getParameter("user");
             String password = request.getParameter("password");
-            HttpSession sesion = request.getSession(); // almacenamos la sesion iniciada
-            CuentaJpaController cuentaJpaController = new CuentaJpaController(); //llamamos al controlador jpa
-            Cuenta cuentaUsurioBuscado = cuentaJpaController.findCuentaUsuario(user); //buscamos el usuario dado el nombre de usuario
+            //llamamos al controlador jpa
+            CuentaJpaController cuentaJpaController = new CuentaJpaController();
+            //buscamos el usuario dado el nombre de usuario
+            Cuenta cuentaUsurioBuscado = cuentaJpaController.findCuentaUsuario(user);
             if (cuentaUsurioBuscado != null) { //en caso  de que no exista el usuario buscado
+                Encriptar enc = new Encriptar();//encriptador de datos en MD5
                 if (cuentaUsurioBuscado.getPassword().equals(enc.getMD5(password))) { //comparamos las contraseñas
-                    //enviamos parametros a la sesion
-
+                    // almacenamos la sesion iniciada
+                    HttpSession sesion = request.getSession();
                     sesion.setAttribute("logueado", "1");
                     sesion.setAttribute("user", cuentaUsurioBuscado.getUsuario());
                     sesion.setAttribute("id", cuentaUsurioBuscado.getIdCuenta());
+                    sesion.setAttribute("rol", cuentaUsurioBuscado.getIdRol().getTipoRol());
+                    sesion.setAttribute("nombre", cuentaUsurioBuscado.getIdUsuario().getNombreUsuario());
+                    sesion.setAttribute("apellido", cuentaUsurioBuscado.getIdUsuario().getApellidoUsuario());
                     //enviamos el json para la vista login.jsp
-                    salida =  "{\"user\":\"" + cuentaUsurioBuscado.getUsuario() + "\",\"id\":" + cuentaUsurioBuscado.getIdCuenta() + ",\"logueado\":1}";
-                    out.print(salida);
+                    JSONObject jsonRes = new JSONObject();
+                    jsonRes.put("user", cuentaUsurioBuscado.getUsuario());
+                    jsonRes.put("logueado", 1);
+                    jsonRes.put("rol", cuentaUsurioBuscado.getIdRol().getTipoRol());
+                    out.print(jsonRes);
                 } else {//retornamos en este caso no existe contraseña
                     salida = "{\"esContraIncorrecta\":1}";
                     out.print(salida);
