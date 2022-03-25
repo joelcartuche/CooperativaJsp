@@ -1,10 +1,9 @@
 <%-- 
     Document   : deleteParnet
     Created on : 19 mar 2022, 4:56:59
-    Author     : LENOVO
+    Author     : jede
 --%>
 
-<%@page import="Utilidades.Dominio"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <jsp:include page="../Template/cabecera.jsp"></jsp:include>
@@ -15,8 +14,6 @@
     //        response.sendRedirect("../login.jsp");
     //}
     
-    Dominio dom = new Dominio();
-
     String id = request.getParameter("id");
     String esEliminado = request.getParameter("esEliminado");
 %>
@@ -76,15 +73,15 @@
     myModal.show();
     $(document).ready(function () {
         $('#no').click(function (event) {
-            window.location.replace("<%=dom.getDominio()%>Socio?accion=listar");
+            window.location.replace("Socio?accion=listar");
         });
         $('#si').click(function (event) {
-            $.post("<%=dom.getDominio()%>Socio?accion=eliminar", {
+            $.post("Socio?accion=eliminar", {
                 id:<%=id%>,
                 esEliminado:<%=esEliminado%>
             }, function (res) {
                 if (res.message) {
-                    window.location.replace("<%=dom.getDominio()%>Socio?accion=listar");
+                    window.location.replace("Socio?accion=listar");
                 }
             });
         });

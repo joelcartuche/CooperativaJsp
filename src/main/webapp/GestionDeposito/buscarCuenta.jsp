@@ -1,21 +1,18 @@
 <%-- 
     Document   : deposito
     Created on : 21 mar 2022, 12:11:21
-    Author     : LENOVO
+    Author     : jede
 --%>
 
-<%@page import="Utilidades.Dominio"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <jsp:include page="../Template/layout.jsp"></jsp:include>
+    
 <%
     //HttpSession sesion2 = request.getSession();
     //if (sesion2.getAttribute("logueado") == null || sesion2.getAttribute("logueado").equals("0")) {
     //        response.sendRedirect("../login.jsp");
     //}
-
-    Dominio dom = new Dominio();
-    boolean esEliminado = false;
 %>
 
 <main>
@@ -48,7 +45,7 @@
             <div class="col-12 col-md-11">
                 <table class="table" id="tableSearch">
                     <thead>
-                        <tr>
+                        <tr class="table-success">
                             <th scope="col">N° Cuenta</th>
                             <th scope="col">Nombre</th>
                             <th scope="col">Apellido</th>
@@ -85,7 +82,7 @@
             // Primero validará el formulario.
             if (validaForm()) {
                 // enviamos la peticion por el metodo POST
-                $.post("<%=dom.getDominio()%>Deposito?accion=buscar", $("#formdata").serialize(), function (res) {
+                $.post("Deposito?accion=buscar", $("#formdata").serialize(), function (res) {
                     // si existe un error en los datos enviados, se presenta un alert            
                     if (res.error) {
                         $('#errorlAlert').show();
@@ -107,9 +104,9 @@
                         // si la cuenta esta eliminada, no se podra hacer un deposito y se presenta un boton para activa la cuenta
                         let opciones = "";
                         if (!res.estadoCuentaCooperativa) {
-                            opciones = '<a type="button" href="<%=dom.getDominio()%>Deposito?accion=irDeposito&id=' + res.idCuentaCooperativa + '" class="btn btn-success">Hacer Depósito</a>';
+                            opciones = '<a type="button" href="Deposito?accion=irDeposito&id=' + res.idCuentaCooperativa + '" class="btn btn-success">Hacer Depósito</a>';
                         } else {
-                            opciones = '<a type="button" href="<%=dom.getDominio()%>Cuenta?accion=editar&id=' + res.idCuentaCooperativa + '" class="btn btn-primary">Activar Cuenta<i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                            opciones = '<a type="button" href="CuentasCooperativa?accion=editar&id=' + res.idCuentaCooperativa + '" class="btn btn-primary">Activar Cuenta<i class="fa fa-pencil" aria-hidden="true"></i></a>';
                         }
                         // se construye la tabla y se presenta en la vista
                         $('#tableSearch>tbody').append(

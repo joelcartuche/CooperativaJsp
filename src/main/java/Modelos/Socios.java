@@ -88,7 +88,7 @@ public class Socios implements Serializable {
     @Column(name = "codigo_socio")
     private int codigoSocio;
     
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idSocios", fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idSocios", fetch = FetchType.EAGER)
     private CuentaCooperativa cuentaCooperativa;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoSocio")

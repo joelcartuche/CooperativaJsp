@@ -8,7 +8,6 @@ import Controladores.CuentaCooperativaJpaController;
 import Controladores.SociosJpaController;
 import Controladores.UsuarioJpaController;
 import Controladores.exceptions.NonexistentEntityException;
-import Modelos.Cuenta;
 import Modelos.CuentaCooperativa;
 import Modelos.Socios;
 import Modelos.Usuario;

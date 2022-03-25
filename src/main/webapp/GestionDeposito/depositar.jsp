@@ -1,20 +1,18 @@
 <%-- 
     Document   : depositar
     Created on : 21 mar 2022, 17:11:05
-    Author     : LENOVO
+    Author     : jede
 --%>
 
-<%@page import="Utilidades.Dominio"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <jsp:include page="../Template/layout.jsp"></jsp:include>
+    
 <%
     //HttpSession sesion2 = request.getSession();
     //if (sesion2.getAttribute("logueado") == null || sesion2.getAttribute("logueado").equals("0")) {
     //        response.sendRedirect("../login.jsp");
     //}
-
-    Dominio dom = new Dominio();
 %>
 
 <main>
@@ -147,7 +145,7 @@
             // Primero validará el formulario.
             if (validaForm()) {
                 // enviamos la peticion por el metodo POST
-                $.post("<%=dom.getDominio()%>Deposito?accion=depositar", $("#formdata").serialize(), function (res) {
+                $.post("Deposito?accion=depositar", $("#formdata").serialize(), function (res) {
                     // si existe un error en los datos enviados, se presenta un alert            
                     if (res.error) {
                         $('#errorlAlert').show();

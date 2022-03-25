@@ -1,10 +1,9 @@
 <%-- 
     Document   : retirar
     Created on : 22 mar 2022, 14:14:36
-    Author     : LENOVO
+    Author     : jede
 --%>
 
-<%@page import="Utilidades.Dominio"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 
@@ -14,8 +13,6 @@
     //if (sesion2.getAttribute("logueado") == null || sesion2.getAttribute("logueado").equals("0")) {
     //        response.sendRedirect("../login.jsp");
     //}
-
-    Dominio dom = new Dominio();
 %>
 <main>
     <div class="container-fluid">
@@ -147,7 +144,7 @@
             // Primero validará el formulario.
             if (validaForm()) {
                 // enviamos la peticion por el metodo POST
-                $.post("<%=dom.getDominio()%>Retiro?accion=retirar", $("#formdata").serialize(), function (res) {
+                $.post("Retiro?accion=retirar", $("#formdata").serialize(), function (res) {
                     // si existe un error en los datos enviados, se presenta un alert            
                     if (res.error) {
                         $('#errorlAlert').show();

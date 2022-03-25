@@ -1,7 +1,7 @@
 <%-- 
     Document   : editarCuentaCooperativa
     Created on : 24 mar 2022, 22:37:02
-    Author     : LENOVO
+    Author     : jede
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

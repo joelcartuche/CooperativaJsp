@@ -1,10 +1,9 @@
 <%-- 
     Document   : viewParnet
     Created on : 19 mar 2022, 6:29:45
-    Author     : LENOVO
+    Author     : jede
 --%>
 
-<%@page import="Utilidades.Dominio"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 
@@ -16,7 +15,6 @@
     //        response.sendRedirect("../login.jsp");
     //}
 
-    Dominio dom = new Dominio();
     boolean estadoSocio = (Boolean) request.getAttribute("estado");
     boolean estadoCuentaCooperativa = (Boolean) request.getAttribute("estadoCuentaCooperativa");
 %>
@@ -71,7 +69,7 @@
                             </div>
                         </div>
                         <div class="mt-4">
-                            <a type="button" href="<%=dom.getDominio()%>Socio?accion=editar&id=${socio.getIdSocios()}" class="btn btn-primary">Editar información <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                            <a type="button" href="Socio?accion=editar&id=${socio.getIdSocios()}" class="btn btn-primary">Editar información <i class="fa fa-pencil" aria-hidden="true"></i></a>
                         </div>
                     </div>
                 </div>

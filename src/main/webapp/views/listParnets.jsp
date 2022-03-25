@@ -1,10 +1,9 @@
 <%-- 
     Document   : listParnets
     Created on : 15 mar 2022, 18:57:30
-    Author     : LENOVO
+    Author     : jede
 --%>
 
-<%@page import="Utilidades.Dominio"%>
 <%@page import="Modelos.Socios"%>
 <%@page import="java.util.List"%>
 <%@page import="Controladores.SociosJpaController"%>
@@ -18,13 +17,8 @@
     //        response.sendRedirect("../login.jsp");
     //}
 
-    Dominio dom = new Dominio();
-%>
-
-<%
     SociosJpaController sociosJpaController = new SociosJpaController();
     List<Socios> listaSocio = sociosJpaController.findSociosEntities();
-
 %>
 
 <main>
@@ -32,20 +26,20 @@
         <div class="row">
             <div class="col-md-12 fw-bold fs-3 text-center">Lista de Socios</div>
         </div>
-        <div class="row mt-5 justify-content-center">
+        <div class="row mt-4 justify-content-center">
             <div class="col-12 col-md-11">
                 <%                    if (listaSocio.isEmpty()) {
                 %>
                 <div class="alert alert-primary" role="alert">
                     No hay Socios registrados.
-                    <a href="<%=dom.getDominio()%>Socio?accion=agregar" class="btn btn-primary">Agregar Nuevo Socio</a>
+                    <a href="Socio?accion=agregar" class="btn btn-primary">Agregar Nuevo Socio</a>
                 </div>
                 <%
                 } else {
                 %>
                 <table class="table">
                     <thead>
-                        <tr>
+                        <tr class="table-info">
                             <th scope="col">Id</th>
                             <th scope="col">Nombre</th>
                             <th scope="col">Apellido</th>
@@ -80,15 +74,15 @@
                                     }
                                 %></td>
                             <td>
-                                <a type="button" href="<%=dom.getDominio()%>Socio?accion=ver&id=<%=socio.getIdSocios()%>" class="btn btn-info"><i class="bi bi-eye text-white"></i></a>
-                                <a type="button" href="<%=dom.getDominio()%>Socio?accion=editar&id=<%=socio.getIdSocios()%>" class="btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                <a type="button" href="Socio?accion=ver&id=<%=socio.getIdSocios()%>" class="btn btn-info"><i class="bi bi-eye text-white"></i></a>
+                                <a type="button" href="Socio?accion=editar&id=<%=socio.getIdSocios()%>" class="btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                     
                                 <% if (!socio.getEsEliminado()) {%>
-                                <a type="button" href="<%=dom.getDominio()%>Socio?accion=eliminar&id=<%=socio.getIdSocios()%>&esEliminado=<%=socio.getEsEliminado()%>" class="btn btn-danger"><i class="fa fa-trash-o fa-lg"></i> </a>
+                                <a type="button" href="Socio?accion=eliminar&id=<%=socio.getIdSocios()%>&esEliminado=<%=socio.getEsEliminado()%>" class="btn btn-danger"><i class="fa fa-trash-o fa-lg"></i> </a>
                                 <%
                                 } else {
                                 %>
-                                <a type="button" href="<%=dom.getDominio()%>Socio?accion=eliminar&id=<%=socio.getIdSocios()%>&esEliminado=<%=socio.getEsEliminado()%>" class="btn btn-success">Activar </a>
+                                <a type="button" href="Socio?accion=eliminar&id=<%=socio.getIdSocios()%>&esEliminado=<%=socio.getEsEliminado()%>" class="btn btn-success">Activar </a>
                                 <%
                                     }
                                 %></td>

@@ -1,10 +1,9 @@
 <%-- 
     Document   : addParnet
     Created on : 15 mar 2022, 21:27:14
-    Author     : LENOVO
+    Author     : jede
 --%>
 
-<%@page import="Utilidades.Dominio"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <jsp:include page="../Template/layout.jsp"></jsp:include>
@@ -13,8 +12,6 @@
     //if (sesion2.getAttribute("logueado") == null || sesion2.getAttribute("logueado").equals("0")) {
     //        response.sendRedirect("../login.jsp");
     //}
-
-    Dominio dom = new Dominio();
 %>
 
 <main>
@@ -100,7 +97,7 @@
             if (validaForm()) {
                 // enviamos la peticion por el metodo POST
                 // como respuesta, recibimos un JSON con la informacion requerida
-                $.post("<%=dom.getDominio()%>Socio?accion=agregar", $("#formdata").serialize(), function (res) {
+                $.post("Socio?accion=agregar", $("#formdata").serialize(), function (res) {
                     // si en el JSON existe el parametro error, significa que existe un error de los datos. 
                     if (res.error) {
                         $('#errorlAlert').show();
@@ -134,25 +131,25 @@
     });
 
     function validaForm() {
-        if ($("#inputName").val() == "") {
+        if ($("#inputName").val() === "") {
             $('#errorName').show();
             $('#inputName').addClass("is-invalid");
             $("#inputName").focus();
             return false;
         }
-        if ($("#inputLatName").val() == "") {
+        if ($("#inputLatName").val() === "") {
             $('#errorLastName').show();
             $('#inputLatName').addClass("is-invalid");
             $("#inputLatName").focus();
             return false;
         }
-        if ($("#inputCi").val() == "") {
+        if ($("#inputCi").val() === "") {
             $('#errorCi').show();
             $('#inputCi').addClass("is-invalid");
             $("#inputCi").focus();
             return false;
         }
-        if ($("#inputPhone").val() == "") {
+        if ($("#inputPhone").val() === "") {
             $('#errorPhone').show();
             $('#inputPhone').addClass("is-invalid");
             $("#inputPhone").focus();

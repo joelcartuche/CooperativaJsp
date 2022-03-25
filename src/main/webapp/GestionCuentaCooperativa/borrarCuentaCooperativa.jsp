@@ -1,10 +1,9 @@
 <%-- 
     Document   : borrarCuentaCooperativa
     Created on : 24 mar 2022, 21:32:26
-    Author     : LENOVO
+    Author     : jede
 --%>
 
-<%@page import="Utilidades.Dominio"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <jsp:include page="../Template/cabecera.jsp"></jsp:include>
@@ -28,11 +27,11 @@
                     <%
                         if (Boolean.parseBoolean(esEliminado)) {
                     %>
-                    Activar Socio
+                    Activar Cuenta Cooperativa
                     <%
                     } else {
                     %>
-                    Eliminar Socio
+                    Eliminar Cuenta Cooperativa
                     <%
                         }
                     %>
@@ -42,11 +41,11 @@
                 <%
                     if (Boolean.parseBoolean(esEliminado)) {
                 %>
-                ¿Desea Activar Socio?
+                ¿Desea Activar Cuenta Cooperativa?
                 <%
                 } else {
                 %>
-                ¿Desea Desactivar Socio?
+                ¿Desea Desactivar Cuenta Cooperativa?
                 <%
                     }
                 %>

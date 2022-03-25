@@ -1,21 +1,18 @@
 <%-- 
     Document   : buscarSocio
     Created on : 24 mar 2022, 15:45:27
-    Author     : LENOVO
+    Author     : jede
 --%>
 
-<%@page import="Utilidades.Dominio"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <jsp:include page="../Template/layout.jsp"></jsp:include>
+    
 <%
     //HttpSession sesion2 = request.getSession();
     //if (sesion2.getAttribute("logueado") == null || sesion2.getAttribute("logueado").equals("0")) {
     //        response.sendRedirect("../login.jsp");
     //}
-
-    Dominio dom = new Dominio();
-    boolean esEliminado = false;
 %>
 
 <main>
@@ -44,11 +41,11 @@
             </div>
         </div>
 
-        <div class="row mt-4 mb-5 justify-content-center">
+        <div class="row mt-3 mb-5 justify-content-center">
             <div class="col-12 col-md-11">
                 <table class="table" id="tableSearch">
                     <thead>
-                        <tr>
+                        <tr class="table-info">
                             <th scope="col">Id</th>
                             <th scope="col">Nombre</th>
                             <th scope="col">Apellido</th>
@@ -86,7 +83,7 @@
             // Primero validará el formulario.
             if (validaForm()) {
                 // enviamos la peticion por el metodo POST
-                $.post("<%=dom.getDominio()%>Socio?accion=buscarSocio", $("#formdata").serialize(), function (res) {
+                $.post("Socio?accion=buscarSocio", $("#formdata").serialize(), function (res) {
                     // si existe un error en los datos enviados, se presenta un alert            
                     if (res.error) {
                         $('#errorlAlert').show();
@@ -108,12 +105,12 @@
                         // si la cuenta esta eliminada, no se podra hacer un deposito y se presenta un boton para activa la cuenta
                         let opciones = "";
                         if (!res.esEliminado) {
-                            opciones = '<a type="button" href="<%=dom.getDominio()%>Socio?accion=eliminar&id=' + res.idSocio + '&esEliminado=' + res.esEliminado + '" class="btn btn-danger"><i class="fa fa-trash-o fa-lg"></i> </a>';
+                            opciones = '<a type="button" href="Socio?accion=eliminar&id=' + res.idSocio + '&esEliminado=' + res.esEliminado + '" class="btn btn-danger"><i class="fa fa-trash-o fa-lg"></i> </a>';
                         } else {
-                            opciones = '<a type="button" href="<%=dom.getDominio()%>Socio?accion=eliminar&id=' + res.idSocio + '&esEliminado=' + res.esEliminado + '" class="btn btn-success">Activar </a>';
+                            opciones = '<a type="button" href="Socio?accion=eliminar&id=' + res.idSocio + '&esEliminado=' + res.esEliminado + '" class="btn btn-success">Activar </a>';
                         }
-                        let btnVer = '<a type="button" href="<%=dom.getDominio()%>Socio?accion=ver&id=' + res.idSocio + '" class="btn btn-info me-1"><i class="bi bi-eye text-white"></i></a>'
-                        let btnEditar = '<a type="button" href="<%=dom.getDominio()%>Socio?accion=editar&id=' + res.idSocio + '" class="btn btn-primary me-1"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                        let btnVer = '<a type="button" href="Socio?accion=ver&id=' + res.idSocio + '" class="btn btn-info me-1"><i class="bi bi-eye text-white"></i></a>'
+                        let btnEditar = '<a type="button" href="Socio?accion=editar&id=' + res.idSocio + '" class="btn btn-primary me-1"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
                         // se construye la tabla y se presenta en la vista
                         $('#tableSearch>tbody').append(
                                 "<tr>\n\

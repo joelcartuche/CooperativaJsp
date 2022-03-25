@@ -1,13 +1,12 @@
 <%-- 
     Document   : listarCuentasCooperativa
     Created on : 24 mar 2022, 17:26:45
-    Author     : LENOVO
+    Author     : jede
 --%>
 
 <%@page import="Controladores.CuentaCooperativaJpaController"%>
 <%@page import="Modelos.CuentaCooperativa"%>
 <%@page import="java.util.List"%>
-<%@page import="Utilidades.Dominio"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 
@@ -19,7 +18,6 @@
     //        response.sendRedirect("../login.jsp");
     //}
 
-    Dominio dom = new Dominio();
     CuentaCooperativaJpaController cuentaCooperativaJpaController = new CuentaCooperativaJpaController();
     List<CuentaCooperativa> listaCuentas = cuentaCooperativaJpaController.findCuentaCooperativaEntities();
 %>
@@ -35,7 +33,7 @@
                 %>
                 <div class="alert alert-primary" role="alert">
                     No hay Socios registrados.
-                    <a href="<%=dom.getDominio()%>Socio?accion=agregar" class="btn btn-primary">Agregar Nuevo Socio</a>
+                    <a href="Socio?accion=agregar" class="btn btn-primary">Agregar Nuevo Socio</a>
                 </div>
                 <%
                 } else {
@@ -77,15 +75,15 @@
                                     }
                                 %></td>
                             <td>
-                                <a type="button" href="<%=dom.getDominio()%>CuentasCooperativa?accion=ver&id=<%=cuenta.getIdCuentaCooperativa()%>" class="btn btn-info"><i class="bi bi-eye text-white"></i></a>
-                                <a type="button" href="<%=dom.getDominio()%>CuentasCooperativa?accion=editar&id=<%=cuenta.getIdCuentaCooperativa()%>" class="btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                <a type="button" href="CuentasCooperativa?accion=ver&id=<%=cuenta.getIdCuentaCooperativa()%>" class="btn btn-info"><i class="bi bi-eye text-white"></i></a>
+                                <a type="button" href="CuentasCooperativa?accion=editar&id=<%=cuenta.getIdCuentaCooperativa()%>" class="btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i></a>
 
                                 <% if (!cuenta.getEsEliminado()) {%>
-                                <a type="button" href="<%=dom.getDominio()%>CuentasCooperativa?accion=eliminar&id=<%=cuenta.getIdCuentaCooperativa()%>&esEliminado=<%=cuenta.getEsEliminado()%>" class="btn btn-danger"><i class="fa fa-trash-o fa-lg"></i> </a>
+                                <a type="button" href="CuentasCooperativa?accion=eliminar&id=<%=cuenta.getIdCuentaCooperativa()%>&esEliminado=<%=cuenta.getEsEliminado()%>" class="btn btn-danger"><i class="fa fa-trash-o fa-lg"></i> </a>
                                 <%
                                 } else {
                                 %>
-                                <a type="button" href="<%=dom.getDominio()%>CuentasCooperativa?accion=eliminar&id=<%=cuenta.getIdCuentaCooperativa()%>&esEliminado=<%=cuenta.getEsEliminado()%>" class="btn btn-success">Activar </a>
+                                <a type="button" href="CuentasCooperativa?accion=eliminar&id=<%=cuenta.getIdCuentaCooperativa()%>&esEliminado=<%=cuenta.getEsEliminado()%>" class="btn btn-success">Activar </a>
                                 <%
                                     }
                                 %></td>

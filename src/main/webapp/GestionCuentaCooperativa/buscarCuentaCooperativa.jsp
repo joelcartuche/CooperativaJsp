@@ -1,7 +1,7 @@
 <%-- 
     Document   : buscarCuentaCooperativa
     Created on : 25 mar 2022, 1:56:14
-    Author     : LENOVO
+    Author     : jede
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -44,7 +44,7 @@
             <div class="col-12 col-md-11">
                 <table class="table" id="tableSearch">
                     <thead>
-                        <tr>
+                        <tr class="table-primary">
                             <th scope="col">Id</th>
                             <th scope="col">Número Cuenta</th>
                             <th scope="col">Nombre Cuenta</th>

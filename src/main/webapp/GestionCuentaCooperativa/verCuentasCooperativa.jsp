@@ -1,10 +1,9 @@
 <%-- 
     Document   : verCuentasCooperativa
     Created on : 24 mar 2022, 18:02:21
-    Author     : LENOVO
+    Author     : jede
 --%>
 
-<%@page import="Utilidades.Dominio"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <jsp:include page="../Template/layout.jsp"></jsp:include>
@@ -15,7 +14,6 @@
     //        response.sendRedirect("../login.jsp");
     //}
 
-    Dominio dom = new Dominio();
     boolean esEliminadoCuenta = (Boolean) request.getAttribute("esEliminadoCuenta");
     boolean esEliminadoSocio = (Boolean) request.getAttribute("esEliminadoSocio");
     boolean esEliminadoUsuario = (Boolean) request.getAttribute("esEliminadoUsuario");
@@ -114,7 +112,7 @@
                             </div>
                         </div>
                         <div class="mt-4">
-                            <a type="button" href="<%=dom.getDominio()%>Socio?accion=editar&id=${socio.getIdSocios()}" class="btn btn-primary">Editar información <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                            <a type="button" href="Socio?accion=editar&id=${socio.getIdSocios()}" class="btn btn-primary">Editar información <i class="fa fa-pencil" aria-hidden="true"></i></a>
                         </div>
                     </div>
                 </div>
@@ -163,7 +161,7 @@
                             </div>
                         </div>
                         <div class="mt-4">
-                            <a type="button" href="<%=dom.getDominio()%>EditarUsuario?id=${usuario.getIdUsuario()}" class="btn btn-primary">Editar información <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                            <a type="button" href="EditarUsuario?id=${usuario.getIdUsuario()}" class="btn btn-primary">Editar información <i class="fa fa-pencil" aria-hidden="true"></i></a>
                         </div>
                     </div>
                 </div>

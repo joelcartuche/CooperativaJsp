@@ -1,12 +1,11 @@
 <%-- 
     Document   : addParnet
     Created on : 15 mar 2022, 21:27:14
-    Author     : LENOVO
+    Author     : jede
 --%>
 
 <%@page import="Modelos.Socios"%>
 <%@page import="Controladores.SociosJpaController"%>
-<%@page import="Utilidades.Dominio"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <jsp:include page="../Template/layout.jsp"></jsp:include>
@@ -17,7 +16,6 @@
     //        response.sendRedirect("../login.jsp");
     //}
 
-    Dominio dom = new Dominio();
     boolean estadoSocio = (Boolean) request.getAttribute("estado");
 %>
 
@@ -121,7 +119,7 @@
 
         $("#botonenviar").click(function () {     // Con esto establecemos la acción por defecto de nuestro botón de enviar.
             if (validaForm()) {                               // Primero validará el formulario.
-                $.post("<%=dom.getDominio()%>Socio?accion=editar", $("#formdata").serialize(), function (res) {
+                $.post("Socio?accion=editar", $("#formdata").serialize(), function (res) {
                     if (res.error) {
                         $('#errorlAlert').show();
                         $('#errorlAlert').text(res.error);
