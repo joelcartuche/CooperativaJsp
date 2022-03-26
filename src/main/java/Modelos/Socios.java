@@ -97,7 +97,7 @@ public class Socios implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoSocio")
     private List<Retiro> retiro = new ArrayList<>();
         
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoCredito")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCodigoSocio")
     private Collection<Credito> creditoCollection;
 
     public Socios() {
