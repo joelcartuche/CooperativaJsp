@@ -4,6 +4,18 @@
     Author     : joelc
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%
+    HttpSession sesion = request.getSession();
+    if (sesion.getAttribute("logueado") != null ) {
+        if (sesion.getAttribute("rol").equals("Socio")) {
+            response.sendRedirect("Home?accion=socio");
+        } else if (sesion.getAttribute("rol").equals("Administrador") || sesion.getAttribute("rol").equals("Secretaria")) {
+            response.sendRedirect("Home?accion=admin");
+        }
+    }
+%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -106,7 +118,7 @@
                                 $('#errorUsuario').removeAttr("hidden");
                             }
                         }
-                        
+
                     });
                 });
             });

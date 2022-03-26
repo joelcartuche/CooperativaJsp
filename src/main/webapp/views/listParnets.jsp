@@ -12,10 +12,10 @@
 <jsp:include page="../Template/layout.jsp"></jsp:include>
 
 <%
-    //HttpSession sesion2 = request.getSession();
-    //if (sesion2.getAttribute("logueado") == null || sesion2.getAttribute("logueado").equals("0")) {
-    //        response.sendRedirect("../login.jsp");
-    //}
+    HttpSession sesion2 = request.getSession();
+    if (sesion2.getAttribute("logueado") == null || sesion2.getAttribute("logueado").equals("0")) {
+            response.sendRedirect("../login.jsp");
+    }
 
     SociosJpaController sociosJpaController = new SociosJpaController();
     List<Socios> listaSocio = sociosJpaController.findSociosEntities();
