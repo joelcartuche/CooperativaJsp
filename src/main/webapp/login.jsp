@@ -90,11 +90,11 @@
                     <form>
                         <div class="form-group">
                             <label>Usuario</label>
-                            <input type="text" class="form-control" id ="usuario" placeholder="Humano pon tu usuario">
+                            <input type="text" class="form-control" id ="usuario" placeholder="Ingrese el nombre de usuario">
                         </div>
                         <div class="form-group">
                             <label>Password</label>
-                            <input type="password" id="password" class="form-control" placeholder="Humano pon tu password">
+                            <input type="password" id="password" class="form-control" placeholder="Ingrese su contraseña">
                         </div>
                         <input type="button"  id="submit" class="btn btn-primary" value="Iniciar sesión" />
                     </form> 

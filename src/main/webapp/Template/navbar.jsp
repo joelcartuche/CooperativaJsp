@@ -7,11 +7,7 @@
 <%@page import="Utilidades.Dominio"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
-    //HttpSession sesion2 = request.getSession();
-    //if (sesion2.getAttribute("logueado") == null || sesion2.getAttribute("logueado").equals("0")) {
-    //        response.sendRedirect("../login.jsp");
-    //}
-        
+       
     Dominio dom = new Dominio();
 %>
 
@@ -90,7 +86,7 @@
                         </a>
                     </li>
                     <li class="offcanvasItems">
-                        <a href="GestionCredito/listarCreditos.jsp" class="nav-link px-3 active">
+                        <a href="<%=dom.getDominio()%>GestionCredito/listarCreditos.jsp" class="nav-link px-3 active">
                             <span class="myIconText me-2"><i class="bi bi-credit-card-2-back-fill"></i></span>
                             <span class="myOffCanvaSubtitle">Credits</span>
                         </a>

@@ -76,7 +76,7 @@ public class Socios implements Serializable {
     @NotNull
     @Column(name = "codigo_socio")
     private int codigoSocio;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoCredito")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCodigoSocio")
     private Collection<Credito> creditoCollection;
 
     public Socios() {

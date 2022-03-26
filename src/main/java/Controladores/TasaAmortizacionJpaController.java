@@ -5,6 +5,8 @@
 package Controladores;
 
 import Controladores.exceptions.NonexistentEntityException;
+import Modelos.Credito;
+import Modelos.Socios;
 import Modelos.TasaAmortizacion;
 import java.io.Serializable;
 import java.util.List;
@@ -126,6 +128,25 @@ public class TasaAmortizacionJpaController implements Serializable {
             em.close();
         }
     }
+    
+    public List<TasaAmortizacion>  findTasaAmortizacionIdCredito(Credito credito) {
+ 
+        EntityManager em = getEntityManager();
+        Query buscar = em.createNamedQuery("TasaAmortizacion.findByCodigoCredito");
+        buscar.setParameter("codigoCredito", credito);
+        buscar.setParameter("esEliminado", false);
+        List<TasaAmortizacion> tasaAmortizacions = buscar.getResultList();
+        if (tasaAmortizacions.isEmpty()) {
+            return null;
+        } else {
+            try {
+                return tasaAmortizacions;
+            } finally {
+                em.close();
+            }
+        }
+    }
+    
 
     public int getTasaAmortizacionCount() {
         EntityManager em = getEntityManager();

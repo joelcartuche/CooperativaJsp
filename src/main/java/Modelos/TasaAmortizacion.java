@@ -42,7 +42,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "TasaAmortizacion.findBySaldoDeuda", query = "SELECT t FROM TasaAmortizacion t WHERE t.saldoDeuda = :saldoDeuda"),
     @NamedQuery(name = "TasaAmortizacion.findByCuota", query = "SELECT t FROM TasaAmortizacion t WHERE t.cuota = :cuota"),
     @NamedQuery(name = "TasaAmortizacion.findByInteres", query = "SELECT t FROM TasaAmortizacion t WHERE t.interes = :interes"),
-    @NamedQuery(name = "TasaAmortizacion.findByAmortizacion", query = "SELECT t FROM TasaAmortizacion t WHERE t.amortizacion = :amortizacion")})
+    @NamedQuery(name = "TasaAmortizacion.findByAmortizacion", query = "SELECT t FROM TasaAmortizacion t WHERE t.amortizacion = :amortizacion"),
+@NamedQuery(name = "TasaAmortizacion.findByCodigoCredito", query = "SELECT t FROM TasaAmortizacion t WHERE t.codigoCredito = :codigoCredito AND t.esEliminado=:esEliminado"),
+
+})
+
 public class TasaAmortizacion implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -60,8 +64,6 @@ public class TasaAmortizacion implements Serializable {
     @Size(min = 1, max = 200)
     @Column(name = "forma_pago")
     private String formaPago;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "es_pagado")
     private boolean esPagado;
     @Column(name = "fecha_pago")
