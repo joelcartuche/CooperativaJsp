@@ -94,7 +94,7 @@
     <main>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-12 fw-bold fs-3 text-center">Gestión  Rol</div>
+                <div class="col-md-12 fw-bold fs-3 text-center">Editar Usuario</div>
             </div>
             <div class="row mt-4 mb-5 justify-content-center">
                 <div class="col-12 col-md-12">

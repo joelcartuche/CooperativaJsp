@@ -32,7 +32,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Credito.findByMontoCredito", query = "SELECT c FROM Credito c WHERE c.montoCredito = :montoCredito"),
     @NamedQuery(name = "Credito.findByInteresCredito", query = "SELECT c FROM Credito c WHERE c.interesCredito = :interesCredito"),
     @NamedQuery(name = "Credito.findByEsEliminado", query = "SELECT c FROM Credito c WHERE c.esEliminado = :esEliminado"),
-    @NamedQuery(name = "Credito.findByIdCodigoSocio", query = "SELECT c FROM Credito c WHERE c.idCodigoSocio = :idCodigoSocio")})
+    @NamedQuery(name = "Credito.findByCodigoCredito", query = "SELECT c FROM Credito c WHERE c.codigoCredito = :codigoCredito"),
+@NamedQuery(name = "Credito.findBySocio", query = "SELECT c FROM Credito c WHERE c.idCodigoSocio = :socio")})
 public class Credito implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -50,11 +51,11 @@ public class Credito implements Serializable {
     private Boolean esEliminado;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "id_codigo_socio")
-    private int idCodigoSocio;
-    @JoinColumn(name = "codigo_credito", referencedColumnName = "codigo_socio")
+    @Column(name = "codigo_credito")
+    private int codigoCredito;
+    @JoinColumn(name = "id_codigo_socio", referencedColumnName = "codigo_socio")
     @ManyToOne(optional = false)
-    private Socios codigoCredito;
+    private Socios idCodigoSocio;
 
     public Credito() {
     }
@@ -63,9 +64,9 @@ public class Credito implements Serializable {
         this.idCredito = idCredito;
     }
 
-    public Credito(Integer idCredito, int idCodigoSocio) {
+    public Credito(Integer idCredito, int codigoCredito) {
         this.idCredito = idCredito;
-        this.idCodigoSocio = idCodigoSocio;
+        this.codigoCredito = codigoCredito;
     }
 
     public Integer getIdCredito() {
@@ -100,20 +101,20 @@ public class Credito implements Serializable {
         this.esEliminado = esEliminado;
     }
 
-    public int getIdCodigoSocio() {
-        return idCodigoSocio;
-    }
-
-    public void setIdCodigoSocio(int idCodigoSocio) {
-        this.idCodigoSocio = idCodigoSocio;
-    }
-
-    public Socios getCodigoCredito() {
+    public int getCodigoCredito() {
         return codigoCredito;
     }
 
-    public void setCodigoCredito(Socios codigoCredito) {
+    public void setCodigoCredito(int codigoCredito) {
         this.codigoCredito = codigoCredito;
+    }
+
+    public Socios getIdCodigoSocio() {
+        return idCodigoSocio;
+    }
+
+    public void setIdCodigoSocio(Socios idCodigoSocio) {
+        this.idCodigoSocio = idCodigoSocio;
     }
 
     @Override

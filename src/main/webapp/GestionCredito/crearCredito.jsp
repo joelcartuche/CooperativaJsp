@@ -40,11 +40,13 @@ $(document).ready(function(event) {
 
     function ocultarToast(){
         //ocultamos el toast
-        toast.hide();
         $('#mensajeErrorToast').html("");
         $('#montoCredito').removeClass("is-invalid");
         $('#plazoMeses').removeClass("is-invalid");
     }
+    var totalInteres =0;
+    var totalPagar=0;
+    var dataTasaAmortizacion;
     
     $('#btnGenerarTasaAmortizacionModal').click(function(){
         var monto= $('#montoCredito').val();
@@ -55,6 +57,8 @@ $(document).ready(function(event) {
             monto:monto,
             plazo:plazo
         },function(result){
+            window.console.log(result);
+            
             if(result== "errorMontoVacio"){
                 $('#montoCredito').addClass("is-invalid");
                 $('#mensajeErrorToast').html("Ingrese un monto para calcular la tasa de amortización");
@@ -64,113 +68,112 @@ $(document).ready(function(event) {
                 $('#plazoMeses').addClass("is-invalid");
                 $('#mensajeErrorToast').html("Ingrese un plazo para calcular la tasa de amortización");
 
+            }else if(result.length >0){
+                dataTasaAmortizacion= result; //lo pasamos a la variable global
+                var tBody ="";
+                totalInteres =0;
+                totalPagar=0;
+                for (var i = 0; i < result.length; i++) {
+                    tBody+="<tr>";
+                    tBody+="<td>"+(i+1)+"</td>";
+                    for (var j = 0; j<4; j++) {
+                        tBody+="<td>"+result[i][j]+"</td>";
+                        if(j==2){
+                            totalInteres = totalInteres+result[i][j];
+                        }
+                        if(j==3){
+                            totalPagar = totalPagar+result[i][j];
+                        }
+                    }   
+                    tBody+="</tr>"; 
+                }
+                $('#totalInteres').html(totalInteres);
+                $('#totalPagado').html(totalPagar);
+                $('#generacionTasaAmortizacion').html(tBody);
             }
         });
     });
+    $('#guardarTasaAmortizacion').click(function(){
+       
+        if(totalPagar>0){
+            $('#alertaTasaAmortizacion').removeClass("alert-danger");
+            $('#alertaTasaAmortizacion').addClass("alert-success");
+            $('#alertaTasaAmortizacion').html("Se selecciono la tasa de amortización");
+            
+        }else{
+            $('#alertaTasaAmortizacion').removeClass("alert-success");
+            $('#alertaTasaAmortizacion').addClass("alert-danger");
+            $('#alertaTasaAmortizacion').html("No se ha generado ninguna tasa de amortización");
+
+        }
+    });
+   
     
-    $('#btnBuscarUsuario').click(function(){
-        $('#errorBuscarUsuario').attr("hidden",true);
-        var usuario = $('#usuarioBuscar').val();
-        $.get('../BuscarUsuarioNombre',{
-            nombreApellido: usuario
+    $('#btnBuscarSocio').click(function (){
+        $('#errorBuscarSocio').attr("hidden",true);
+        $('#coicidenciaBussquedaSocio').html("");
+        var cedula = $('#cedulaSocioBuscar').val();
+        $.get('../BuscarSocioCedula',{
+            cedula:cedula
         },function(resultado){
-            var data = resultado;
+            
+            window.console.log(resultado.toString());
             if(data == "error"){
-                $('#errorBuscarUsuario').attr("hidden",false);
-            }else{
+                $('#errorBuscarSocio').attr("hidden",false);
+            }else if(resultado.length >0){
+                var data = resultado[0];
                 var tBody="";
-                data = data.split(';');
-                window.console.log(data.length);
-                for(var i=0;i<data.length-1;i=i+5){
-                    tBody=tBody+"<tr>";
-                    tBody=tBody+"<td>"+data[i]+"</td>";
-                    tBody=tBody+"<td>"+data[i+1]+"</td>";
-                    tBody=tBody+"<td>"+data[i+2]+"</td>";
-                    tBody=tBody+"<td>"+data[i+3]+"</td>";
-                    tBody=tBody+"<td>"+data[i+4]+"</td>";
-                    tBody=tBody+'<td> <input id="id'+data[i]+'" type="button" onclick="actualizacionIdUsuario('+data[i]+')" class="boton btn btn-secondary" data-bs-dismiss="modal" value="Seleccionar" input/> </td>';
-                    tBody=tBody+"</tr>";                    
-                }
-                $('#coicidenciaBussquedaUsuario').html(tBody);
+                var i =0;
+                var datoIdNombreApellido ="'"+data[i] +";"+data[i+1]+" "+data[i+2]+"'";
+                
+                tBody=tBody+"<tr>";
+                tBody=tBody+"<td>"+data[i]+"</td>";
+                tBody=tBody+"<td>"+data[i+1]+"</td>";
+                tBody=tBody+"<td>"+data[i+2]+"</td>";
+                tBody=tBody+"<td>"+data[i+3]+"</td>";
+                tBody=tBody+"<td>"+data[i+4]+"</td>";
+                tBody=tBody+"<td>"+data[i+5]+"</td>";
+                tBody=tBody+'<td> <input id="idSocio'+data[i]+'" type="button" onclick="actualizacionIdSocio('+datoIdNombreApellido+')" class="boton btn btn-secondary" data-bs-dismiss="modal" value="Seleccionar" input/> </td>';
+                tBody=tBody+"</tr>";                    
+                
+                $('#coicidenciaBussquedaSocio').html(tBody);
                 
             }
             
         });
     });
     
-    $('#btnBuscarRol').click(function (){
-        $('#errorBuscarRol').attr("hidden",true);
-        $('#coicidenciaBussquedaRol').html("");
-        var rol = $('#tipoRolBuscar').val();
-        $.get('../BuscarRolNombre',{
-            rolTipo:rol
-        },function(resultado){
-            var data = resultado;
-            if(data == "error"){
-                $('#errorBuscarRol').attr("hidden",false);
-            }else{
-                var tBody="";
-                data = data.split(';');
-                window.console.log(data.length);
-                for(var i=0;i<data.length-1;i=i+2){
-                    tBody=tBody+"<tr>";
-                    tBody=tBody+"<td>"+data[i]+"</td>";
-                    tBody=tBody+"<td>"+data[i+1]+"</td>";
-                    tBody=tBody+'<td> <input id="idRolLista'+data[i]+'" type="button" onclick="actualizacionIdRol('+data[i]+')" class="boton btn btn-secondary" data-bs-dismiss="modal" value="Seleccionar" input/> </td>';
-                    tBody=tBody+"</tr>";                    
-                }
-                $('#coicidenciaBussquedaRol').html(tBody);
-                
-            }
-            
-        });
+    $('#cancelar').click(function (){
+        window.location.replace("listarCreditos.jsp");
     });
     
     function ocultarCampos(){
-        $('#usuario').removeClass("is-invalid");
-        $('#clave1').removeClass("is-invalid");
-        $('#clave2').removeClass("is-invalid");
+        $('#montoCredito').removeClass("is-invalid");
         $('#mensajeError').attr("hidden",true);
         $('#mensajeSuccess').attr("hidden",true);
-        $('#usuarioActual').removeClass("is-invalid");
+
     }
     $('#guardar').click(function (){
         ocultarCampos();
-        var usuario = $('#usuario').val();
-        var clave1 = $('#clave1').val();
-        var clave2 = $('#clave2').val();
-        var idUsuario =$('#idUsuarioActual').val();
-        var idRol = $('#idRolActual').val();
-        $.post('../CrearCuenta',{
-            usuario: usuario,
-            clave1: clave1,
-            clave2: clave2,
-            idUsuario: idUsuario,
-            idRol: idRol
+        var monto = $('#montoCredito').val();
+        var idSocio = $('#idSocioActual').val();
+        $.post('../CrearCredito',{
+            monto: monto,
+            idSocio: idSocio,
+            totalPagar: totalPagar,
+            dataTasaAmortizacion: dataTasaAmortizacion.toString(),
         },function(result){
-            if(result=="errorNombreUsuario"){
-                $('#usuario').addClass("is-invalid");
-            }else if(result=="errorClaveNoIngresada"){
+            if(result=="errorMonto"){
+                $('#montoCredito').addClass("is-invalid");
+            }else if(result=="errorTasa"){
                 $('#mensajeError').attr("hidden",false);
-                $('#mensajeError').html("Error no se ha ingresado clave");
-            }else if(result=="errorClaveNoCoincide"){
-                $('#clave1').addClass("is-invalid");
-                $('#clave2').addClass("is-invalid");
-            }if(result=="errorUsuario"){
+                $('#mensajeError').html("Error no se ha generado una tasa de amortización");
+            }else if(result=="errorSocio"){
                 $('#mensajeError').attr("hidden",false);
-                $('#mensajeError').html("Error usuario no seleccionado");
-
-            }else if(result=="errorIdRol"){
-                $('#mensajeError').attr("hidden",false);
-                $('#mensajeError').html("Error con el rol");
-                
-            }else if(result=="errorCuentaNoCreada"){
-                $('#mensajeError').attr("hidden",false);
-                $('#mensajeError').html("Error con el usuario que ha sido seleccionado debido a que ya existe una cuenta para este usuario");
-                $('#usuarioActual').addClass("is-invalid");
-            }else if(result=="success"){
+                $('#mensajeError').html("Error no se ha seleccionado ningun socio");
+            }if(result=="success"){
                 $('#mensajeSuccess').attr("hidden",false);
-                window.location.replace("listarCuenta.jsp");
+                window.location.replace("listarCreditos.jsp");
             }
         });
     });    
@@ -205,7 +208,7 @@ $(document).ready(function(event) {
                         </div>
                         <div class="mb-3 row">
                             <label  class="col-sm-6 col-form-label">Tasa de amortización</label>
-                            <div class="alert alert-danger" role="alert">No se ha generado ninguna tasa de amortización</div>
+                            <div id="alertaTasaAmortizacion" class="alert alert-danger" role="alert">No se ha generado ninguna tasa de amortización</div>
                             <input id="generarTasaAmortizacion" class="btn btn-outline-success " data-bs-toggle="modal" data-bs-target="#modalTazaAmortizacion" value="Generar taza de amortización"/>
                             <input id="generoTazaAmortizacion" value="0" hidden >
                         </div>
@@ -247,9 +250,23 @@ $(document).ready(function(event) {
                                     <th scope="col" class="text-center" colspan="2">
                                         <input id="plazoMeses" class="form-control" placeholder="Ingrese plazo del prestamo en meses"/>
                                     </th>
-                                    <th scope="col" class="text-center" colspan="4">
-                                        <input id="btnGenerarTasaAmortizacionModal" class="btn btn-primary" value="Generar taza de amortización"/>
+                                    <th  class="text-center" colspan="3">
+                                        <input id="btnGenerarTasaAmortizacionModal" class="btn btn-primary" value="Generar"/>
                                     </th>
+                                </tr>
+                                <tr>
+                                    <th scope="col"  class="text-center" ></th>
+                                    <th scope="col" class="text-center" ></th>
+                                    <th scope="col" class="text-center" ></th>
+                                    <th scope="col" class="text-center" >Total interes</th>
+                                    <th scope="col" class="text-center" >Total pagado</th>
+                                </tr>
+                                <tr>
+                                    <td class="text-center" ></td>
+                                    <td class="text-center" ></td>
+                                    <td class="text-center" ></td>
+                                    <td class="text-center" id="totalInteres"></td>
+                                    <td class="text-center" id="totalPagado"></td>
                                 </tr>
                                 <tr>
                                     <th scope="col">Periodo</th>
@@ -257,7 +274,6 @@ $(document).ready(function(event) {
                                     <th scope="col">Cuota</th>
                                     <th scope="col">Interes</th>
                                     <th scope="col">Amortizacion</th>
-                                    <th scope="col">Valor a pagar cada mes</th>
                                 </tr>
                             </thead>
                             <tbody id="generacionTasaAmortizacion">
@@ -279,15 +295,15 @@ $(document).ready(function(event) {
 
 <!-- Modal socio-->
 <div class="modal fade" id="modalSocio" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content ">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Seleccionar socio</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="container-fluid">
-            <div id="errorBuscarRol" class="alert alert-danger" role="alert" hidden>
+            <div id="errorBuscarSocio" class="alert alert-danger" role="alert" hidden>
                 No se encontraron coincidencias
             </div>
             <div class="row">
@@ -295,18 +311,22 @@ $(document).ready(function(event) {
                     <thead>
                         <tr>
                             <th scope="col" colspan="2" >
-                                <input id="tipoRolBuscar" name="tipoRolBuscar" class="form-control " placeholder="Ingrese rol" id="flexCheckDefault" />
+                                <input id="cedulaSocioBuscar" name="cedulaSocio" class="form-control " placeholder="Ingrese número de cédula del socio" id="flexCheckDefault" />
                             </th>
                             <th scope="col" class="text-center" >
-                                <input id="btnBuscarRol" class="btn btn-primary" value="Buscar"/>
+                                <input id="btnBuscarSocio" class="btn btn-primary" value="Buscar"/>
                             </th>
                         </tr>
                         <tr>
                             <th scope="col">N°</th>
-                            <th scope="col">Tipo Rol</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Apellido</th>
+                            <th scope="col">Cedula</th>
+                            <th scope="col">Teléfono</th>
+                            <th scope="col">Dirección</th>
                         </tr>
                     </thead>
-                    <tbody id="coicidenciaBussquedaRol">
+                    <tbody id="coicidenciaBussquedaSocio">
 
                     </tbody>
                 </table>
@@ -330,29 +350,16 @@ $(document).ready(function(event) {
 </div>
 
 <script>
-    function actualizacionIdUsuario(idDada){
-        $('#idUsuarioActual').removeAttr("value");
-        $('#idUsuarioActual').attr("value",idDada);
-        
-        $.get('../BuscarUsuarioId',{
-           idUsuario:idDada 
-        },function(result){
-            var data = JSON.parse(result);
-            $('#usuarioActual').val(data.nombreUsuario);
-        });
-
-    };
     
-    function actualizacionIdRol(idDado){
-        $('#idRolActual').removeAttr("value");
-        $('#idRolActual').attr("value",idDado);
+    function actualizacionIdSocio(socioIdNombreApellido){
+        var socioYnombre = socioIdNombreApellido.split(";");
+        idDado = socioYnombre[0];
+        nombreDado = socioYnombre[1];
         
-        $.get('../BuscarRolId',{
-           idRol:idDado 
-        },function(result){
-            var data = JSON.parse(result);
-            $('#rol').val(data.rol);
-        });
+        $('#idSocioActual').removeAttr("value");
+        $('#idSocioActual').attr("value",idDado);
+        $('#socio').val(nombreDado);
+
     };
 </script>
 

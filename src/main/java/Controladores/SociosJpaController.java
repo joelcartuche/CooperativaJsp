@@ -37,8 +37,9 @@ public class SociosJpaController implements Serializable {
 
     public SociosJpaController() {
     }
-
     
+    
+
     public void create(Socios socios) {
         if (socios.getCreditoCollection() == null) {
             socios.setCreditoCollection(new ArrayList<Credito>());
@@ -55,12 +56,12 @@ public class SociosJpaController implements Serializable {
             socios.setCreditoCollection(attachedCreditoCollection);
             em.persist(socios);
             for (Credito creditoCollectionCredito : socios.getCreditoCollection()) {
-                Socios oldCodigoCreditoOfCreditoCollectionCredito = creditoCollectionCredito.getCodigoCredito();
-                creditoCollectionCredito.setCodigoCredito(socios);
+                Socios oldIdCodigoSocioOfCreditoCollectionCredito = creditoCollectionCredito.getIdCodigoSocio();
+                creditoCollectionCredito.setIdCodigoSocio(socios);
                 creditoCollectionCredito = em.merge(creditoCollectionCredito);
-                if (oldCodigoCreditoOfCreditoCollectionCredito != null) {
-                    oldCodigoCreditoOfCreditoCollectionCredito.getCreditoCollection().remove(creditoCollectionCredito);
-                    oldCodigoCreditoOfCreditoCollectionCredito = em.merge(oldCodigoCreditoOfCreditoCollectionCredito);
+                if (oldIdCodigoSocioOfCreditoCollectionCredito != null) {
+                    oldIdCodigoSocioOfCreditoCollectionCredito.getCreditoCollection().remove(creditoCollectionCredito);
+                    oldIdCodigoSocioOfCreditoCollectionCredito = em.merge(oldIdCodigoSocioOfCreditoCollectionCredito);
                 }
             }
             em.getTransaction().commit();
@@ -85,7 +86,7 @@ public class SociosJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Credito " + creditoCollectionOldCredito + " since its codigoCredito field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Credito " + creditoCollectionOldCredito + " since its idCodigoSocio field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -101,12 +102,12 @@ public class SociosJpaController implements Serializable {
             socios = em.merge(socios);
             for (Credito creditoCollectionNewCredito : creditoCollectionNew) {
                 if (!creditoCollectionOld.contains(creditoCollectionNewCredito)) {
-                    Socios oldCodigoCreditoOfCreditoCollectionNewCredito = creditoCollectionNewCredito.getCodigoCredito();
-                    creditoCollectionNewCredito.setCodigoCredito(socios);
+                    Socios oldIdCodigoSocioOfCreditoCollectionNewCredito = creditoCollectionNewCredito.getIdCodigoSocio();
+                    creditoCollectionNewCredito.setIdCodigoSocio(socios);
                     creditoCollectionNewCredito = em.merge(creditoCollectionNewCredito);
-                    if (oldCodigoCreditoOfCreditoCollectionNewCredito != null && !oldCodigoCreditoOfCreditoCollectionNewCredito.equals(socios)) {
-                        oldCodigoCreditoOfCreditoCollectionNewCredito.getCreditoCollection().remove(creditoCollectionNewCredito);
-                        oldCodigoCreditoOfCreditoCollectionNewCredito = em.merge(oldCodigoCreditoOfCreditoCollectionNewCredito);
+                    if (oldIdCodigoSocioOfCreditoCollectionNewCredito != null && !oldIdCodigoSocioOfCreditoCollectionNewCredito.equals(socios)) {
+                        oldIdCodigoSocioOfCreditoCollectionNewCredito.getCreditoCollection().remove(creditoCollectionNewCredito);
+                        oldIdCodigoSocioOfCreditoCollectionNewCredito = em.merge(oldIdCodigoSocioOfCreditoCollectionNewCredito);
                     }
                 }
             }
@@ -145,7 +146,7 @@ public class SociosJpaController implements Serializable {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Socios (" + socios + ") cannot be destroyed since the Credito " + creditoCollectionOrphanCheckCredito + " in its creditoCollection field has a non-nullable codigoCredito field.");
+                illegalOrphanMessages.add("This Socios (" + socios + ") cannot be destroyed since the Credito " + creditoCollectionOrphanCheckCredito + " in its creditoCollection field has a non-nullable idCodigoSocio field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
@@ -181,6 +182,24 @@ public class SociosJpaController implements Serializable {
         } finally {
             em.close();
         }
+    }
+    
+    public Socios findSociosCedula(String cedula) {
+        EntityManager em = getEntityManager();
+        Query buscar = em.createNamedQuery("Socios.findByCedulaSocio");
+        buscar.setParameter("cedulaSocio", cedula);
+        List<Socios> sociosList = buscar.getResultList();
+        if (!sociosList.isEmpty()) {
+            try {
+                return sociosList.get(0);
+            } finally {
+                em.close();
+            }
+
+        }else{
+            return null;
+        }
+        
     }
 
     public Socios findSocios(Integer id) {

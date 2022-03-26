@@ -11,6 +11,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.Math;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  *
@@ -48,14 +51,65 @@ public class GenerarTasaAmortizacion extends HttpServlet {
         PrintWriter out = response.getWriter();
         String montoData = request.getParameter("monto");
         String plazoData = request.getParameter("plazo");
-        Double interesAnual = 0.8;
+        Double interesAnual = 6.0; //interes representado en porcentaje 8% anual
+        Double interesMensual = interesAnual/12; //interes mensual
         
         if (montoData ==null || montoData.equals("")) {
             out.print("errorMontoVacio");
         }else if(plazoData == null || plazoData.equals("")){
             out.print("errorPlazoVacio");
         }else{
+            double monto = Double.parseDouble(montoData);
+            double plazo = Double.parseDouble(plazoData);
+            double interes = interesMensual/100;
+            double pagoMensual= Math.pow((1+interes), plazo)*interes;
+            pagoMensual = pagoMensual/(Math.pow((1+interes), plazo)-1);
+            pagoMensual = monto*pagoMensual;
+            BigDecimal bd = new BigDecimal(pagoMensual).setScale(2, RoundingMode.HALF_UP);//redondeamos a dos decimales
+            pagoMensual = bd.doubleValue();//almacenamos la variable
+
+            String salida="[";
+            double totalPagar = 0.0;
+
+            for (int i = 0; i < plazo; i++) {
+                
+                double interesBanco = monto * interes; //
+                bd =new BigDecimal(interesBanco).setScale(2, RoundingMode.HALF_UP);//redondeamos a dos decimales
+                interesBanco = bd.doubleValue();
+
+                double pagoProducto = pagoMensual - interesBanco;
+                bd =new BigDecimal(pagoProducto).setScale(2, RoundingMode.HALF_UP);//redondeamos a dos decimales
+                pagoProducto = bd.doubleValue();
+                
+                totalPagar += pagoProducto;//calculamos el total pagado
+                
+                if(i<plazo-1){
+                    salida+="["+monto+","+pagoMensual+","+interesBanco+","+pagoProducto+"]";
+                    salida+=",";
+                }else{
+                    if (totalPagar < Double.parseDouble(montoData)) {//en caso de que no coicida el total pagado con el monto dado
+                        pagoMensual = pagoMensual+(Double.parseDouble(montoData)-totalPagar);//sumamos al pago mensual el centavo que falta
+                        //recalculamos el pago del producto
+                        pagoProducto = pagoMensual - interesBanco;
+                        bd = new BigDecimal(pagoProducto).setScale(2, RoundingMode.HALF_UP);//redondeamos a dos decimales
+                        pagoProducto = bd.doubleValue();
+                    }
+                    salida += "[" + monto + "," + pagoMensual + "," + interesBanco + "," + pagoProducto + "]";
+                }
+
+                System.out.printf("%f                  | %f                 | %f            | %f                     \n",monto,interesBanco,pagoMensual,pagoProducto );
+                monto = monto -pagoProducto;
+                bd =new BigDecimal(monto).setScale(2, RoundingMode.HALF_UP);//redondeamos el monto a dos decimales
+                monto = bd.doubleValue();
+                
+                
+            }
+            salida+="]";
+            //pasamos a json
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
             
+            out.print(salida);
         }
         
         

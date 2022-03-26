@@ -27,7 +27,7 @@ public class CreditoJpaController implements Serializable {
         this.emf = emf;
     }
     private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
-    
+
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
@@ -42,15 +42,15 @@ public class CreditoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Socios codigoCredito = credito.getCodigoCredito();
-            if (codigoCredito != null) {
-                codigoCredito = em.getReference(codigoCredito.getClass(), codigoCredito.getIdSocios());
-                credito.setCodigoCredito(codigoCredito);
+            Socios idCodigoSocio = credito.getIdCodigoSocio();
+            if (idCodigoSocio != null) {
+                idCodigoSocio = em.getReference(idCodigoSocio.getClass(), idCodigoSocio.getIdSocios());
+                credito.setIdCodigoSocio(idCodigoSocio);
             }
             em.persist(credito);
-            if (codigoCredito != null) {
-                codigoCredito.getCreditoCollection().add(credito);
-                codigoCredito = em.merge(codigoCredito);
+            if (idCodigoSocio != null) {
+                idCodigoSocio.getCreditoCollection().add(credito);
+                idCodigoSocio = em.merge(idCodigoSocio);
             }
             em.getTransaction().commit();
         } finally {
@@ -66,20 +66,20 @@ public class CreditoJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Credito persistentCredito = em.find(Credito.class, credito.getIdCredito());
-            Socios codigoCreditoOld = persistentCredito.getCodigoCredito();
-            Socios codigoCreditoNew = credito.getCodigoCredito();
-            if (codigoCreditoNew != null) {
-                codigoCreditoNew = em.getReference(codigoCreditoNew.getClass(), codigoCreditoNew.getIdSocios());
-                credito.setCodigoCredito(codigoCreditoNew);
+            Socios idCodigoSocioOld = persistentCredito.getIdCodigoSocio();
+            Socios idCodigoSocioNew = credito.getIdCodigoSocio();
+            if (idCodigoSocioNew != null) {
+                idCodigoSocioNew = em.getReference(idCodigoSocioNew.getClass(), idCodigoSocioNew.getIdSocios());
+                credito.setIdCodigoSocio(idCodigoSocioNew);
             }
             credito = em.merge(credito);
-            if (codigoCreditoOld != null && !codigoCreditoOld.equals(codigoCreditoNew)) {
-                codigoCreditoOld.getCreditoCollection().remove(credito);
-                codigoCreditoOld = em.merge(codigoCreditoOld);
+            if (idCodigoSocioOld != null && !idCodigoSocioOld.equals(idCodigoSocioNew)) {
+                idCodigoSocioOld.getCreditoCollection().remove(credito);
+                idCodigoSocioOld = em.merge(idCodigoSocioOld);
             }
-            if (codigoCreditoNew != null && !codigoCreditoNew.equals(codigoCreditoOld)) {
-                codigoCreditoNew.getCreditoCollection().add(credito);
-                codigoCreditoNew = em.merge(codigoCreditoNew);
+            if (idCodigoSocioNew != null && !idCodigoSocioNew.equals(idCodigoSocioOld)) {
+                idCodigoSocioNew.getCreditoCollection().add(credito);
+                idCodigoSocioNew = em.merge(idCodigoSocioNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -110,10 +110,10 @@ public class CreditoJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The credito with id " + id + " no longer exists.", enfe);
             }
-            Socios codigoCredito = credito.getCodigoCredito();
-            if (codigoCredito != null) {
-                codigoCredito.getCreditoCollection().remove(credito);
-                codigoCredito = em.merge(codigoCredito);
+            Socios idCodigoSocio = credito.getIdCodigoSocio();
+            if (idCodigoSocio != null) {
+                idCodigoSocio.getCreditoCollection().remove(credito);
+                idCodigoSocio = em.merge(idCodigoSocio);
             }
             em.remove(credito);
             em.getTransaction().commit();
@@ -154,6 +154,23 @@ public class CreditoJpaController implements Serializable {
             return em.find(Credito.class, id);
         } finally {
             em.close();
+        }
+    }
+    
+    public Credito findCreditoSocio(Socios socio) {
+        EntityManager em = getEntityManager();
+        Query buscar = em.createNamedQuery("Credito.findBySocio");
+        buscar.setParameter("socio", socio);
+        List<Credito> creditoList = buscar.getResultList();
+        if (!creditoList.isEmpty()) {
+            try {
+                return creditoList.get(0);
+            } finally {
+                em.close();
+            }
+
+        }else{
+            return null;
         }
     }
 
