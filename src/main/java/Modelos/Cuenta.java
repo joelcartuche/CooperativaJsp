@@ -42,21 +42,26 @@ public class Cuenta implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_cuenta")
     private Integer idCuenta;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 200)
     @Column(name = "usuario")
     private String usuario;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 200)
     @Column(name = "password")
     private String password;
+    
     @Column(name = "es_eliminado")
     private Boolean esEliminado;
+    
     @JoinColumn(name = "id_rol", referencedColumnName = "id_rol")
     @ManyToOne(optional = false)
     private Rol idRol;
+    
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     @OneToOne(optional = false)
     private Usuario idUsuario;

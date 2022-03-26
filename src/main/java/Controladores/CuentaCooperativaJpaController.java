@@ -230,6 +230,32 @@ public class CuentaCooperativaJpaController implements Serializable {
             em.close();
         }
     }
+    
+    public CuentaCooperativa findNumeroCuentaCooperativa (String numCuenta) {
+        EntityManager em = getEntityManager();
+        Query buscar = em.createNamedQuery("CuentaCooperativa.findByNumeroCuenta");
+        buscar.setParameter("numeroCuenta", numCuenta);
+        List<CuentaCooperativa> cuentaLista = buscar.getResultList();
+        try {
+            return cuentaLista.get(0);
+        } catch (Exception e) {
+            em.close();
+            return null;
+        }
+    }
+    
+    public CuentaCooperativa findBySocioId (int idSocio) {
+        EntityManager em = getEntityManager();
+        Query buscar = em.createNamedQuery("CuentaCooperativa.findByIdSocio");
+        buscar.setParameter("idSocio", idSocio);
+        List<CuentaCooperativa> cuentaLista = buscar.getResultList();
+        try {
+            return cuentaLista.get(0);
+        } catch (Exception e) {
+            em.close();
+            return null;
+        }
+    }
 
     public int getCuentaCooperativaCount() {
         EntityManager em = getEntityManager();

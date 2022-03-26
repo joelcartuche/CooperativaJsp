@@ -1,12 +1,11 @@
 <%-- 
     Document   : addParnet
     Created on : 15 mar 2022, 21:27:14
-    Author     : LENOVO
+    Author     : jede
 --%>
 
 <%@page import="Modelos.Socios"%>
 <%@page import="Controladores.SociosJpaController"%>
-<%@page import="Utilidades.Dominio"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <jsp:include page="../Template/layout.jsp"></jsp:include>
@@ -17,7 +16,6 @@
             response.sendRedirect("../login.jsp");
     }
 
-    Dominio dom = new Dominio();
     boolean estadoSocio = (Boolean) request.getAttribute("estado");
 %>
 
@@ -32,7 +30,7 @@
         <div class="row mt-4 mb-5 justify-content-center">
             <div class="col-12 col-md-8">
 
-                <div id="errorlAlert" class="alert alert-danger" role="alert">
+                <div id="errorlAlert" class="alert alert-danger" role="alert" style="display: none">
                     A simple danger alert
                 </div>
 
@@ -118,14 +116,10 @@
 </main>
 <script>
     $(document).ready(function () {
-        //ocultamos los divs de alertas
-        //$('#errorName').hide();
-        $('#errorlAlert').hide();
-        $('#successAlert').hide();
 
         $("#botonenviar").click(function () {     // Con esto establecemos la acción por defecto de nuestro botón de enviar.
             if (validaForm()) {                               // Primero validará el formulario.
-                $.post("<%=dom.getDominio()%>Socio?accion=editar", $("#formdata").serialize(), function (res) {
+                $.post("Socio?accion=editar", $("#formdata").serialize(), function (res) {
                     if (res.error) {
                         $('#errorlAlert').show();
                         $('#errorlAlert').text(res.error);
@@ -151,25 +145,25 @@
 
     function validaForm() {
         // Campos de texto
-        if ($("#inputName").val() == "") {
+        if ($("#inputName").val() === "") {
             $('#errorName').show();
             $('#inputName').addClass("is-invalid");
             $("#inputName").focus();
             return false;
         }
-        if ($("#inputLatName").val() == "") {
+        if ($("#inputLatName").val() === "") {
             $('#errorLastName').show();
             $('#inputLatName').addClass("is-invalid");
             $("#inputLatName").focus();
             return false;
         }
-        if ($("#inputCi").val() == "") {
+        if ($("#inputCi").val() === "") {
             $('#errorCi').show();
             $('#inputCi').addClass("is-invalid");
             $("#inputCi").focus();
             return false;
         }
-        if ($("#inputPhone").val() == "") {
+        if ($("#inputPhone").val() === "") {
             $('#errorPhone').show();
             $('#inputPhone').addClass("is-invalid");
             $("#inputPhone").focus();

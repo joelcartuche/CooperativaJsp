@@ -9,6 +9,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -43,30 +44,37 @@ public class Usuario implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_usuario")
     private Integer idUsuario;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 150)
     @Column(name = "nombre_usuario")
     private String nombreUsuario;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 150)
     @Column(name = "apellido_usuario")
     private String apellidoUsuario;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 10)
     @Column(name = "cedula_usuario")
     private String cedulaUsuario;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 10)
     @Column(name = "telefono_usuario")
     private String telefonoUsuario;
+    
     @Column(name = "es_eliminado")
     private Boolean esEliminado;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idUsuario")
+        
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idUsuario", fetch = FetchType.LAZY)
     private CuentaCooperativa cuentaCooperativa;
+    
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "idUsuario")
     private Cuenta cuenta;
 

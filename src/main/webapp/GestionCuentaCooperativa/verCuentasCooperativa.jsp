@@ -1,11 +1,10 @@
 <%-- 
-    Document   : viewParnet
-    Created on : 19 mar 2022, 6:29:45
+    Document   : verCuentasCooperativa
+    Created on : 24 mar 2022, 18:02:21
     Author     : jede
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
 
 <jsp:include page="../Template/layout.jsp"></jsp:include>
 
@@ -15,18 +14,62 @@
             response.sendRedirect("../login.jsp");
     }
 
-    boolean estadoSocio = (Boolean) request.getAttribute("estado");
-    boolean estadoCuentaCooperativa = (Boolean) request.getAttribute("estadoCuentaCooperativa");
+    boolean esEliminadoCuenta = (Boolean) request.getAttribute("esEliminadoCuenta");
+    boolean esEliminadoSocio = (Boolean) request.getAttribute("esEliminadoSocio");
+    boolean esEliminadoUsuario = (Boolean) request.getAttribute("esEliminadoUsuario");
 %>
 
 <main>
     <div class="container-fluid">
 
+        <div class="row mt-2 mb-5 justify-content-center">
+            <div class="col-12 col-md-9">
+                <div class="card">
+                    <div class="card-header fw-bold">
+                        Información de Cuenta Cooperativa
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 d-flex align-items-center">
+                                <span class="fw-bold me-2 text-muted">N° de Cuenta:</span><span>${cuentaCooperativa.getNumeroCuenta()}</span>
+                            </div>
+                            <div class="col-md-6 d-flex align-items-center mt-2">
+                                <span class="fw-bold me-2 text-muted">Estado:</span>
+                                <% if (!esEliminadoCuenta) {%>
+                                <span class="my-estado-activo">
+                                    Activo
+                                </span>
+                                <%
+                                } else {
+                                %>
+                                <span class="my-estado-inactivo">
+                                    Inactivo
+                                </span>
+                                <%
+                                    }
+                                %>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 d-flex align-items-center">
+                                <span class="fw-bold me-2 text-muted">Nombre de la Cuenta:</span><span>${cuentaCooperativa.getNombreCuenta()}</span>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-6 d-flex align-items-center">
+                                <span class="fw-bold me-2 text-muted">Código de la Cuenta:</span><span>${cuentaCooperativa.getCodigoCuenta()}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row mt-4 mb-4 justify-content-center">
             <div class="col-12 col-md-9">
                 <div class="card">
                     <div class="card-header fw-bold">
-                        Información de Socio
+                        Información del Socio
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -35,7 +78,7 @@
                             </div>
                             <div class="col-md-6 d-flex align-items-center mt-2">
                                 <span class="fw-bold me-2 text-muted">Estado:</span>
-                                <% if (!estadoSocio) {%>
+                                <% if (!esEliminadoSocio) {%>
                                 <span class="my-estado-activo">
                                     Activo
                                 </span>
@@ -76,20 +119,20 @@
             </div>
         </div>
 
-        <div class="row mt-2 mb-5 justify-content-center">
+        <div class="row mt-4 mb-4 justify-content-center">
             <div class="col-12 col-md-9">
                 <div class="card">
                     <div class="card-header fw-bold">
-                        Información de Cuenta de Socio
+                        Información del Usuario
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6 d-flex align-items-center">
-                                <span class="fw-bold me-2 text-muted">N° de Cuenta:</span><span>${cuentaCooperativa.getNumeroCuenta()}</span>
+                                <span class="fw-bold me-2 text-muted">Nombres:</span><span>${usuario.getNombreUsuario()}</span>
                             </div>
                             <div class="col-md-6 d-flex align-items-center mt-2">
                                 <span class="fw-bold me-2 text-muted">Estado:</span>
-                                <% if (!estadoCuentaCooperativa) {%>
+                                <% if (!esEliminadoUsuario) {%>
                                 <span class="my-estado-activo">
                                     Activo
                                 </span>
@@ -106,18 +149,25 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 d-flex align-items-center">
-                                <span class="fw-bold me-2 text-muted">Nombre de la Cuenta:</span><span>${cuentaCooperativa.getNombreCuenta()}</span>
+                                <span class="fw-bold me-2 text-muted">Apellidos:</span><span>${usuario.getApellidoUsuario()}</span>
                             </div>
                         </div>
                         <div class="row mt-2">
                             <div class="col-md-6 d-flex align-items-center">
-                                <span class="fw-bold me-2 text-muted">Código de la Cuenta:</span><span>${cuentaCooperativa.getCodigoCuenta()}</span>
+                                <span class="fw-bold me-2 text-muted">Cédula:</span><span>${usuario.getCedulaUsuario()}</span>
                             </div>
+                            <div class="col-md-6 d-flex align-items-center">
+                                <span class="fw-bold me-2 text-muted">Teléfono:</span><span>${usuario.getTelefonoUsuario()}</span>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <a type="button" href="EditarUsuario?id=${usuario.getIdUsuario()}" class="btn btn-primary">Editar información <i class="fa fa-pencil" aria-hidden="true"></i></a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
 
     </div>
 

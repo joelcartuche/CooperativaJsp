@@ -11,15 +11,17 @@
         response.sendRedirect("login.jsp");
     }
 %>
-<%
-    String id = request.getParameter("id");
-    String nombre = request.getParameter("user");
-
-%>
 <main>
     <div class="container-fluid">
+        <div class="row mt-4">
+            <div class="col-md-12 fs-3 text-center">
+                <h2>Bienvenido <span class="text-success"><%=sesion.getAttribute("nombre")%> <%=sesion.getAttribute("apellido")%></span></h2>
+            </div>
+        </div>
         <div class="row">
-            <div class="col-md-12 fw-bold fs-3 text-center">Bienvenido <%=nombre%></div>
+            <div class="col-md-12 fs-3 text-center">
+                <span class="fw-bold">Rol: </span><span class="text-success"><%=sesion.getAttribute("rol")%></span>
+            </div>
         </div>
     </div>
 </main>

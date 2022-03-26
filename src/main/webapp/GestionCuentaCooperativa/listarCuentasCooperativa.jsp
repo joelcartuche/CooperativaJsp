@@ -1,13 +1,14 @@
 <%-- 
-    Document   : listParnets
-    Created on : 15 mar 2022, 18:57:30
+    Document   : listarCuentasCooperativa
+    Created on : 24 mar 2022, 17:26:45
     Author     : jede
 --%>
 
-<%@page import="Modelos.Socios"%>
+<%@page import="Controladores.CuentaCooperativaJpaController"%>
+<%@page import="Modelos.CuentaCooperativa"%>
 <%@page import="java.util.List"%>
-<%@page import="Controladores.SociosJpaController"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 
 <jsp:include page="../Template/layout.jsp"></jsp:include>
 
@@ -17,18 +18,18 @@
             response.sendRedirect("../login.jsp");
     }
 
-    SociosJpaController sociosJpaController = new SociosJpaController();
-    List<Socios> listaSocio = sociosJpaController.findSociosEntities();
+    CuentaCooperativaJpaController cuentaCooperativaJpaController = new CuentaCooperativaJpaController();
+    List<CuentaCooperativa> listaCuentas = cuentaCooperativaJpaController.findCuentaCooperativaEntities();
 %>
 
 <main>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12 fw-bold fs-3 text-center">Lista de Socios</div>
+            <div class="col-md-12 fw-bold fs-3 text-center">Lista de Cuentas Cooperativa</div>
         </div>
         <div class="row mt-4 justify-content-center">
             <div class="col-12 col-md-11">
-                <%                    if (listaSocio.isEmpty()) {
+                <%                    if (listaCuentas.isEmpty()) {
                 %>
                 <div class="alert alert-primary" role="alert">
                     No hay Socios registrados.
@@ -38,29 +39,29 @@
                 } else {
                 %>
                 <table class="table">
-                    <thead>
-                        <tr class="table-info">
+                    <thead class="table-primary">
+                        <tr>
                             <th scope="col">Id</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Apellido</th>
-                            <th scope="col">Cédula</th>
-                            <th scope="col">Teléfono</th>
-                            <th scope="col">Estado</th>
+                            <th scope="col">Número Cuenta</th>
+                            <th scope="col">Nombre Cuenta</th>
+                            <th scope="col">Código Cuenta</th>
+                            <th scope="col">Nombre Socio</th>
+                            <th scope="col">Estado Cuenta</th>
                             <th scope="col">Opciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <%
-                            for (Socios socio : listaSocio) {
+                            for (CuentaCooperativa cuenta : listaCuentas) {
                         %>
                         <tr>
-                            <td><%=socio.getIdSocios()%></th>
-                            <td><%=socio.getNombreSocio()%></td>
-                            <td><%=socio.getApellidoSocio()%></td>
-                            <td><%=socio.getCedulaSocio()%></td>
-                            <td><%=socio.getTelefonoSocio()%></td>
+                            <td><%=cuenta.getIdCuentaCooperativa()%></th>
+                            <td><%=cuenta.getNumeroCuenta()%></td>
+                            <td><%=cuenta.getNombreCuenta()%></td>
+                            <td><%=cuenta.getCodigoCuenta()%></td>
+                            <td><%=cuenta.getIdSocios().getNombreSocio()%></td>
                             <td>
-                                <% if (!socio.getEsEliminado()) {%>
+                                <% if (!cuenta.getEsEliminado()) {%>
                                 <span class="my-estado-activo">
                                     Activo
                                 </span>
@@ -74,15 +75,15 @@
                                     }
                                 %></td>
                             <td>
-                                <a type="button" href="Socio?accion=ver&id=<%=socio.getIdSocios()%>" class="btn btn-info"><i class="bi bi-eye text-white"></i></a>
-                                <a type="button" href="Socio?accion=editar&id=<%=socio.getIdSocios()%>" class="btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                    
-                                <% if (!socio.getEsEliminado()) {%>
-                                <a type="button" href="Socio?accion=eliminar&id=<%=socio.getIdSocios()%>&esEliminado=<%=socio.getEsEliminado()%>" class="btn btn-danger"><i class="fa fa-trash-o fa-lg"></i> </a>
+                                <a type="button" href="CuentasCooperativa?accion=ver&id=<%=cuenta.getIdCuentaCooperativa()%>" class="btn btn-info"><i class="bi bi-eye text-white"></i></a>
+                                <a type="button" href="CuentasCooperativa?accion=editar&id=<%=cuenta.getIdCuentaCooperativa()%>" class="btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+
+                                <% if (!cuenta.getEsEliminado()) {%>
+                                <a type="button" href="CuentasCooperativa?accion=eliminar&id=<%=cuenta.getIdCuentaCooperativa()%>&esEliminado=<%=cuenta.getEsEliminado()%>" class="btn btn-danger"><i class="fa fa-trash-o fa-lg"></i> </a>
                                 <%
                                 } else {
                                 %>
-                                <a type="button" href="Socio?accion=eliminar&id=<%=socio.getIdSocios()%>&esEliminado=<%=socio.getEsEliminado()%>" class="btn btn-success">Activar </a>
+                                <a type="button" href="CuentasCooperativa?accion=eliminar&id=<%=cuenta.getIdCuentaCooperativa()%>&esEliminado=<%=cuenta.getEsEliminado()%>" class="btn btn-success">Activar </a>
                                 <%
                                     }
                                 %></td>

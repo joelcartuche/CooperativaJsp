@@ -1,6 +1,6 @@
 <%-- 
-    Document   : deleteParnet
-    Created on : 19 mar 2022, 4:56:59
+    Document   : borrarCuentaCooperativa
+    Created on : 24 mar 2022, 21:32:26
     Author     : jede
 --%>
 
@@ -27,11 +27,11 @@
                     <%
                         if (Boolean.parseBoolean(esEliminado)) {
                     %>
-                    Activar Socio
+                    Activar Cuenta Cooperativa
                     <%
                     } else {
                     %>
-                    Eliminar Socio
+                    Eliminar Cuenta Cooperativa
                     <%
                         }
                     %>
@@ -41,11 +41,11 @@
                 <%
                     if (Boolean.parseBoolean(esEliminado)) {
                 %>
-                ¿Desea Activar Socio?
+                ¿Desea Activar Cuenta Cooperativa?
                 <%
                 } else {
                 %>
-                ¿Desea Desactivar Socio?
+                ¿Desea Desactivar Cuenta Cooperativa?
                 <%
                     }
                 %>
@@ -73,15 +73,15 @@
     myModal.show();
     $(document).ready(function () {
         $('#no').click(function (event) {
-            window.location.replace("Socio?accion=listar");
+            window.location.replace("CuentasCooperativa?accion=listar");
         });
         $('#si').click(function (event) {
-            $.post("Socio?accion=eliminar", {
+            $.post("CuentasCooperativa?accion=eliminar", {
                 id:<%=id%>,
                 esEliminado:<%=esEliminado%>
             }, function (res) {
                 if (res.message) {
-                    window.location.replace("Socio?accion=listar");
+                    window.location.replace("CuentasCooperativa?accion=listar");
                 }
             });
         });

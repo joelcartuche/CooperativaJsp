@@ -9,6 +9,7 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -43,19 +44,23 @@ public class Deposito implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_deposito")
     private Integer idDeposito;
+    
     @Basic(optional = false)
     @NotNull
     @Column(name = "monto_deposito")
     private float montoDeposito;
+    
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_deposito")
     @Temporal(TemporalType.DATE)
     private Date fechaDeposito;
+    
     @Column(name = "es_eliminado")
     private Boolean esEliminado;
+    
     @JoinColumn(name = "codigo_socio", referencedColumnName = "codigo_socio")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Socios codigoSocio;
 
     public Deposito() {

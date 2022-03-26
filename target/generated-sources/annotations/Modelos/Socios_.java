@@ -1,6 +1,9 @@
 package Modelos;
 
 import Modelos.Credito;
+import Modelos.CuentaCooperativa;
+import Modelos.Depositos;
+import Modelos.Retiro;
 import javax.annotation.Generated;
 import javax.persistence.metamodel.CollectionAttribute;
 import javax.persistence.metamodel.SingularAttribute;
@@ -17,6 +20,10 @@ public class Socios_ {
     public static volatile SingularAttribute<Socios, Integer> codigoSocio;
     public static volatile SingularAttribute<Socios, Integer> idSocios;
     public static volatile SingularAttribute<Socios, String> cedulaSocio;
+    public static volatile SingularAttribute<Socios, Credito> credito;
+    public static volatile SingularAttribute<Socios, CuentaCooperativa> cuentaCooperativa;
+    public static volatile SingularAttribute<Socios, Depositos> deposito;
+    public static volatile SingularAttribute<Socios, Retiro> retiro;
     public static volatile SingularAttribute<Socios, String> nombreSocio;
     public static volatile SingularAttribute<Socios, Boolean> esEliminado;
 

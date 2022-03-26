@@ -210,6 +210,18 @@ public class SociosJpaController implements Serializable {
             em.close();
         }
     }
+    
+    public Socios findByCedulaSocio (String cedula) {
+        EntityManager em = getEntityManager();
+        Query buscar = em.createNamedQuery("Socios.findByCedulaSocio");
+        buscar.setParameter("cedulaSocio", cedula);
+        List<Socios> socioLista = buscar.getResultList();
+        try {
+            return socioLista.get(0);
+        } finally {
+            em.close();
+        }
+    }
 
     public int getSociosCount() {
         EntityManager em = getEntityManager();
