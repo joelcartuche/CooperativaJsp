@@ -9,7 +9,6 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,7 +34,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Deposito.findByIdDeposito", query = "SELECT d FROM Deposito d WHERE d.idDeposito = :idDeposito"),
     @NamedQuery(name = "Deposito.findByMontoDeposito", query = "SELECT d FROM Deposito d WHERE d.montoDeposito = :montoDeposito"),
     @NamedQuery(name = "Deposito.findByFechaDeposito", query = "SELECT d FROM Deposito d WHERE d.fechaDeposito = :fechaDeposito"),
-    @NamedQuery(name = "Deposito.findByEsEliminado", query = "SELECT d FROM Deposito d WHERE d.esEliminado = :esEliminado")})
+    @NamedQuery(name = "Deposito.findByEsEliminado", query = "SELECT d FROM Deposito d WHERE d.esEliminado = :esEliminado"),
+    @NamedQuery(name = "Deposito.findByFechaIncioFechaFin", query = "SELECT d FROM Deposito d WHERE d.fechaDeposito>= :fechaInicio AND d.fechaDeposito<= :fechaFin")})
 public class Deposito implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,23 +44,19 @@ public class Deposito implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_deposito")
     private Integer idDeposito;
-    
     @Basic(optional = false)
     @NotNull
     @Column(name = "monto_deposito")
     private float montoDeposito;
-    
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_deposito")
     @Temporal(TemporalType.DATE)
     private Date fechaDeposito;
-    
     @Column(name = "es_eliminado")
     private Boolean esEliminado;
-    
     @JoinColumn(name = "codigo_socio", referencedColumnName = "codigo_socio")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     private Socios codigoSocio;
 
     public Deposito() {

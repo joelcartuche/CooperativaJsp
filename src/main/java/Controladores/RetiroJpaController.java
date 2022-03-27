@@ -5,8 +5,10 @@
 package Controladores;
 
 import Controladores.exceptions.NonexistentEntityException;
+import Modelos.Deposito;
 import Modelos.Retiro;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -124,6 +126,28 @@ public class RetiroJpaController implements Serializable {
             em.close();
         }
     }
+    //Retiro.findByFechaIncioFechaFin
+    
+    public List<Retiro> findRetiroFechaInicioFin(Date fechaInicio,Date fechaFin){
+        EntityManager em = getEntityManager();
+        Query buscar = em.createNamedQuery("Retiro.findByFechaIncioFechaFin");
+        buscar.setParameter("fechaInicio", fechaInicio);
+        buscar.setParameter("fechaFin", fechaFin);
+        List<Retiro> retiroList = buscar.getResultList();
+        if (!retiroList.isEmpty()) {
+
+            try {
+                return retiroList;
+            } finally {
+                em.close();
+            }
+
+        }else{
+            return null;
+        }
+
+    }
+    
 
     public int getRetiroCount() {
         EntityManager em = getEntityManager();

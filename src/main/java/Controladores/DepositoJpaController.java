@@ -6,7 +6,9 @@ package Controladores;
 
 import Controladores.exceptions.NonexistentEntityException;
 import Modelos.Deposito;
+import Modelos.Socios;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -123,6 +125,28 @@ public class DepositoJpaController implements Serializable {
         } finally {
             em.close();
         }
+    }
+    
+    public List<Deposito> findDepositoFechaInicioFin(Date fechaInicio,Date fechaFin){
+        EntityManager em = getEntityManager();
+        Query buscar = em.createNamedQuery("Deposito.findByFechaIncioFechaFin");
+        buscar.setParameter("fechaInicio", fechaInicio);
+        buscar.setParameter("fechaFin", fechaFin);
+        List<Deposito> depositoList = buscar.getResultList();
+        if (!depositoList.isEmpty()) {
+
+            System.out.println(depositoList.get(0).getIdDeposito());
+
+            try {
+                return depositoList;
+            } finally {
+                em.close();
+            }
+
+        }else{
+            return null;
+        }
+
     }
 
     public int getDepositoCount() {

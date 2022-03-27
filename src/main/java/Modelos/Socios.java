@@ -5,14 +5,11 @@
 package Modelos;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -51,54 +48,46 @@ public class Socios implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_socios")
     private Integer idSocios;
-    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 150)
     @Column(name = "nombre_socio")
     private String nombreSocio;
-    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 150)
     @Column(name = "apellido_socio")
     private String apellidoSocio;
-    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 150)
     @Column(name = "cedula_socio")
     private String cedulaSocio;
-    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 150)
     @Column(name = "telefono_socio")
     private String telefonoSocio;
-    
     @Size(max = 300)
     @Column(name = "direccion_socio")
     private String direccionSocio;
-    
     @Column(name = "es_eliminado")
     private Boolean esEliminado;
-    
     @Basic(optional = false)
     @NotNull
     @Column(name = "codigo_socio")
     private int codigoSocio;
-    
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idSocios", fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idSocios")
     private CuentaCooperativa cuentaCooperativa;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoSocio")
-    private List<Deposito> deposito = new ArrayList<>();
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoSocio")
-    private List<Retiro> retiro = new ArrayList<>();
-        
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCodigoSocio", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCodigoSocio")
     private Collection<Credito> creditoCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoSocio")
+    private Collection<Deposito> depositoCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoSocio")
+    private Collection<Retiro> retiroCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoSocio")
+    private Collection<Aportes> aportesCollection;
+
 
     public Socios() {
     }
@@ -188,22 +177,6 @@ public class Socios implements Serializable {
         this.cuentaCooperativa = cuentaCooperativa;
     }
 
-    public List<Deposito> getDeposito() {
-        return deposito;
-    }
-
-    public void setDeposito(List<Deposito> deposito) {
-        this.deposito = deposito;
-    }
-
-    public List<Retiro> getRetiro() {
-        return retiro;
-    }
-
-    public void setRetiro(List<Retiro> retiro) {
-        this.retiro = retiro;
-    }
-    
     @XmlTransient
     public Collection<Credito> getCreditoCollection() {
         return creditoCollection;
@@ -211,6 +184,33 @@ public class Socios implements Serializable {
 
     public void setCreditoCollection(Collection<Credito> creditoCollection) {
         this.creditoCollection = creditoCollection;
+    }
+
+    @XmlTransient
+    public Collection<Deposito> getDepositoCollection() {
+        return depositoCollection;
+    }
+
+    public void setDepositoCollection(Collection<Deposito> depositoCollection) {
+        this.depositoCollection = depositoCollection;
+    }
+
+    @XmlTransient
+    public Collection<Retiro> getRetiroCollection() {
+        return retiroCollection;
+    }
+
+    public void setRetiroCollection(Collection<Retiro> retiroCollection) {
+        this.retiroCollection = retiroCollection;
+    }
+
+    @XmlTransient
+    public Collection<Aportes> getAportesCollection() {
+        return aportesCollection;
+    }
+
+    public void setAportesCollection(Collection<Aportes> aportesCollection) {
+        this.aportesCollection = aportesCollection;
     }
 
     @Override

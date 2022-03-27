@@ -59,11 +59,11 @@ public class TasaAmortizacion implements Serializable {
     private Integer numeroPagos;
     @Column(name = "es_eliminado")
     private Boolean esEliminado;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 200)
+    @Size(max = 200)
     @Column(name = "forma_pago")
     private String formaPago;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "es_pagado")
     private boolean esPagado;
     @Column(name = "fecha_pago")
@@ -92,9 +92,8 @@ public class TasaAmortizacion implements Serializable {
         this.idTasaAmortizacion = idTasaAmortizacion;
     }
 
-    public TasaAmortizacion(Integer idTasaAmortizacion, String formaPago, boolean esPagado) {
+    public TasaAmortizacion(Integer idTasaAmortizacion, boolean esPagado) {
         this.idTasaAmortizacion = idTasaAmortizacion;
-        this.formaPago = formaPago;
         this.esPagado = esPagado;
     }
 

@@ -5,7 +5,9 @@
 package Modelos;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,9 +17,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -53,6 +57,8 @@ public class Credito implements Serializable {
     @NotNull
     @Column(name = "codigo_credito")
     private int codigoCredito;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoCredito")
+    private Collection<TasaAmortizacion> tasaAmortizacionCollection;
     @JoinColumn(name = "id_codigo_socio", referencedColumnName = "codigo_socio")
     @ManyToOne(optional = false)
     private Socios idCodigoSocio;
@@ -107,6 +113,15 @@ public class Credito implements Serializable {
 
     public void setCodigoCredito(int codigoCredito) {
         this.codigoCredito = codigoCredito;
+    }
+
+    @XmlTransient
+    public Collection<TasaAmortizacion> getTasaAmortizacionCollection() {
+        return tasaAmortizacionCollection;
+    }
+
+    public void setTasaAmortizacionCollection(Collection<TasaAmortizacion> tasaAmortizacionCollection) {
+        this.tasaAmortizacionCollection = tasaAmortizacionCollection;
     }
 
     public Socios getIdCodigoSocio() {
