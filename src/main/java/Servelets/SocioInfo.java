@@ -98,7 +98,7 @@ public class SocioInfo extends HttpServlet {
                             // verifico si el socio esta registrado
                             if (socio != null) {
                                 // obtengo la lista de depositos
-                                List<Deposito> listaDeposito = socio.getDeposito();
+                                List<Deposito> listaDeposito = (List<Deposito>) socio.getDepositoCollection();
                                 // verifico si el hay algun deposito
                                 if (listaDeposito.size() > 0) {
                                     // creo un json array para guardar los depositos
@@ -165,7 +165,7 @@ public class SocioInfo extends HttpServlet {
                             // verifico si el socio esta registrado
                             if (socio != null) {
                                 // obtengo la lista de retiros
-                                List<Retiro> listaRetiro = socio.getRetiro();
+                                List<Retiro> listaRetiro = (List<Retiro>) socio.getRetiroCollection();
                                 // verifico si el hay algun retiro
                                 if (listaRetiro.size() > 0) {
                                     // creo un json array para guardar los retiros

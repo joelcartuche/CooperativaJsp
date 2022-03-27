@@ -59,7 +59,7 @@
                                 <input type="password" id="password" class="form-control my-4 py-2" placeholder="Contraseña">
                                 <div class="text-center mt-3">
                                     <input type="button"  id="submit" class="btn btn-primary" value="Iniciar sesión" />
-                                    <a href="/" class="nav-link">Volver al inicio</a>
+                                    <a href="/Cooperativa" class="nav-link">Volver al inicio</a>
                                 </div>
                             </form>
                         </div>
