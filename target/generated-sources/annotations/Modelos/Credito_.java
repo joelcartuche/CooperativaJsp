@@ -1,14 +1,17 @@
 package Modelos;
 
 import Modelos.Socios;
+import Modelos.TasaAmortizacion;
 import javax.annotation.Generated;
+import javax.persistence.metamodel.CollectionAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.7.9.v20210604-rNA", date="2022-03-24T13:53:07")
+@Generated(value="EclipseLink-2.7.9.v20210604-rNA", date="2022-03-26T23:24:06")
 @StaticMetamodel(Credito.class)
 public class Credito_ { 
 
+    public static volatile CollectionAttribute<Credito, TasaAmortizacion> tasaAmortizacionCollection;
     public static volatile SingularAttribute<Credito, Integer> idCredito;
     public static volatile SingularAttribute<Credito, Socios> idCodigoSocio;
     public static volatile SingularAttribute<Credito, Float> montoCredito;

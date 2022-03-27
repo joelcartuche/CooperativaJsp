@@ -1,3 +1,4 @@
+Servelets\Home.class
 Modelos\Cuenta.class
 Servelets\EditarUsuario.class
 Servelets\EditarCredito.class
@@ -15,6 +16,7 @@ Controladores\TasaAmortizacionJpaController.class
 Servelets\CrearRol.class
 Servelets\EditarRol.class
 Servelets\BorrarRol.class
+Servelets\GenerarReporte.class
 Servelets\CrearCredito.class
 Modelos\Aportes.class
 Controladores\CuentaJpaController.class
@@ -22,6 +24,7 @@ Utilidades\Dominio.class
 Modelos\Credito_.class
 Servelets\BuscarUsuarioId.class
 Modelos\Deposito_.class
+Servelets\PagarLetra.class
 Modelos\TasaAmortizacion_.class
 Modelos\CuentaCooperativa_.class
 Modelos\Usuario.class
@@ -33,14 +36,18 @@ Controladores\exceptions\PreexistingEntityException.class
 Modelos\Credito.class
 Modelos\CuentaCooperativa.class
 Servelets\Socio.class
+Servelets\Retiros.class
 Servelets\BorrarUsuario.class
 Servelets\Login.class
 Controladores\AportesJpaController.class
 Modelos\Reportes.class
+Servelets\CuentasCooperativa.class
 Servelets\BorrarCuenta.class
 Servelets\EditarCuenta.class
 Controladores\UsuarioJpaController.class
 Controladores\exceptions\NonexistentEntityException.class
+Servelets\Depositos.class
+Servelets\BuscarCredito.class
 Servelets\GenerarTasaAmortizacion.class
 Modelos\Aportes_.class
 Controladores\DepositoJpaController.class

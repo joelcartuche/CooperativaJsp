@@ -14,7 +14,6 @@
             response.sendRedirect("../login.jsp");
     }
 %>
-
 <main>
     <div class="container-fluid">
 
