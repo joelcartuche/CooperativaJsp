@@ -9,6 +9,7 @@ import Controladores.CuentaJpaController;
 import Modelos.Cuenta;
 import Modelos.CuentaCooperativa;
 import Modelos.Deposito;
+import Modelos.Retiro;
 import Modelos.Socios;
 import Modelos.Usuario;
 import java.io.IOException;
@@ -111,6 +112,7 @@ public class SocioInfo extends HttpServlet {
                                     }
                                     // presento la respuesta
                                     jsonResultado.put("message", "OK");
+                                    jsonResultado.put("operacion", "Depósito");
                                     jsonResultado.put("depositos", ja);
                                 } else {
                                     jsonResultado.put("info", "No ha realizado ningún depósito");
@@ -137,6 +139,74 @@ public class SocioInfo extends HttpServlet {
                 }
             }
         }
+        
+        
+        // REALIZO LA BUSQUEDA DE TODOS LOS RETIROS
+        if (action.equalsIgnoreCase("retiros")) {
+            // obtengo el id de la cuenta del usuario
+            int idCuenta = Integer.parseInt((String) request.getParameter("id"));
+            // declaro un objeto json para las respuestas
+            JSONObject jsonResultado = new JSONObject(); 
+            try ( PrintWriter out = response.getWriter()) {
+                try {
+                    // realizo la busqueda de la cuenta por el id
+                    CuentaJpaController cuentaJpaController = new CuentaJpaController();
+                    Cuenta cuenta = cuentaJpaController.findCuenta(idCuenta);
+                    // obtengo el usuario
+                    Usuario usuario = cuenta.getIdUsuario();
+                    // verifico si el usuario está registrado
+                    if (usuario != null) {
+                        // obtengo la cuenta cooperativa del usuario
+                        CuentaCooperativa cuentaCooperativa = usuario.getCuentaCooperativa();
+                        // verifico si la cuenta cooperativa está creada
+                        if (cuentaCooperativa != null) {
+                            // obtengo el socio
+                            Socios socio = cuentaCooperativa.getIdSocios();
+                            // verifico si el socio esta registrado
+                            if (socio != null) {
+                                // obtengo la lista de retiros
+                                List<Retiro> listaRetiro = socio.getRetiro();
+                                // verifico si el hay algun retiro
+                                if (listaRetiro.size() > 0) {
+                                    // creo un json array para guardar los retiros
+                                    JSONArray ja = new JSONArray();
+                                    // itero la lista y guardo el retiro en el json array
+                                    for(Retiro retiro : listaRetiro) {
+                                        JSONObject jsonDeposito = new JSONObject();
+                                        jsonDeposito.put("monto", Math.round(retiro.getMontoRetiro()*100.0)/100.0);
+                                        jsonDeposito.put("fecha", new SimpleDateFormat("dd/MM/yyyy").format(retiro.getFechaRetiro()));
+                                        ja.put(jsonDeposito);
+                                    }
+                                    // presento la respuesta
+                                    jsonResultado.put("message", "OK");
+                                    jsonResultado.put("operacion", "Retiro");
+                                    jsonResultado.put("retiros", ja);
+                                } else {
+                                    jsonResultado.put("info", "No ha realizado ningún retiro");
+                                }
+                            } else {
+                                jsonResultado.put("error", "No está registrado como Socio de la Cooperativa");
+                            }
+                        } else {
+                            jsonResultado.put("error", "No posee una cuenta cooperativa");
+                        }
+                    } else {
+                        jsonResultado.put("error", "No posee una cuenta usuario");
+                    }
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.setStatus(200);
+                    out.print(jsonResultado);
+
+                } catch (Exception e) {
+                    String salida = "{\"error\":\"Lo sentimos, no se encontró el número de cuenta\"}";
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    out.print(salida);
+                }
+            }
+        }
+        
 
     }
 

@@ -170,7 +170,7 @@
                             res.depositos?.map(deposito => {
                                 datos += "<tr>\n\
                             <td>" + deposito.fecha + "</td>\n\
-                            <td>" + "Depósito" + "</td>\n\
+                            <td>" + res.operacion + "</td>\n\
                             <td>$ " + deposito.monto + "</td>\n\
                             </tr>";
                             })
@@ -183,6 +183,57 @@
                     });
                     ;
                 });
+                
+                
+                // FUNCION PARA OBTENER LOS RETIROS
+                $("#btnRetiro").click(function () {
+                    // agrego algunas clases a los btn depositar y retirar
+                    $("#btnRetiro").addClass("active")
+                    $("#btnDeposito").removeClass("active")
+                    // remover las filas de la tabla
+                    $('#tableSuccess>tbody').find("tr").remove();
+                    // enviamos la peticion por el metodo POST
+                    $.post("SocioInfo?accion=retiros", {
+                        id: <%=sesion2.getAttribute("id")%>,
+                    }, function (res) {
+                        // si existe un error, se presenta un alert
+                        if (res.error) {
+                            $('#errorAlert').text(res.error);
+                            $('#errorAlert').show();
+                        }
+                        // si existe una informacion por el servidor, se presenta un alert
+                        if (res.info) {
+                            $('#infoAlert').text(res.info);
+                            $('#infoAlert').show();
+                        }
+                        // si la respuesta del servidor es OK
+                        if (res.message) {
+                            // se presenta un toast de confirmacion
+                            $('#liveToast').toast('show');
+                            // se borra cualquier alert
+                            $('#errorAlert').hide();
+                            $('#infoAlert').hide();
+                            // se crea una variable para almacenar la estructura de las filas de la tabla
+                            let datos = "";
+                            // se itera la lista de retiros y se agreaga en una fila
+                            res.retiros?.map(deposito => {
+                                datos += "<tr>\n\
+                            <td>" + deposito.fecha + "</td>\n\
+                            <td>" + res.operacion + "</td>\n\
+                            <td>$ " + deposito.monto + "</td>\n\
+                            </tr>";
+                            })
+                            // se agrega las filas a la tabla
+                            $('#tableSuccess>tbody').append(datos);
+                        }
+                    }).fail(function (error) { // si existe un error del servidor, presentamos un alert
+                        $('#errorlAlert').show();
+                        $('#errorlAlert').text("Error " + error.status + ": " + error.responseText);
+                    });
+                    ;
+                });
+                
+                
             });
         </script>
 
