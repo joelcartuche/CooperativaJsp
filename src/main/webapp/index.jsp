@@ -15,7 +15,7 @@
     <!-- Cunstom css link -->
     <link rel="stylesheet" href="css/socioPage.css">
 
-    <title>Cooperativa de Taxis - TaxoPel</title>
+    <title>TAXOPEL</title>
 </head>
 
 <body>
