@@ -15,10 +15,7 @@ import java.lang.Math;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-/**
- *
- * @author joelc
- */
+
 @WebServlet(name = "GenerarTasaAmortizacion", urlPatterns = {"/GenerarTasaAmortizacion"})
 public class GenerarTasaAmortizacion extends HttpServlet {
 
@@ -51,7 +48,7 @@ public class GenerarTasaAmortizacion extends HttpServlet {
         PrintWriter out = response.getWriter();
         String montoData = request.getParameter("monto");
         String plazoData = request.getParameter("plazo");
-        Double interesAnual = 6.0; //interes representado en porcentaje 8% anual
+        Double interesAnual = 8.0; //interes representado en porcentaje 8% anual
         Double interesMensual = interesAnual/12; //interes mensual
         
         if (montoData ==null || montoData.equals("")) {

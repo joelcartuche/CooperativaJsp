@@ -1,8 +1,3 @@
-<%-- 
-    Document   : gestionUsuario
-    Created on : 14 mar. 2022, 16:11:58
-    Author     : joelc
---%>
 
 
 <%@page import="Modelos.Usuario"%>

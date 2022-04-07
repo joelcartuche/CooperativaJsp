@@ -1,8 +1,4 @@
-<%-- 
-    Document   : crearCredito
-    Created on : 21 mar. 2022, 16:26:02
-    Author     : joelc
---%>
+
 
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.AbstractList"%>

@@ -7,10 +7,7 @@ package Utilidades;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 
-/**
- *
- * @author joelc
- */
+
 public class Encriptar {
 
     public String getMD5(String input) {

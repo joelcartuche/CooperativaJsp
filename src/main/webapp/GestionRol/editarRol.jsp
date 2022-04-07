@@ -1,10 +1,6 @@
-<%-- 
-    Document   : editarRol
-    Created on : 15 mar. 2022, 15:42:58
-    Author     : joelc
---%>
 
-<%@page import="com.sun.java.swing.plaf.windows.resources.windows"%>
+
+
 <%@page import="Modelos.Rol"%>
 <%@page import="Controladores.RolJpaController"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

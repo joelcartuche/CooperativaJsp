@@ -1,8 +1,4 @@
-<%-- 
-    Document   : crearRol
-    Created on : 14 mar. 2022, 17:37:31
-    Author     : joelc
---%>
+
 
 <%@page import="Modelos.Rol"%>
 <%@page import="java.util.List"%>

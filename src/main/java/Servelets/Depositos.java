@@ -20,10 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 
-/**
- *
- * @author LENOVO
- */
+
 @WebServlet(name = "Deposito", urlPatterns = {"/Deposito"})
 public class Depositos extends HttpServlet {
 

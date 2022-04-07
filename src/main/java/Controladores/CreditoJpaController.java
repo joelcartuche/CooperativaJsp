@@ -17,10 +17,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-/**
- *
- * @author joelc
- */
 public class CreditoJpaController implements Serializable {
 
     public CreditoJpaController(EntityManagerFactory emf) {

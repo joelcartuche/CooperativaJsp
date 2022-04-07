@@ -1,14 +1,3 @@
-<%-- 
-    Document   : crearCredito
-    Created on : 21 mar. 2022, 17:19:24
-    Author     : joelc
---%>
-
-<%-- 
-    Document   : crearCuenta
-    Created on : 16 mar. 2022, 21:19:36
-    Author     : joelc
---%>
 
 
 <%@page import="java.util.ArrayList"%>
@@ -18,7 +7,6 @@
 <%@page import="Controladores.UsuarioJpaController"%>
 <%@page import="Modelos.Cuenta"%>
 <%@page import="Controladores.CuentaJpaController"%>
-<%@page import="com.sun.java.swing.plaf.windows.resources.windows"%>
 <%@page import="Modelos.Rol"%>
 <%@page import="Controladores.RolJpaController"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -116,12 +104,13 @@ $(document).ready(function(event) {
         $.get('../BuscarSocioCedula',{
             cedula:cedula
         },function(resultado){
-            
-            window.console.log(resultado.toString());
-            if(data == "error"){
+
+            window.console.log("resultado"+resultado[0]);
+            if(resultado == "error"){
                 $('#errorBuscarSocio').attr("hidden",false);
-            }else if(resultado.length >0){
+            }else {
                 var data = resultado[0];
+                window.console.log(data.toString());
                 var tBody="";
                 var i =0;
                 var datoIdNombreApellido ="'"+data[i] +";"+data[i+1]+" "+data[i+2]+"'";
@@ -161,7 +150,7 @@ $(document).ready(function(event) {
             monto: monto,
             idSocio: idSocio,
             totalPagar: totalPagar,
-            dataTasaAmortizacion: dataTasaAmortizacion.toString(),
+            dataTasaAmortizacion: dataTasaAmortizacion,
         },function(result){
             if(result=="errorMonto"){
                 $('#montoCredito').addClass("is-invalid");

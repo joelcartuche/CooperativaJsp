@@ -1,8 +1,4 @@
-<%-- 
-    Document   : buscarSocio
-    Created on : 24 mar 2022, 15:45:27
-    Author     : jede
---%>
+
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 

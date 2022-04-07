@@ -1,8 +1,4 @@
-<%-- 
-    Document   : borrarCuentaCooperativa
-    Created on : 24 mar 2022, 21:32:26
-    Author     : jede
---%>
+
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 

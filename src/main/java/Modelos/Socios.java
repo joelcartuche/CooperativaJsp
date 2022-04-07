@@ -23,10 +23,7 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-/**
- *
- * @author joelc
- */
+
 @Entity
 @Table(name = "socios")
 @XmlRootElement
@@ -87,7 +84,6 @@ public class Socios implements Serializable {
     private Collection<Retiro> retiroCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoSocio")
     private Collection<Aportes> aportesCollection;
-
 
     public Socios() {
     }

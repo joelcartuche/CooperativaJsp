@@ -19,10 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 
-/**
- *
- * @author LENOVO
- */
+
 @WebServlet(name = "CuentasCooperativa", urlPatterns = {"/CuentasCooperativa"})
 public class CuentasCooperativa extends HttpServlet {
 

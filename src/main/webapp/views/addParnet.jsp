@@ -1,8 +1,4 @@
-<%-- 
-    Document   : addParnet
-    Created on : 15 mar 2022, 21:27:14
-    Author     : jede
---%>
+
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 

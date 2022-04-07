@@ -24,10 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-/**
- *
- * @author LENOVO
- */
+
 @WebServlet(name = "SocioInfo", urlPatterns = {"/SocioInfo"})
 public class SocioInfo extends HttpServlet {
 

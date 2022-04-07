@@ -19,10 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author joelc
- */
+
 @WebServlet(name = "BorrarUsuario", urlPatterns = {"/BorrarUsuario"})
 public class BorrarUsuario extends HttpServlet {
 

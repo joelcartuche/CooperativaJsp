@@ -1,8 +1,4 @@
-<%-- 
-    Document   : buscarCuentaCooperativa
-    Created on : 25 mar 2022, 1:56:14
-    Author     : jede
---%>
+
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 

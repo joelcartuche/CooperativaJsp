@@ -16,10 +16,6 @@ import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-/**
- *
- * @author joelc
- */
 public class AportesJpaController implements Serializable {
 
     public AportesJpaController(EntityManagerFactory emf) {

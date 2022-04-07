@@ -1,8 +1,4 @@
-<%-- 
-    Document   : listarCuenta
-    Created on : 16 mar. 2022, 21:19:10
-    Author     : joelc
---%>
+
 
 <%@page import="Modelos.Cuenta"%>
 <%@page import="Controladores.CuentaJpaController"%>

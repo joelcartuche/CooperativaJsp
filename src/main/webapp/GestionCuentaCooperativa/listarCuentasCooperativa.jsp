@@ -1,8 +1,4 @@
-<%-- 
-    Document   : listarCuentasCooperativa
-    Created on : 24 mar 2022, 17:26:45
-    Author     : jede
---%>
+
 
 <%@page import="Controladores.CuentaCooperativaJpaController"%>
 <%@page import="Modelos.CuentaCooperativa"%>

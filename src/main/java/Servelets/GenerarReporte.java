@@ -36,10 +36,7 @@ import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
 
-/**
- *
- * @author joelc
- */
+
 @WebServlet(name = "GenerarReporte", urlPatterns = {"/GenerarReporte"})
 public class GenerarReporte extends HttpServlet {
 

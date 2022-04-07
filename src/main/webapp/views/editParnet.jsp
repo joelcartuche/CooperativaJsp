@@ -1,8 +1,3 @@
-<%-- 
-    Document   : addParnet
-    Created on : 15 mar 2022, 21:27:14
-    Author     : jede
---%>
 
 <%@page import="Modelos.Socios"%>
 <%@page import="Controladores.SociosJpaController"%>

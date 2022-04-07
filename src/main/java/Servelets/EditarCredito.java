@@ -22,10 +22,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author joelc
- */
+
 @WebServlet(name = "EditarCredito", urlPatterns = {"/EditarCredito"})
 public class EditarCredito extends HttpServlet {
 

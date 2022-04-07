@@ -4,12 +4,10 @@
  */
 package Utilidades;
 
-/**
- *
- * @author joelc
- */
+
 public class Dominio {
     private final String dominio = "http://localhost:8080/Cooperativa/";
+//    private final String dominio = "http://cooperativa.per1.cloudsig.ma/";
 
     public Dominio() {
     }

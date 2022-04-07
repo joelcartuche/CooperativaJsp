@@ -18,10 +18,7 @@ import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-/**
- *
- * @author joelc
- */
+
 public class DepositoJpaController implements Serializable {
 
     public DepositoJpaController(EntityManagerFactory emf) {

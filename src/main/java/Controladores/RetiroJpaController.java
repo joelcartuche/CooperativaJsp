@@ -18,10 +18,7 @@ import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-/**
- *
- * @author joelc
- */
+
 public class RetiroJpaController implements Serializable {
 
     public RetiroJpaController(EntityManagerFactory emf) {

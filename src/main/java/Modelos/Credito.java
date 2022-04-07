@@ -23,10 +23,6 @@ import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-/**
- *
- * @author joelc
- */
 @Entity
 @Table(name = "credito")
 @XmlRootElement

@@ -16,10 +16,7 @@ import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-/**
- *
- * @author joelc
- */
+
 public class RolJpaController implements Serializable {
 
     public RolJpaController(EntityManagerFactory emf) {
@@ -122,6 +119,26 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
             return em.find(Rol.class, id);
         } finally {
             em.close();
+        }
+    }
+    
+    public Rol findRolNombre(String tipoRol) {
+        System.out.println("-----------------------------------------------");
+        EntityManager em = getEntityManager();//tipoRol
+        Query buscar = em.createNamedQuery("Rol.findByTipoRol");
+        buscar.setParameter("tipoRol", tipoRol);
+        List<Rol> rolList = buscar.getResultList();
+        System.out.println("id rol:  "+rolList.get(0).getIdRol() );
+        if (!rolList.isEmpty()) {
+            try {
+                
+                return rolList.get(0);
+            } finally {
+                em.close();
+            }
+
+        }else{
+            return null;
         }
     }
     

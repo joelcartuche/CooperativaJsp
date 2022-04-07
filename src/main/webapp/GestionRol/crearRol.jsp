@@ -1,8 +1,3 @@
-<%-- 
-    Document   : crearRol
-    Created on : 15 mar. 2022, 21:43:16
-    Author     : joelc
---%>
 
 <%@page import="Controladores.RolJpaController"%>
 <%@page import="Modelos.Rol"%>

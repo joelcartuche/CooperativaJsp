@@ -1,8 +1,4 @@
-<%-- 
-    Document   : editarCredito
-    Created on : 23 mar. 2022, 17:43:19
-    Author     : joelc
---%>
+
 
 <%@page import="Modelos.TasaAmortizacion"%>
 <%@page import="Controladores.TasaAmortizacionJpaController"%>
@@ -15,7 +11,7 @@
 <%@page import="Controladores.UsuarioJpaController"%>
 <%@page import="Modelos.Cuenta"%>
 <%@page import="Controladores.CuentaJpaController"%>
-<%@page import="com.sun.java.swing.plaf.windows.resources.windows"%>
+
 <%@page import="Modelos.Rol"%>
 <%@page import="Controladores.RolJpaController"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

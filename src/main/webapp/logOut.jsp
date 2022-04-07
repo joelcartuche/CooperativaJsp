@@ -1,8 +1,3 @@
-<%-- 
-    Document   : logOut
-    Created on : 15 mar. 2022, 21:33:59
-    Author     : joelc
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

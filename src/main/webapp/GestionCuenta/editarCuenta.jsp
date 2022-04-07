@@ -1,8 +1,3 @@
-<%-- 
-    Document   : editarCuenta
-    Created on : 16 mar. 2022, 21:19:19
-    Author     : joelc
---%>
 
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.AbstractList"%>
@@ -11,7 +6,6 @@
 <%@page import="Controladores.UsuarioJpaController"%>
 <%@page import="Modelos.Cuenta"%>
 <%@page import="Controladores.CuentaJpaController"%>
-<%@page import="com.sun.java.swing.plaf.windows.resources.windows"%>
 <%@page import="Modelos.Rol"%>
 <%@page import="Controladores.RolJpaController"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

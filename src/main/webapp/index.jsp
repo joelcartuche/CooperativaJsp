@@ -1,8 +1,3 @@
-<%-- 
-    Document   : index.jsp
-    Created on : 25 mar 2022, 12:24:33
-    Author     : jede
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

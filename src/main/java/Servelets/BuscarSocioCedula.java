@@ -14,10 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author joelc
- */
+
 @WebServlet(name = "BuscarSocioCedula", urlPatterns = {"/BuscarSocioCedula"})
 public class BuscarSocioCedula extends HttpServlet {
 
@@ -75,14 +72,22 @@ public class BuscarSocioCedula extends HttpServlet {
                     +"\""+socio.getTelefonoSocio()+"\","
                     +"\""+socio.getDireccionSocio()+"\""
                     +"]]";
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
             System.out.println(salida);
+            System.out.println("111111111111111111111111");
+            response.setContentType("application/json");
+            System.out.println("22222222222222222222222222");
+            response.setCharacterEncoding("UTF-8");
+            System.out.println("333333333333333333333333333");
+            response.setStatus(200);
+//            salida = socio.getIdSocios()+","
+//                   + socio.getNombreSocio()+","
+//                   + socio.getApellidoSocio()+","
+//                   +socio.getCedulaSocio()+","
+//                    +socio.getTelefonoSocio()+","
+//                    + socio.getDireccionSocio();
+System.out.println("4444444444444444444");
             out.print(salida);
         }
-        
-        
-        
     }
 
     /**

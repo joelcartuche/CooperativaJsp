@@ -1,8 +1,4 @@
-<%-- 
-    Document   : designPage
-    Created on : 15 mar 2022, 13:02:16
-    Author     : jede
---%>
+
 
 <%@page import="Utilidades.Dominio"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -77,7 +73,7 @@
                     <div class="text-muted small fw-bold text-uppercase px-3">CORE</div>
                 </li>
                 <li class="offcanvasItems">
-                    <a href="/Cooperativa" class="nav-link px-3 active">
+                    <a href="<%=new Dominio().getDominio() %>" class="nav-link px-3 active">
                         <span class="myIconText me-2"><i class="bi bi-collection"></i></span>
                         <span class="myOffCanvaSubtitle">Dashboard</span>
                     </a>

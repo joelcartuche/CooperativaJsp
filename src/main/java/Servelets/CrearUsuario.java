@@ -18,10 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author joelc
- */
+
 @WebServlet(name = "CrearUsuario", urlPatterns = {"/CrearUsuario"})
 public class CrearUsuario extends HttpServlet {
 

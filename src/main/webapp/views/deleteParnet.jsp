@@ -1,8 +1,3 @@
-<%-- 
-    Document   : deleteParnet
-    Created on : 19 mar 2022, 4:56:59
-    Author     : jede
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 

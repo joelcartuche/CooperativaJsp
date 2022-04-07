@@ -1,8 +1,4 @@
-<%-- 
-    Document   : viewParnet
-    Created on : 19 mar 2022, 6:29:45
-    Author     : jede
---%>
+
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 

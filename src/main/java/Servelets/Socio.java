@@ -5,10 +5,14 @@
 package Servelets;
 
 import Controladores.CuentaCooperativaJpaController;
+import Controladores.CuentaJpaController;
+import Controladores.RolJpaController;
 import Controladores.SociosJpaController;
 import Controladores.UsuarioJpaController;
 import Controladores.exceptions.NonexistentEntityException;
+import Modelos.Cuenta;
 import Modelos.CuentaCooperativa;
+import Modelos.Rol;
 import Modelos.Socios;
 import Modelos.Usuario;
 import Utilidades.Validar;
@@ -24,10 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 
-/**
- *
- * @author LENOVO
- */
+
 @WebServlet(name = "Socio", urlPatterns = {"/Socio"})
 public class Socio extends HttpServlet {
 
@@ -176,7 +177,7 @@ public class Socio extends HttpServlet {
                     socio.setApellidoSocio(apellido);
                     socio.setCedulaSocio(cedula);
                     socio.setTelefonoSocio(telefono);
-                    socio.setDireccionSocio(direccion);
+                    socio.setDireccionSocio(direccion.replace("\n",""));
                     socio.setEsEliminado(Boolean.FALSE);
 
                     // creamos un nuevo usuario
@@ -186,6 +187,29 @@ public class Socio extends HttpServlet {
                     usuario.setApellidoUsuario(apellido);
                     usuario.setCedulaUsuario(cedula);
                     usuario.setTelefonoUsuario(telefono);
+                    //creamos o buscamos el rol
+                    RolJpaController rolJpaController = new RolJpaController();
+                    Rol rol = rolJpaController.findRolNombre("Socio");
+                    System.out.println("****************************");
+                    
+                    if (rol==null) { //en caso de no existir un rol con elnombre socio
+                        //creamos el nuevo rol
+                        System.out.println("Entro null");
+                        rol = new Rol();
+                        rol.setTipoRol("Socio");
+                        rol.setEsEliminado(Boolean.FALSE);
+                        rolJpaController.create(rol);
+                        System.out.println("rol estado"+ rol.getIdRol());
+                    }
+                    
+                    //creamos la cuenta
+                    CuentaJpaController cuentaJpaController = new CuentaJpaController();
+                    Cuenta cuenta = new Cuenta();
+                    cuenta.setEsEliminado(Boolean.FALSE);
+                    cuenta.setIdRol(rol);
+                    //cuenta.setIdUsuario(usuario);
+                    
+                    cuenta.setPassword(new Utilidades.Encriptar().getMD5(socio.getCedulaSocio()));//encriptamos la clave 
 
                     try {
                         // guardamos el socio en la bse de datos
@@ -195,6 +219,12 @@ public class Socio extends HttpServlet {
 
                         //guardamos el usuario en la base de datos
                         usuarioJpaController.create(usuario);
+                        
+                        //creamos  la cuenta
+                        cuenta.setUsuario(socio.getCedulaSocio()); //insertamos la cedula del socio como nombre de usuario
+                        cuenta.setIdUsuario(usuario);//le damos el usuario que ha sido creado en la base de datos con su id
+                        cuentaJpaController.create(cuenta);//creamos la cuenta
+                        
 
                         // Creamos una nueva cuenta cooperativa
                         CuentaCooperativaJpaController cuentaCooperativaJpaController = new CuentaCooperativaJpaController();

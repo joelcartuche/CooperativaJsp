@@ -7,10 +7,7 @@ package Utilidades;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- *
- * @author LENOVO
- */
+
 public class Validar {
 
     // varifica si es valido la cedula ecuatoriana

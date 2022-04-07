@@ -1,8 +1,4 @@
-<%-- 
-    Document   : buscarCuenta
-    Created on : 22 mar 2022, 14:00:36
-    Author     : jede
---%>
+
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 

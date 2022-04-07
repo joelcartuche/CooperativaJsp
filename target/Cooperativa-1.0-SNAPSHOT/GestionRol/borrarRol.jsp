@@ -1,8 +1,3 @@
-<%-- 
-    Document   : borrarRol
-    Created on : 14 mar. 2022, 19:13:17
-    Author     : joelc
---%>
 
 <%@page import="Modelos.Rol"%>
 <%@page import="Controladores.RolJpaController"%>

@@ -1,8 +1,4 @@
-<%-- 
-    Document   : borrarUsuario
-    Created on : 16 mar. 2022, 16:48:35
-    Author     : joelc
---%>
+
 
 <%@page import="Modelos.Rol"%>
 <%@page import="Controladores.RolJpaController"%>

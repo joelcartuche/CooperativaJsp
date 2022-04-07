@@ -1,8 +1,4 @@
-<%-- 
-    Document   : verCuentasCooperativa
-    Created on : 24 mar 2022, 18:02:21
-    Author     : jede
---%>
+
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 

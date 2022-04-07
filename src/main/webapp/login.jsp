@@ -1,8 +1,5 @@
-<%-- 
-    Document   : login
-    Created on : 13 mar. 2022, 16:09:13
-    Author     : joelc
---%>
+
+<%@page import="Utilidades.Dominio"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%
@@ -59,7 +56,7 @@
                                 <input type="password" id="password" class="form-control my-4 py-2" placeholder="Contraseña">
                                 <div class="text-center mt-3">
                                     <input type="button"  id="submit" class="btn btn-primary" value="Iniciar sesión" />
-                                    <a href="/Cooperativa" class="nav-link">Volver al inicio</a>
+                                    <a href="<%=new Dominio().getDominio() %>" class="nav-link">Volver al inicio</a>
                                 </div>
                             </form>
                         </div>

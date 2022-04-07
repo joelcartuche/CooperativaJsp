@@ -1,8 +1,3 @@
-<%-- 
-    Document   : depositar
-    Created on : 21 mar 2022, 17:11:05
-    Author     : jede
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
@@ -37,7 +32,7 @@
                             <span>${numCuentaCooperativa}</span>
                         </div>
                     </div>
-                    <div class="row mb-3">
+                    <div class="row mb-3" hidden>
                         <div class="col-12 col-md-6">
                             <span class="fw-bold">Saldo Actual:</span>
                         </div>

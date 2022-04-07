@@ -8,10 +8,7 @@ import Controladores.UsuarioJpaController;
 import Modelos.Cuenta;
 import Modelos.Usuario;
 
-/**
- *
- * @author joelc
- */
+
 public class TestContacto {
     public static void main(String[] args) {
         Usuario usuario = new Usuario();

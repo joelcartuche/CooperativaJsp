@@ -20,10 +20,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-/**
- *
- * @author joelc
- */
+
 public class SociosJpaController implements Serializable {
 
     public SociosJpaController(EntityManagerFactory emf) {
@@ -189,7 +186,9 @@ public class SociosJpaController implements Serializable {
         Query buscar = em.createNamedQuery("Socios.findByCedulaSocio");
         buscar.setParameter("cedulaSocio", cedula);
         List<Socios> sociosList = buscar.getResultList();
+        System.out.println("------------------------------------------");
         if (!sociosList.isEmpty()) {
+            System.out.println("id socios "+sociosList.get(0).getIdSocios());
             try {
                 return sociosList.get(0);
             } finally {

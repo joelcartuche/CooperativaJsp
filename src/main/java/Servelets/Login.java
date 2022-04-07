@@ -21,7 +21,7 @@ import org.json.JSONObject;
 
 /**
  *
- * @author joelc Contraseña= #VFmwfozF30e usuario = administrador
+ * @author Contraseña= #VFmwfozF30e usuario = administrador
  */
 @WebServlet(name = "Login", urlPatterns = {"/Login"})
 public class Login extends HttpServlet {

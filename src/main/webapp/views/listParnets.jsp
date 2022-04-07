@@ -1,8 +1,3 @@
-<%-- 
-    Document   : listParnets
-    Created on : 15 mar 2022, 18:57:30
-    Author     : jede
---%>
 
 <%@page import="Modelos.Socios"%>
 <%@page import="java.util.List"%>

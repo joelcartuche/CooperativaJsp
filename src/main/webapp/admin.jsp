@@ -1,8 +1,4 @@
-<%-- 
-    Document   : index.jsp
-    Created on : 13 mar. 2022, 16:11:21
-    Author     : joelc
---%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:include page="/Template/layout.jsp"></jsp:include>   
 <%

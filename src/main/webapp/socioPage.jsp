@@ -1,8 +1,3 @@
-<%-- 
-    Document   : socioPage
-    Created on : 25 mar 2022, 15:46:04
-    Author     : jede
---%>
 
 <%@page import="Utilidades.Dominio"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

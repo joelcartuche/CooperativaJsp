@@ -1,8 +1,4 @@
-<%-- 
-    Document   : deposito
-    Created on : 21 mar 2022, 12:11:21
-    Author     : jede
---%>
+
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
