@@ -5,6 +5,7 @@
 package Modelos;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,19 +13,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
-/**
- *
- * @author joelc
- */
+
 @Entity
 @Table(name = "socios")
 @XmlRootElement
@@ -36,7 +35,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Socios.findByCedulaSocio", query = "SELECT s FROM Socios s WHERE s.cedulaSocio = :cedulaSocio"),
     @NamedQuery(name = "Socios.findByTelefonoSocio", query = "SELECT s FROM Socios s WHERE s.telefonoSocio = :telefonoSocio"),
     @NamedQuery(name = "Socios.findByDireccionSocio", query = "SELECT s FROM Socios s WHERE s.direccionSocio = :direccionSocio"),
-    @NamedQuery(name = "Socios.findByEsEliminado", query = "SELECT s FROM Socios s WHERE s.esEliminado = :esEliminado")})
+    @NamedQuery(name = "Socios.findByEsEliminado", query = "SELECT s FROM Socios s WHERE s.esEliminado = :esEliminado"),
+    @NamedQuery(name = "Socios.findByCodigoSocio", query = "SELECT s FROM Socios s WHERE s.codigoSocio = :codigoSocio")})
 public class Socios implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -70,32 +70,35 @@ public class Socios implements Serializable {
     private String direccionSocio;
     @Column(name = "es_eliminado")
     private Boolean esEliminado;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "codigo_socio")
+    private int codigoSocio;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "idSocios")
     private CuentaCooperativa cuentaCooperativa;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idSocios")
-    private Deposito deposito;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idSocios")
-    private Retiro retiro;
-    @JoinColumn(name = "id_credito", referencedColumnName = "id_credito")
-    @OneToOne(optional = false)
-    private Credito idCredito;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idSocios")
-    private Aportes aportes;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCodigoSocio")
+    private Collection<Credito> creditoCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoSocio")
+    private Collection<Deposito> depositoCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoSocio")
+    private Collection<Retiro> retiroCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoSocio")
+    private Collection<Aportes> aportesCollection;
 
     public Socios() {
-        this.esEliminado=false;
     }
 
     public Socios(Integer idSocios) {
         this.idSocios = idSocios;
     }
 
-    public Socios(Integer idSocios, String nombreSocio, String apellidoSocio, String cedulaSocio, String telefonoSocio) {
+    public Socios(Integer idSocios, String nombreSocio, String apellidoSocio, String cedulaSocio, String telefonoSocio, int codigoSocio) {
         this.idSocios = idSocios;
         this.nombreSocio = nombreSocio;
         this.apellidoSocio = apellidoSocio;
         this.cedulaSocio = cedulaSocio;
         this.telefonoSocio = telefonoSocio;
+        this.codigoSocio = codigoSocio;
     }
 
     public Integer getIdSocios() {
@@ -154,6 +157,14 @@ public class Socios implements Serializable {
         this.esEliminado = esEliminado;
     }
 
+    public int getCodigoSocio() {
+        return codigoSocio;
+    }
+
+    public void setCodigoSocio(int codigoSocio) {
+        this.codigoSocio = codigoSocio;
+    }
+
     public CuentaCooperativa getCuentaCooperativa() {
         return cuentaCooperativa;
     }
@@ -162,36 +173,40 @@ public class Socios implements Serializable {
         this.cuentaCooperativa = cuentaCooperativa;
     }
 
-    public Deposito getDeposito() {
-        return deposito;
+    @XmlTransient
+    public Collection<Credito> getCreditoCollection() {
+        return creditoCollection;
     }
 
-    public void setDeposito(Deposito deposito) {
-        this.deposito = deposito;
+    public void setCreditoCollection(Collection<Credito> creditoCollection) {
+        this.creditoCollection = creditoCollection;
     }
 
-    public Retiro getRetiro() {
-        return retiro;
+    @XmlTransient
+    public Collection<Deposito> getDepositoCollection() {
+        return depositoCollection;
     }
 
-    public void setRetiro(Retiro retiro) {
-        this.retiro = retiro;
+    public void setDepositoCollection(Collection<Deposito> depositoCollection) {
+        this.depositoCollection = depositoCollection;
     }
 
-    public Credito getIdCredito() {
-        return idCredito;
+    @XmlTransient
+    public Collection<Retiro> getRetiroCollection() {
+        return retiroCollection;
     }
 
-    public void setIdCredito(Credito idCredito) {
-        this.idCredito = idCredito;
+    public void setRetiroCollection(Collection<Retiro> retiroCollection) {
+        this.retiroCollection = retiroCollection;
     }
 
-    public Aportes getAportes() {
-        return aportes;
+    @XmlTransient
+    public Collection<Aportes> getAportesCollection() {
+        return aportesCollection;
     }
 
-    public void setAportes(Aportes aportes) {
-        this.aportes = aportes;
+    public void setAportesCollection(Collection<Aportes> aportesCollection) {
+        this.aportesCollection = aportesCollection;
     }
 
     @Override

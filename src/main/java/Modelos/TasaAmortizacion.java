@@ -5,33 +5,45 @@
 package Modelos;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- *
- * @author joelc
- */
+
 @Entity
 @Table(name = "tasa_amortizacion")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "TasaAmortizacion.findAll", query = "SELECT t FROM TasaAmortizacion t"),
     @NamedQuery(name = "TasaAmortizacion.findByIdTasaAmortizacion", query = "SELECT t FROM TasaAmortizacion t WHERE t.idTasaAmortizacion = :idTasaAmortizacion"),
-    @NamedQuery(name = "TasaAmortizacion.findByMontoPagar", query = "SELECT t FROM TasaAmortizacion t WHERE t.montoPagar = :montoPagar"),
     @NamedQuery(name = "TasaAmortizacion.findByNumeroPagos", query = "SELECT t FROM TasaAmortizacion t WHERE t.numeroPagos = :numeroPagos"),
-    @NamedQuery(name = "TasaAmortizacion.findByEsEliminado", query = "SELECT t FROM TasaAmortizacion t WHERE t.esEliminado = :esEliminado")})
+    @NamedQuery(name = "TasaAmortizacion.findByEsEliminado", query = "SELECT t FROM TasaAmortizacion t WHERE t.esEliminado = :esEliminado"),
+    @NamedQuery(name = "TasaAmortizacion.findByFormaPago", query = "SELECT t FROM TasaAmortizacion t WHERE t.formaPago = :formaPago"),
+    @NamedQuery(name = "TasaAmortizacion.findByEsPagado", query = "SELECT t FROM TasaAmortizacion t WHERE t.esPagado = :esPagado"),
+    @NamedQuery(name = "TasaAmortizacion.findByFechaPago", query = "SELECT t FROM TasaAmortizacion t WHERE t.fechaPago = :fechaPago"),
+    @NamedQuery(name = "TasaAmortizacion.findByFechaCreacion", query = "SELECT t FROM TasaAmortizacion t WHERE t.fechaCreacion = :fechaCreacion"),
+    @NamedQuery(name = "TasaAmortizacion.findBySaldoDeuda", query = "SELECT t FROM TasaAmortizacion t WHERE t.saldoDeuda = :saldoDeuda"),
+    @NamedQuery(name = "TasaAmortizacion.findByCuota", query = "SELECT t FROM TasaAmortizacion t WHERE t.cuota = :cuota"),
+    @NamedQuery(name = "TasaAmortizacion.findByInteres", query = "SELECT t FROM TasaAmortizacion t WHERE t.interes = :interes"),
+    @NamedQuery(name = "TasaAmortizacion.findByAmortizacion", query = "SELECT t FROM TasaAmortizacion t WHERE t.amortizacion = :amortizacion"),
+@NamedQuery(name = "TasaAmortizacion.findByCodigoCredito", query = "SELECT t FROM TasaAmortizacion t WHERE t.codigoCredito = :codigoCredito AND t.esEliminado=:esEliminado"),
+
+})
+
 public class TasaAmortizacion implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -40,28 +52,46 @@ public class TasaAmortizacion implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_tasa_amortizacion")
     private Integer idTasaAmortizacion;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "monto_pagar")
-    private Double montoPagar;
     @Column(name = "numero_pagos")
     private Integer numeroPagos;
     @Column(name = "es_eliminado")
     private Boolean esEliminado;
-    @JoinColumn(name = "id_cuota", referencedColumnName = "id_cuota")
-    @OneToOne(optional = false)
-    private Cuota idCuota;
-    @JoinColumn(name = "id_pago", referencedColumnName = "id_pago")
-    @OneToOne(optional = false)
-    private Pago idPago;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idTasaAmortizacion")
-    private Credito credito;
+    @Size(max = 200)
+    @Column(name = "forma_pago")
+    private String formaPago;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "es_pagado")
+    private boolean esPagado;
+    @Column(name = "fecha_pago")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaPago;
+    @Column(name = "fecha_creacion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaCreacion;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "saldo_deuda")
+    private Double saldoDeuda;
+    @Column(name = "cuota")
+    private Double cuota;
+    @Column(name = "interes")
+    private Double interes;
+    @Column(name = "amortizacion")
+    private Double amortizacion;
+    @JoinColumn(name = "codigo_credito", referencedColumnName = "codigo_credito")
+    @ManyToOne(optional = false)
+    private Credito codigoCredito;
 
     public TasaAmortizacion() {
-        this.esEliminado=false;
     }
 
     public TasaAmortizacion(Integer idTasaAmortizacion) {
         this.idTasaAmortizacion = idTasaAmortizacion;
+    }
+
+    public TasaAmortizacion(Integer idTasaAmortizacion, boolean esPagado) {
+        this.idTasaAmortizacion = idTasaAmortizacion;
+        this.esPagado = esPagado;
     }
 
     public Integer getIdTasaAmortizacion() {
@@ -70,14 +100,6 @@ public class TasaAmortizacion implements Serializable {
 
     public void setIdTasaAmortizacion(Integer idTasaAmortizacion) {
         this.idTasaAmortizacion = idTasaAmortizacion;
-    }
-
-    public Double getMontoPagar() {
-        return montoPagar;
-    }
-
-    public void setMontoPagar(Double montoPagar) {
-        this.montoPagar = montoPagar;
     }
 
     public Integer getNumeroPagos() {
@@ -96,28 +118,76 @@ public class TasaAmortizacion implements Serializable {
         this.esEliminado = esEliminado;
     }
 
-    public Cuota getIdCuota() {
-        return idCuota;
+    public String getFormaPago() {
+        return formaPago;
     }
 
-    public void setIdCuota(Cuota idCuota) {
-        this.idCuota = idCuota;
+    public void setFormaPago(String formaPago) {
+        this.formaPago = formaPago;
     }
 
-    public Pago getIdPago() {
-        return idPago;
+    public boolean getEsPagado() {
+        return esPagado;
     }
 
-    public void setIdPago(Pago idPago) {
-        this.idPago = idPago;
+    public void setEsPagado(boolean esPagado) {
+        this.esPagado = esPagado;
     }
 
-    public Credito getCredito() {
-        return credito;
+    public Date getFechaPago() {
+        return fechaPago;
     }
 
-    public void setCredito(Credito credito) {
-        this.credito = credito;
+    public void setFechaPago(Date fechaPago) {
+        this.fechaPago = fechaPago;
+    }
+
+    public Date getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public Double getSaldoDeuda() {
+        return saldoDeuda;
+    }
+
+    public void setSaldoDeuda(Double saldoDeuda) {
+        this.saldoDeuda = saldoDeuda;
+    }
+
+    public Double getCuota() {
+        return cuota;
+    }
+
+    public void setCuota(Double cuota) {
+        this.cuota = cuota;
+    }
+
+    public Double getInteres() {
+        return interes;
+    }
+
+    public void setInteres(Double interes) {
+        this.interes = interes;
+    }
+
+    public Double getAmortizacion() {
+        return amortizacion;
+    }
+
+    public void setAmortizacion(Double amortizacion) {
+        this.amortizacion = amortizacion;
+    }
+
+    public Credito getCodigoCredito() {
+        return codigoCredito;
+    }
+
+    public void setCodigoCredito(Credito codigoCredito) {
+        this.codigoCredito = codigoCredito;
     }
 
     @Override

@@ -4,32 +4,27 @@
  */
 package Controladores;
 
-import Controladores.exceptions.IllegalOrphanException;
 import Controladores.exceptions.NonexistentEntityException;
 import Modelos.Deposito;
-import java.io.Serializable;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import Modelos.Socios;
-import java.util.ArrayList;
+import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.Persistence;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
-/**
- *
- * @author joelc
- */
+
 public class DepositoJpaController implements Serializable {
 
     public DepositoJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
- private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
@@ -38,36 +33,12 @@ public class DepositoJpaController implements Serializable {
     public DepositoJpaController() {
     }
 
-
-    public void create(Deposito deposito) throws IllegalOrphanException {
-        List<String> illegalOrphanMessages = null;
-        Socios idSociosOrphanCheck = deposito.getIdSocios();
-        if (idSociosOrphanCheck != null) {
-            Deposito oldDepositoOfIdSocios = idSociosOrphanCheck.getDeposito();
-            if (oldDepositoOfIdSocios != null) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("The Socios " + idSociosOrphanCheck + " already has an item of type Deposito whose idSocios column cannot be null. Please make another selection for the idSocios field.");
-            }
-        }
-        if (illegalOrphanMessages != null) {
-            throw new IllegalOrphanException(illegalOrphanMessages);
-        }
+    public void create(Deposito deposito) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Socios idSocios = deposito.getIdSocios();
-            if (idSocios != null) {
-                idSocios = em.getReference(idSocios.getClass(), idSocios.getIdSocios());
-                deposito.setIdSocios(idSocios);
-            }
             em.persist(deposito);
-            if (idSocios != null) {
-                idSocios.setDeposito(deposito);
-                idSocios = em.merge(idSocios);
-            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -76,40 +47,12 @@ public class DepositoJpaController implements Serializable {
         }
     }
 
-    public void edit(Deposito deposito) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(Deposito deposito) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Deposito persistentDeposito = em.find(Deposito.class, deposito.getIdDeposito());
-            Socios idSociosOld = persistentDeposito.getIdSocios();
-            Socios idSociosNew = deposito.getIdSocios();
-            List<String> illegalOrphanMessages = null;
-            if (idSociosNew != null && !idSociosNew.equals(idSociosOld)) {
-                Deposito oldDepositoOfIdSocios = idSociosNew.getDeposito();
-                if (oldDepositoOfIdSocios != null) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("The Socios " + idSociosNew + " already has an item of type Deposito whose idSocios column cannot be null. Please make another selection for the idSocios field.");
-                }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            if (idSociosNew != null) {
-                idSociosNew = em.getReference(idSociosNew.getClass(), idSociosNew.getIdSocios());
-                deposito.setIdSocios(idSociosNew);
-            }
             deposito = em.merge(deposito);
-            if (idSociosOld != null && !idSociosOld.equals(idSociosNew)) {
-                idSociosOld.setDeposito(null);
-                idSociosOld = em.merge(idSociosOld);
-            }
-            if (idSociosNew != null && !idSociosNew.equals(idSociosOld)) {
-                idSociosNew.setDeposito(deposito);
-                idSociosNew = em.merge(idSociosNew);
-            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -138,11 +81,6 @@ public class DepositoJpaController implements Serializable {
                 deposito.getIdDeposito();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The deposito with id " + id + " no longer exists.", enfe);
-            }
-            Socios idSocios = deposito.getIdSocios();
-            if (idSocios != null) {
-                idSocios.setDeposito(null);
-                idSocios = em.merge(idSocios);
             }
             em.remove(deposito);
             em.getTransaction().commit();
@@ -184,6 +122,28 @@ public class DepositoJpaController implements Serializable {
         } finally {
             em.close();
         }
+    }
+    
+    public List<Deposito> findDepositoFechaInicioFin(Date fechaInicio,Date fechaFin){
+        EntityManager em = getEntityManager();
+        Query buscar = em.createNamedQuery("Deposito.findByFechaIncioFechaFin");
+        buscar.setParameter("fechaInicio", fechaInicio);
+        buscar.setParameter("fechaFin", fechaFin);
+        List<Deposito> depositoList = buscar.getResultList();
+        if (!depositoList.isEmpty()) {
+
+            System.out.println(depositoList.get(0).getIdDeposito());
+
+            try {
+                return depositoList;
+            } finally {
+                em.close();
+            }
+
+        }else{
+            return null;
+        }
+
     }
 
     public int getDepositoCount() {

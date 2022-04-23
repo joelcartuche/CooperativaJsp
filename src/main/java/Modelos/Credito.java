@@ -5,6 +5,7 @@
 package Modelos;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,16 +14,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
-/**
- *
- * @author joelc
- */
 @Entity
 @Table(name = "credito")
 @XmlRootElement
@@ -31,7 +31,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Credito.findByIdCredito", query = "SELECT c FROM Credito c WHERE c.idCredito = :idCredito"),
     @NamedQuery(name = "Credito.findByMontoCredito", query = "SELECT c FROM Credito c WHERE c.montoCredito = :montoCredito"),
     @NamedQuery(name = "Credito.findByInteresCredito", query = "SELECT c FROM Credito c WHERE c.interesCredito = :interesCredito"),
-    @NamedQuery(name = "Credito.findByEsEliminado", query = "SELECT c FROM Credito c WHERE c.esEliminado = :esEliminado")})
+    @NamedQuery(name = "Credito.findByEsEliminado", query = "SELECT c FROM Credito c WHERE c.esEliminado = :esEliminado"),
+    @NamedQuery(name = "Credito.findByCodigoCredito", query = "SELECT c FROM Credito c WHERE c.codigoCredito = :codigoCredito"),
+@NamedQuery(name = "Credito.findBySocio", query = "SELECT c FROM Credito c WHERE c.idCodigoSocio = :socio")})
 public class Credito implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,18 +49,26 @@ public class Credito implements Serializable {
     private Double interesCredito;
     @Column(name = "es_eliminado")
     private Boolean esEliminado;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idCredito")
-    private Socios socios;
-    @JoinColumn(name = "id_tasa_amortizacion", referencedColumnName = "id_tasa_amortizacion")
-    @OneToOne(optional = false)
-    private TasaAmortizacion idTasaAmortizacion;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "codigo_credito")
+    private int codigoCredito;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoCredito")
+    private Collection<TasaAmortizacion> tasaAmortizacionCollection;
+    @JoinColumn(name = "id_codigo_socio", referencedColumnName = "codigo_socio")
+    @ManyToOne(optional = false)
+    private Socios idCodigoSocio;
 
     public Credito() {
-        this.esEliminado=false;
     }
 
     public Credito(Integer idCredito) {
         this.idCredito = idCredito;
+    }
+
+    public Credito(Integer idCredito, int codigoCredito) {
+        this.idCredito = idCredito;
+        this.codigoCredito = codigoCredito;
     }
 
     public Integer getIdCredito() {
@@ -93,20 +103,29 @@ public class Credito implements Serializable {
         this.esEliminado = esEliminado;
     }
 
-    public Socios getSocios() {
-        return socios;
+    public int getCodigoCredito() {
+        return codigoCredito;
     }
 
-    public void setSocios(Socios socios) {
-        this.socios = socios;
+    public void setCodigoCredito(int codigoCredito) {
+        this.codigoCredito = codigoCredito;
     }
 
-    public TasaAmortizacion getIdTasaAmortizacion() {
-        return idTasaAmortizacion;
+    @XmlTransient
+    public Collection<TasaAmortizacion> getTasaAmortizacionCollection() {
+        return tasaAmortizacionCollection;
     }
 
-    public void setIdTasaAmortizacion(TasaAmortizacion idTasaAmortizacion) {
-        this.idTasaAmortizacion = idTasaAmortizacion;
+    public void setTasaAmortizacionCollection(Collection<TasaAmortizacion> tasaAmortizacionCollection) {
+        this.tasaAmortizacionCollection = tasaAmortizacionCollection;
+    }
+
+    public Socios getIdCodigoSocio() {
+        return idCodigoSocio;
+    }
+
+    public void setIdCodigoSocio(Socios idCodigoSocio) {
+        this.idCodigoSocio = idCodigoSocio;
     }
 
     @Override

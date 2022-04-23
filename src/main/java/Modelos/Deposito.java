@@ -13,19 +13,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- *
- * @author joelc
- */
 @Entity
 @Table(name = "deposito")
 @XmlRootElement
@@ -34,7 +30,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Deposito.findByIdDeposito", query = "SELECT d FROM Deposito d WHERE d.idDeposito = :idDeposito"),
     @NamedQuery(name = "Deposito.findByMontoDeposito", query = "SELECT d FROM Deposito d WHERE d.montoDeposito = :montoDeposito"),
     @NamedQuery(name = "Deposito.findByFechaDeposito", query = "SELECT d FROM Deposito d WHERE d.fechaDeposito = :fechaDeposito"),
-    @NamedQuery(name = "Deposito.findByEsEliminado", query = "SELECT d FROM Deposito d WHERE d.esEliminado = :esEliminado")})
+    @NamedQuery(name = "Deposito.findByEsEliminado", query = "SELECT d FROM Deposito d WHERE d.esEliminado = :esEliminado"),
+    @NamedQuery(name = "Deposito.findByFechaIncioFechaFin", query = "SELECT d FROM Deposito d WHERE d.fechaDeposito>= :fechaInicio AND d.fechaDeposito<= :fechaFin")})
 public class Deposito implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -54,12 +51,11 @@ public class Deposito implements Serializable {
     private Date fechaDeposito;
     @Column(name = "es_eliminado")
     private Boolean esEliminado;
-    @JoinColumn(name = "id_socios", referencedColumnName = "id_socios")
-    @OneToOne(optional = false)
-    private Socios idSocios;
+    @JoinColumn(name = "codigo_socio", referencedColumnName = "codigo_socio")
+    @ManyToOne(optional = false)
+    private Socios codigoSocio;
 
     public Deposito() {
-        this.esEliminado=false;
     }
 
     public Deposito(Integer idDeposito) {
@@ -104,12 +100,12 @@ public class Deposito implements Serializable {
         this.esEliminado = esEliminado;
     }
 
-    public Socios getIdSocios() {
-        return idSocios;
+    public Socios getCodigoSocio() {
+        return codigoSocio;
     }
 
-    public void setIdSocios(Socios idSocios) {
-        this.idSocios = idSocios;
+    public void setCodigoSocio(Socios codigoSocio) {
+        this.codigoSocio = codigoSocio;
     }
 
     @Override

@@ -11,28 +11,22 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import Modelos.CuentaCooperativa;
-import Modelos.Deposito;
-import Modelos.Retiro;
 import Modelos.Credito;
-import Modelos.Aportes;
 import Modelos.Socios;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-/**
- *
- * @author joelc
- */
+
 public class SociosJpaController implements Serializable {
 
     public SociosJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-  private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistece_cooperativa");
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
@@ -43,90 +37,29 @@ public class SociosJpaController implements Serializable {
     
     
 
-    public void create(Socios socios) throws IllegalOrphanException {
-        List<String> illegalOrphanMessages = null;
-        Credito idCreditoOrphanCheck = socios.getIdCredito();
-        if (idCreditoOrphanCheck != null) {
-            Socios oldSociosOfIdCredito = idCreditoOrphanCheck.getSocios();
-            if (oldSociosOfIdCredito != null) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("The Credito " + idCreditoOrphanCheck + " already has an item of type Socios whose idCredito column cannot be null. Please make another selection for the idCredito field.");
-            }
-        }
-        if (illegalOrphanMessages != null) {
-            throw new IllegalOrphanException(illegalOrphanMessages);
+    public void create(Socios socios) {
+        if (socios.getCreditoCollection() == null) {
+            socios.setCreditoCollection(new ArrayList<Credito>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            CuentaCooperativa cuentaCooperativa = socios.getCuentaCooperativa();
-            if (cuentaCooperativa != null) {
-                cuentaCooperativa = em.getReference(cuentaCooperativa.getClass(), cuentaCooperativa.getIdCuentaCooperativa());
-                socios.setCuentaCooperativa(cuentaCooperativa);
+            Collection<Credito> attachedCreditoCollection = new ArrayList<Credito>();
+            for (Credito creditoCollectionCreditoToAttach : socios.getCreditoCollection()) {
+                creditoCollectionCreditoToAttach = em.getReference(creditoCollectionCreditoToAttach.getClass(), creditoCollectionCreditoToAttach.getIdCredito());
+                attachedCreditoCollection.add(creditoCollectionCreditoToAttach);
             }
-            Deposito deposito = socios.getDeposito();
-            if (deposito != null) {
-                deposito = em.getReference(deposito.getClass(), deposito.getIdDeposito());
-                socios.setDeposito(deposito);
-            }
-            Retiro retiro = socios.getRetiro();
-            if (retiro != null) {
-                retiro = em.getReference(retiro.getClass(), retiro.getIdRetiro());
-                socios.setRetiro(retiro);
-            }
-            Credito idCredito = socios.getIdCredito();
-            if (idCredito != null) {
-                idCredito = em.getReference(idCredito.getClass(), idCredito.getIdCredito());
-                socios.setIdCredito(idCredito);
-            }
-            Aportes aportes = socios.getAportes();
-            if (aportes != null) {
-                aportes = em.getReference(aportes.getClass(), aportes.getIdAportes());
-                socios.setAportes(aportes);
-            }
+            socios.setCreditoCollection(attachedCreditoCollection);
             em.persist(socios);
-            if (cuentaCooperativa != null) {
-                Socios oldIdSociosOfCuentaCooperativa = cuentaCooperativa.getIdSocios();
-                if (oldIdSociosOfCuentaCooperativa != null) {
-                    oldIdSociosOfCuentaCooperativa.setCuentaCooperativa(null);
-                    oldIdSociosOfCuentaCooperativa = em.merge(oldIdSociosOfCuentaCooperativa);
+            for (Credito creditoCollectionCredito : socios.getCreditoCollection()) {
+                Socios oldIdCodigoSocioOfCreditoCollectionCredito = creditoCollectionCredito.getIdCodigoSocio();
+                creditoCollectionCredito.setIdCodigoSocio(socios);
+                creditoCollectionCredito = em.merge(creditoCollectionCredito);
+                if (oldIdCodigoSocioOfCreditoCollectionCredito != null) {
+                    oldIdCodigoSocioOfCreditoCollectionCredito.getCreditoCollection().remove(creditoCollectionCredito);
+                    oldIdCodigoSocioOfCreditoCollectionCredito = em.merge(oldIdCodigoSocioOfCreditoCollectionCredito);
                 }
-                cuentaCooperativa.setIdSocios(socios);
-                cuentaCooperativa = em.merge(cuentaCooperativa);
-            }
-            if (deposito != null) {
-                Socios oldIdSociosOfDeposito = deposito.getIdSocios();
-                if (oldIdSociosOfDeposito != null) {
-                    oldIdSociosOfDeposito.setDeposito(null);
-                    oldIdSociosOfDeposito = em.merge(oldIdSociosOfDeposito);
-                }
-                deposito.setIdSocios(socios);
-                deposito = em.merge(deposito);
-            }
-            if (retiro != null) {
-                Socios oldIdSociosOfRetiro = retiro.getIdSocios();
-                if (oldIdSociosOfRetiro != null) {
-                    oldIdSociosOfRetiro.setRetiro(null);
-                    oldIdSociosOfRetiro = em.merge(oldIdSociosOfRetiro);
-                }
-                retiro.setIdSocios(socios);
-                retiro = em.merge(retiro);
-            }
-            if (idCredito != null) {
-                idCredito.setSocios(socios);
-                idCredito = em.merge(idCredito);
-            }
-            if (aportes != null) {
-                Socios oldIdSociosOfAportes = aportes.getIdSocios();
-                if (oldIdSociosOfAportes != null) {
-                    oldIdSociosOfAportes.setAportes(null);
-                    oldIdSociosOfAportes = em.merge(oldIdSociosOfAportes);
-                }
-                aportes.setIdSocios(socios);
-                aportes = em.merge(aportes);
             }
             em.getTransaction().commit();
         } finally {
@@ -142,117 +75,38 @@ public class SociosJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Socios persistentSocios = em.find(Socios.class, socios.getIdSocios());
-            CuentaCooperativa cuentaCooperativaOld = persistentSocios.getCuentaCooperativa();
-            CuentaCooperativa cuentaCooperativaNew = socios.getCuentaCooperativa();
-            Deposito depositoOld = persistentSocios.getDeposito();
-            Deposito depositoNew = socios.getDeposito();
-            Retiro retiroOld = persistentSocios.getRetiro();
-            Retiro retiroNew = socios.getRetiro();
-            Credito idCreditoOld = persistentSocios.getIdCredito();
-            Credito idCreditoNew = socios.getIdCredito();
-            Aportes aportesOld = persistentSocios.getAportes();
-            Aportes aportesNew = socios.getAportes();
+            Collection<Credito> creditoCollectionOld = persistentSocios.getCreditoCollection();
+            Collection<Credito> creditoCollectionNew = socios.getCreditoCollection();
             List<String> illegalOrphanMessages = null;
-            if (cuentaCooperativaOld != null && !cuentaCooperativaOld.equals(cuentaCooperativaNew)) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("You must retain CuentaCooperativa " + cuentaCooperativaOld + " since its idSocios field is not nullable.");
-            }
-            if (depositoOld != null && !depositoOld.equals(depositoNew)) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("You must retain Deposito " + depositoOld + " since its idSocios field is not nullable.");
-            }
-            if (retiroOld != null && !retiroOld.equals(retiroNew)) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("You must retain Retiro " + retiroOld + " since its idSocios field is not nullable.");
-            }
-            if (idCreditoNew != null && !idCreditoNew.equals(idCreditoOld)) {
-                Socios oldSociosOfIdCredito = idCreditoNew.getSocios();
-                if (oldSociosOfIdCredito != null) {
+            for (Credito creditoCollectionOldCredito : creditoCollectionOld) {
+                if (!creditoCollectionNew.contains(creditoCollectionOldCredito)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("The Credito " + idCreditoNew + " already has an item of type Socios whose idCredito column cannot be null. Please make another selection for the idCredito field.");
+                    illegalOrphanMessages.add("You must retain Credito " + creditoCollectionOldCredito + " since its idCodigoSocio field is not nullable.");
                 }
-            }
-            if (aportesOld != null && !aportesOld.equals(aportesNew)) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("You must retain Aportes " + aportesOld + " since its idSocios field is not nullable.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            if (cuentaCooperativaNew != null) {
-                cuentaCooperativaNew = em.getReference(cuentaCooperativaNew.getClass(), cuentaCooperativaNew.getIdCuentaCooperativa());
-                socios.setCuentaCooperativa(cuentaCooperativaNew);
+            Collection<Credito> attachedCreditoCollectionNew = new ArrayList<Credito>();
+            for (Credito creditoCollectionNewCreditoToAttach : creditoCollectionNew) {
+                creditoCollectionNewCreditoToAttach = em.getReference(creditoCollectionNewCreditoToAttach.getClass(), creditoCollectionNewCreditoToAttach.getIdCredito());
+                attachedCreditoCollectionNew.add(creditoCollectionNewCreditoToAttach);
             }
-            if (depositoNew != null) {
-                depositoNew = em.getReference(depositoNew.getClass(), depositoNew.getIdDeposito());
-                socios.setDeposito(depositoNew);
-            }
-            if (retiroNew != null) {
-                retiroNew = em.getReference(retiroNew.getClass(), retiroNew.getIdRetiro());
-                socios.setRetiro(retiroNew);
-            }
-            if (idCreditoNew != null) {
-                idCreditoNew = em.getReference(idCreditoNew.getClass(), idCreditoNew.getIdCredito());
-                socios.setIdCredito(idCreditoNew);
-            }
-            if (aportesNew != null) {
-                aportesNew = em.getReference(aportesNew.getClass(), aportesNew.getIdAportes());
-                socios.setAportes(aportesNew);
-            }
+            creditoCollectionNew = attachedCreditoCollectionNew;
+            socios.setCreditoCollection(creditoCollectionNew);
             socios = em.merge(socios);
-            if (cuentaCooperativaNew != null && !cuentaCooperativaNew.equals(cuentaCooperativaOld)) {
-                Socios oldIdSociosOfCuentaCooperativa = cuentaCooperativaNew.getIdSocios();
-                if (oldIdSociosOfCuentaCooperativa != null) {
-                    oldIdSociosOfCuentaCooperativa.setCuentaCooperativa(null);
-                    oldIdSociosOfCuentaCooperativa = em.merge(oldIdSociosOfCuentaCooperativa);
+            for (Credito creditoCollectionNewCredito : creditoCollectionNew) {
+                if (!creditoCollectionOld.contains(creditoCollectionNewCredito)) {
+                    Socios oldIdCodigoSocioOfCreditoCollectionNewCredito = creditoCollectionNewCredito.getIdCodigoSocio();
+                    creditoCollectionNewCredito.setIdCodigoSocio(socios);
+                    creditoCollectionNewCredito = em.merge(creditoCollectionNewCredito);
+                    if (oldIdCodigoSocioOfCreditoCollectionNewCredito != null && !oldIdCodigoSocioOfCreditoCollectionNewCredito.equals(socios)) {
+                        oldIdCodigoSocioOfCreditoCollectionNewCredito.getCreditoCollection().remove(creditoCollectionNewCredito);
+                        oldIdCodigoSocioOfCreditoCollectionNewCredito = em.merge(oldIdCodigoSocioOfCreditoCollectionNewCredito);
+                    }
                 }
-                cuentaCooperativaNew.setIdSocios(socios);
-                cuentaCooperativaNew = em.merge(cuentaCooperativaNew);
-            }
-            if (depositoNew != null && !depositoNew.equals(depositoOld)) {
-                Socios oldIdSociosOfDeposito = depositoNew.getIdSocios();
-                if (oldIdSociosOfDeposito != null) {
-                    oldIdSociosOfDeposito.setDeposito(null);
-                    oldIdSociosOfDeposito = em.merge(oldIdSociosOfDeposito);
-                }
-                depositoNew.setIdSocios(socios);
-                depositoNew = em.merge(depositoNew);
-            }
-            if (retiroNew != null && !retiroNew.equals(retiroOld)) {
-                Socios oldIdSociosOfRetiro = retiroNew.getIdSocios();
-                if (oldIdSociosOfRetiro != null) {
-                    oldIdSociosOfRetiro.setRetiro(null);
-                    oldIdSociosOfRetiro = em.merge(oldIdSociosOfRetiro);
-                }
-                retiroNew.setIdSocios(socios);
-                retiroNew = em.merge(retiroNew);
-            }
-            if (idCreditoOld != null && !idCreditoOld.equals(idCreditoNew)) {
-                idCreditoOld.setSocios(null);
-                idCreditoOld = em.merge(idCreditoOld);
-            }
-            if (idCreditoNew != null && !idCreditoNew.equals(idCreditoOld)) {
-                idCreditoNew.setSocios(socios);
-                idCreditoNew = em.merge(idCreditoNew);
-            }
-            if (aportesNew != null && !aportesNew.equals(aportesOld)) {
-                Socios oldIdSociosOfAportes = aportesNew.getIdSocios();
-                if (oldIdSociosOfAportes != null) {
-                    oldIdSociosOfAportes.setAportes(null);
-                    oldIdSociosOfAportes = em.merge(oldIdSociosOfAportes);
-                }
-                aportesNew.setIdSocios(socios);
-                aportesNew = em.merge(aportesNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -284,41 +138,15 @@ public class SociosJpaController implements Serializable {
                 throw new NonexistentEntityException("The socios with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            CuentaCooperativa cuentaCooperativaOrphanCheck = socios.getCuentaCooperativa();
-            if (cuentaCooperativaOrphanCheck != null) {
+            Collection<Credito> creditoCollectionOrphanCheck = socios.getCreditoCollection();
+            for (Credito creditoCollectionOrphanCheckCredito : creditoCollectionOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Socios (" + socios + ") cannot be destroyed since the CuentaCooperativa " + cuentaCooperativaOrphanCheck + " in its cuentaCooperativa field has a non-nullable idSocios field.");
-            }
-            Deposito depositoOrphanCheck = socios.getDeposito();
-            if (depositoOrphanCheck != null) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Socios (" + socios + ") cannot be destroyed since the Deposito " + depositoOrphanCheck + " in its deposito field has a non-nullable idSocios field.");
-            }
-            Retiro retiroOrphanCheck = socios.getRetiro();
-            if (retiroOrphanCheck != null) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Socios (" + socios + ") cannot be destroyed since the Retiro " + retiroOrphanCheck + " in its retiro field has a non-nullable idSocios field.");
-            }
-            Aportes aportesOrphanCheck = socios.getAportes();
-            if (aportesOrphanCheck != null) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Socios (" + socios + ") cannot be destroyed since the Aportes " + aportesOrphanCheck + " in its aportes field has a non-nullable idSocios field.");
+                illegalOrphanMessages.add("This Socios (" + socios + ") cannot be destroyed since the Credito " + creditoCollectionOrphanCheckCredito + " in its creditoCollection field has a non-nullable idCodigoSocio field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            Credito idCredito = socios.getIdCredito();
-            if (idCredito != null) {
-                idCredito.setSocios(null);
-                idCredito = em.merge(idCredito);
             }
             em.remove(socios);
             em.getTransaction().commit();
@@ -352,11 +180,43 @@ public class SociosJpaController implements Serializable {
             em.close();
         }
     }
+    
+    public Socios findSociosCedula(String cedula) {
+        EntityManager em = getEntityManager();
+        Query buscar = em.createNamedQuery("Socios.findByCedulaSocio");
+        buscar.setParameter("cedulaSocio", cedula);
+        List<Socios> sociosList = buscar.getResultList();
+        System.out.println("------------------------------------------");
+        if (!sociosList.isEmpty()) {
+            System.out.println("id socios "+sociosList.get(0).getIdSocios());
+            try {
+                return sociosList.get(0);
+            } finally {
+                em.close();
+            }
+
+        }else{
+            return null;
+        }
+        
+    }
 
     public Socios findSocios(Integer id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(Socios.class, id);
+        } finally {
+            em.close();
+        }
+    }
+    
+    public Socios findByCedulaSocio (String cedula) {
+        EntityManager em = getEntityManager();
+        Query buscar = em.createNamedQuery("Socios.findByCedulaSocio");
+        buscar.setParameter("cedulaSocio", cedula);
+        List<Socios> socioLista = buscar.getResultList();
+        try {
+            return socioLista.get(0);
         } finally {
             em.close();
         }

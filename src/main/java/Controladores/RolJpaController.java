@@ -4,25 +4,19 @@
  */
 package Controladores;
 
-import Controladores.exceptions.IllegalOrphanException;
 import Controladores.exceptions.NonexistentEntityException;
-import java.io.Serializable;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import Modelos.Cuenta;
 import Modelos.Rol;
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.Persistence;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
-/**
- *
- * @author joelc
- */
+
 public class RolJpaController implements Serializable {
 
     public RolJpaController(EntityManagerFactory emf) {
@@ -36,29 +30,13 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
 
     public RolJpaController() {
     }
-    
-    
 
     public void create(Rol rol) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Cuenta cuenta = rol.getCuenta();
-            if (cuenta != null) {
-                cuenta = em.getReference(cuenta.getClass(), cuenta.getIdCuenta());
-                rol.setCuenta(cuenta);
-            }
             em.persist(rol);
-            if (cuenta != null) {
-                Rol oldIdRolOfCuenta = cuenta.getIdRol();
-                if (oldIdRolOfCuenta != null) {
-                    oldIdRolOfCuenta.setCuenta(null);
-                    oldIdRolOfCuenta = em.merge(oldIdRolOfCuenta);
-                }
-                cuenta.setIdRol(rol);
-                cuenta = em.merge(cuenta);
-            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -67,38 +45,12 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
         }
     }
 
-    public void edit(Rol rol) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(Rol rol) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Rol persistentRol = em.find(Rol.class, rol.getIdRol());
-            Cuenta cuentaOld = persistentRol.getCuenta();
-            Cuenta cuentaNew = rol.getCuenta();
-            List<String> illegalOrphanMessages = null;
-            if (cuentaOld != null && !cuentaOld.equals(cuentaNew)) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("You must retain Cuenta " + cuentaOld + " since its idRol field is not nullable.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            if (cuentaNew != null) {
-                cuentaNew = em.getReference(cuentaNew.getClass(), cuentaNew.getIdCuenta());
-                rol.setCuenta(cuentaNew);
-            }
             rol = em.merge(rol);
-            if (cuentaNew != null && !cuentaNew.equals(cuentaOld)) {
-                Rol oldIdRolOfCuenta = cuentaNew.getIdRol();
-                if (oldIdRolOfCuenta != null) {
-                    oldIdRolOfCuenta.setCuenta(null);
-                    oldIdRolOfCuenta = em.merge(oldIdRolOfCuenta);
-                }
-                cuentaNew.setIdRol(rol);
-                cuentaNew = em.merge(cuentaNew);
-            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -116,7 +68,7 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -127,17 +79,6 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
                 rol.getIdRol();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The rol with id " + id + " no longer exists.", enfe);
-            }
-            List<String> illegalOrphanMessages = null;
-            Cuenta cuentaOrphanCheck = rol.getCuenta();
-            if (cuentaOrphanCheck != null) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Rol (" + rol + ") cannot be destroyed since the Cuenta " + cuentaOrphanCheck + " in its cuenta field has a non-nullable idRol field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             em.remove(rol);
             em.getTransaction().commit();
@@ -180,6 +121,28 @@ private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persi
             em.close();
         }
     }
+    
+    public Rol findRolNombre(String tipoRol) {
+        System.out.println("-----------------------------------------------");
+        EntityManager em = getEntityManager();//tipoRol
+        Query buscar = em.createNamedQuery("Rol.findByTipoRol");
+        buscar.setParameter("tipoRol", tipoRol);
+        List<Rol> rolList = buscar.getResultList();
+        System.out.println("id rol:  "+rolList.get(0).getIdRol() );
+        if (!rolList.isEmpty()) {
+            try {
+                
+                return rolList.get(0);
+            } finally {
+                em.close();
+            }
+
+        }else{
+            return null;
+        }
+    }
+    
+    
 
     public int getRolCount() {
         EntityManager em = getEntityManager();

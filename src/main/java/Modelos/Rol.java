@@ -5,6 +5,7 @@
 package Modelos;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,16 +15,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
-/**
- *
- * @author joelc
- */
+
 @Entity
 @Table(name = "rol")
 @XmlRootElement
@@ -47,11 +46,11 @@ public class Rol implements Serializable {
     private String tipoRol;
     @Column(name = "es_eliminado")
     private Boolean esEliminado;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idRol")
-    private Cuenta cuenta;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idRol")
+    private Collection<Cuenta> cuentaCollection;
 
     public Rol() {
-        esEliminado = false;
+        this.esEliminado=false;
     }
 
     public Rol(Integer idRol) {
@@ -87,12 +86,13 @@ public class Rol implements Serializable {
         this.esEliminado = esEliminado;
     }
 
-    public Cuenta getCuenta() {
-        return cuenta;
+    @XmlTransient
+    public Collection<Cuenta> getCuentaCollection() {
+        return cuentaCollection;
     }
 
-    public void setCuenta(Cuenta cuenta) {
-        this.cuenta = cuenta;
+    public void setCuentaCollection(Collection<Cuenta> cuentaCollection) {
+        this.cuentaCollection = cuentaCollection;
     }
 
     @Override
